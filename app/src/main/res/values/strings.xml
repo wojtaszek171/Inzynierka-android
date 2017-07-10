@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">MyEngineer</string>
     <string name="menuLogInto">Zaloguj się</string>
+    <string name="menuMainScreen">MyEngineer</string>
+    <string name="menuRegister">Zarejestruj się</string>
+    <string name="zaloguj"></string>
 </resources>
