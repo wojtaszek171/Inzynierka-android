@@ -3,8 +3,10 @@ package com.example.teamengineer.myengineer;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 
 public class MainScreen extends AppCompatActivity {
 
@@ -15,7 +17,7 @@ public class MainScreen extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.menuMainScreen);
-        
+
 
     }
 
@@ -26,6 +28,11 @@ public class MainScreen extends AppCompatActivity {
 
     public void register(View view) {
         Intent intent = new Intent(MainScreen.this,Register.class);
+        startActivity(intent);
+    }
+
+    public void Lists(View view) {
+        Intent intent = new Intent(MainScreen.this,ListsList.class);
         startActivity(intent);
     }
 }

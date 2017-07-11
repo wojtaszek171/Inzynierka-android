@@ -3,5 +3,14 @@
     <string name="menuLogInto">Zaloguj się</string>
     <string name="menuMainScreen">MyEngineer</string>
     <string name="menuRegister">Zarejestruj się</string>
+    <string name="menuLists">TWOJE LISTY</string>
     <string name="zaloguj"></string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="friends">Znajomi</string>
+    <string name="lists">Listy</string>
+    <string name="templates">Szablony</string>
+    <string name="options">Ustawienia</string>
+    <string name="logout">Wyloguj</string>
+
 </resources>

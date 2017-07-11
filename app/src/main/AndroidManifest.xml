@@ -3,8 +3,6 @@
     package="com.example.teamengineer.myengineer">
 
     <application
-
-
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -19,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".LogInto" />
-        <activity android:name=".Register"></activity>
+        <activity android:name=".Register" />
+        <activity android:name=".ListsList"></activity>
     </application>
 
 </manifest>
