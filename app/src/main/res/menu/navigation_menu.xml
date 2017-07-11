@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/nav_friends"
-        android:title="@string/friends"/>
+        android:title="@string/friends"
+        android:icon="@mipmap/ic_supervisor_account_black_24dp"/>
     <item android:id="@+id/nav_lists"
-        android:title="@string/lists"/>
+        android:title="@string/lists"
+        android:icon="@mipmap/ic_view_list_black_24dp"/>
     <item android:id="@+id/nav_templates"
-        android:title="@string/templates"/>
+        android:title="@string/templates"
+        android:icon="@mipmap/ic_content_copy_black_24dp"/>
     <item android:id="@+id/nav_settings"
-        android:title="@string/options" />
+        android:title="@string/options"
+        android:icon="@mipmap/ic_settings_black_24dp"/>
     <item android:id="@+id/nav_logout"
     android:title="@string/logout" />
 

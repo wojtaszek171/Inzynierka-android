@@ -9,7 +9,7 @@
         android:title="sort"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_add"
+        android:id="@+id/action_friends"
         android:icon="@drawable/znajomi"
         android:title="friends"
         app:showAsAction="always" />
