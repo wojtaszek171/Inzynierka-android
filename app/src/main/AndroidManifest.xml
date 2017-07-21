@@ -19,7 +19,10 @@
         <activity android:name=".LogInto" />
         <activity android:name=".Register" />
         <activity android:name=".ListsList" />
-        <activity android:name=".ListItems"></activity>
+        <activity android:name=".ListItems" />
+        <activity android:name=".FriendsList" />
+        <activity android:name=".AddFriend" />
+        <activity android:name=".Add_Product"></activity>
     </application>
 
 </manifest>

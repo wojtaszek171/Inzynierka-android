@@ -12,5 +12,17 @@
     <string name="templates">Szablony</string>
     <string name="options">Ustawienia</string>
     <string name="logout">Wyloguj</string>
-
+    <string name="friendNick">Pseudonim</string>
+    <string name="addFriend">Dodaj znajomego</string>
+    <string name="editFriend">Edytuj znajomego</string>
+    <string name="add">Dodaj</string>
+    <string name="edit">Edytuj</string>
+    <string name="product">Produkt</string>
+    <string name="category">Kategoria</string>
+    <string name="amount">Ilość</string>
+    <string name="measure">Miara</string>
+    <string name="addProduct">Dodaj produkt</string>
+    <string name="editProduct">Edytuj produkt</string>
+    <string name="createList">Stwórz listę</string>
+    <string name="createTemplate">Stwórz szablon</string>
 </resources>
