@@ -23,7 +23,7 @@
                 android:layout_weight="1" />
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/floatingActionButton"
+                android:id="@+id/addListButton"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="right"

@@ -1,5 +1,8 @@
 package com.example.teamengineer.myengineer;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -9,12 +12,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class ListsList extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +39,22 @@ public class ListsList extends AppCompatActivity {
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
+
+        FloatingActionButton addNew = (FloatingActionButton) findViewById(R.id.addListButton);
+        addNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(context);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.add_list_dialog);
+
+                // set the custom dialog components - text, image and button
+
+                // if button is clicked, close the custom dialog
+
+                dialog.show();
+            }
+        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
