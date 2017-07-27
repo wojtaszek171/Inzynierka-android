@@ -12,13 +12,14 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
     <Button
-        android:id="@+id/addTemplate"
+        android:id="@+id/useTemplate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/createTemplate"
-        android:layout_below="@+id/addList"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/addList"
+        android:text="@string/useTemplate" />
 
 </RelativeLayout>

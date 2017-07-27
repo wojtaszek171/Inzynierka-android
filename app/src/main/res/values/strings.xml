@@ -25,4 +25,6 @@
     <string name="editProduct">Edytuj produkt</string>
     <string name="createList">Stwórz listę</string>
     <string name="createTemplate">Stwórz szablon</string>
+    <string name="settings">Ustawienia</string>
+    <string name="useTemplate">Użyj szablonu</string>
 </resources>

@@ -9,20 +9,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".MainScreen" />
         <activity android:name=".LogInto" />
         <activity android:name=".Register" />
         <activity android:name=".ListsList" />
         <activity android:name=".ListItems" />
         <activity android:name=".FriendsList" />
         <activity android:name=".AddFriend" />
-        <activity android:name=".Add_Product"></activity>
+        <activity android:name=".Add_Product" />
+        <activity android:name=".Settings" />
+        <activity android:name=".Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Templates" />
+        <activity android:name=".TemplatesList"></activity>
     </application>
 
 </manifest>

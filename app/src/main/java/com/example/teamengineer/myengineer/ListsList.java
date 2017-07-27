@@ -1,8 +1,12 @@
 package com.example.teamengineer.myengineer;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,7 +23,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ListsList extends AppCompatActivity {
+import java.util.List;
+
+import javax.xml.transform.Templates;
+
+public class ListsList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     final Context context = this;
@@ -28,11 +36,15 @@ public class ListsList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lists_list);
+        FloatingActionButton addNew = (FloatingActionButton) findViewById(R.id.addListButton);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.menuLists);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
@@ -40,7 +52,6 @@ public class ListsList extends AppCompatActivity {
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
-        FloatingActionButton addNew = (FloatingActionButton) findViewById(R.id.addListButton);
         addNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,12 +72,48 @@ public class ListsList extends AppCompatActivity {
     }
 
     @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        switch (item.getItemId()) {
+            case R.id.nav_friends: {
+                Intent intent = new Intent(ListsList.this, FriendsList.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_lists: {
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                break;
+            }
+            case R.id.nav_templates: {
+                Intent intent = new Intent(ListsList.this, TemplatesList.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_settings: {
+                Intent intent = new Intent(ListsList.this, Settings.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_logout: {
+                Intent intent = new Intent(ListsList.this, MainScreen.class);
+                startActivity(intent);
+                break;
+            }
+        }
+        //close navigation drawer
+        //mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(mToggle.onOptionsItemSelected(item)){
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

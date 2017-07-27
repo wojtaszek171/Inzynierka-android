@@ -1,7 +1,10 @@
 package com.example.teamengineer.myengineer;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,22 +14,27 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
 
-import javax.xml.transform.Templates;
-
-public class FriendsList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class TemplatesList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friends_list);
+        setContentView(R.layout.activity_templates_list);
+        FloatingActionButton addNew = (FloatingActionButton) findViewById(R.id.addListButton);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(R.string.friends);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(R.string.templates);
+
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
@@ -34,10 +42,15 @@ public class FriendsList extends AppCompatActivity implements NavigationView.OnN
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        addNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+                
+            }
+        });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -45,26 +58,26 @@ public class FriendsList extends AppCompatActivity implements NavigationView.OnN
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_friends: {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
+                Intent intent = new Intent(TemplatesList.this, FriendsList.class);
+                startActivity(intent);
                 break;
             }
             case R.id.nav_lists: {
-                Intent intent = new Intent(FriendsList.this, ListsList.class);
+                Intent intent = new Intent(TemplatesList.this, TemplatesList.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_templates: {
-                Intent intent = new Intent(FriendsList.this, TemplatesList.class);
-                startActivity(intent);
+                mDrawerLayout.closeDrawer(GravityCompat.START);
                 break;
             }
             case R.id.nav_settings: {
-                Intent intent = new Intent(FriendsList.this, Settings.class);
+                Intent intent = new Intent(TemplatesList.this, Settings.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_logout: {
-                Intent intent = new Intent(FriendsList.this, MainScreen.class);
+                Intent intent = new Intent(TemplatesList.this, MainScreen.class);
                 startActivity(intent);
                 break;
             }
@@ -79,8 +92,10 @@ public class FriendsList extends AppCompatActivity implements NavigationView.OnN
         if(mToggle.onOptionsItemSelected(item)){
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
