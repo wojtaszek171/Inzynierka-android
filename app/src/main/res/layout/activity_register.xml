@@ -102,12 +102,12 @@
                     android:text="Hasło"
                     android:textColor="@color/colorText2"
                     android:textSize="30sp"
-                    app:layout_constraintBottom_toTopOf="@+id/editText10"
+                    app:layout_constraintBottom_toTopOf="@+id/password"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" />
 
                 <EditText
-                    android:id="@+id/editText10"
+                    android:id="@+id/password"
                     android:layout_width="256dp"
                     android:layout_height="45dp"
                     android:layout_marginBottom="16dp"
@@ -116,7 +116,7 @@
                     android:layout_marginRight="8dp"
                     android:layout_marginStart="8dp"
                     android:background="@drawable/edittextstyle"
-                    android:inputType="textPersonName"
+                    android:inputType="textPassword"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     app:layout_constraintBottom_toTopOf="@+id/textView6"
@@ -135,13 +135,13 @@
                     android:text="Powtórz hasło"
                     android:textColor="@color/colorText2"
                     android:textSize="30sp"
-                    app:layout_constraintBottom_toTopOf="@+id/editText4"
+                    app:layout_constraintBottom_toTopOf="@+id/repeat_password"
                     app:layout_constraintHorizontal_bias="0.502"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" />
 
                 <EditText
-                    android:id="@+id/editText4"
+                    android:id="@+id/repeat_password"
                     android:layout_width="256dp"
                     android:layout_height="45dp"
                     android:layout_marginBottom="17dp"
@@ -150,7 +150,7 @@
                     android:layout_marginRight="8dp"
                     android:layout_marginStart="8dp"
                     android:background="@drawable/edittextstyle"
-                    android:inputType="textPersonName"
+                    android:inputType="textPassword"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     app:layout_constraintBottom_toTopOf="@+id/button4"
