@@ -62,6 +62,7 @@ public class Settings extends AppCompatActivity implements NavigationView.OnNavi
             }
             case R.id.nav_logout: {
                 Intent intent = new Intent(Settings.this, MainScreen.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
             }

@@ -46,7 +46,7 @@ public class TemplatesList extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
 
-                
+
             }
         });
 
@@ -63,7 +63,7 @@ public class TemplatesList extends AppCompatActivity implements NavigationView.O
                 break;
             }
             case R.id.nav_lists: {
-                Intent intent = new Intent(TemplatesList.this, TemplatesList.class);
+                Intent intent = new Intent(TemplatesList.this, ListsList.class);
                 startActivity(intent);
                 break;
             }
@@ -78,7 +78,9 @@ public class TemplatesList extends AppCompatActivity implements NavigationView.O
             }
             case R.id.nav_logout: {
                 Intent intent = new Intent(TemplatesList.this, MainScreen.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+
                 break;
             }
         }

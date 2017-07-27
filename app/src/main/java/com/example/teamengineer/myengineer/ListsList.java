@@ -96,6 +96,7 @@ public class ListsList extends AppCompatActivity implements NavigationView.OnNav
             }
             case R.id.nav_logout: {
                 Intent intent = new Intent(ListsList.this, MainScreen.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
             }

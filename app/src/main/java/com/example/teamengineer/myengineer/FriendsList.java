@@ -65,6 +65,7 @@ public class FriendsList extends AppCompatActivity implements NavigationView.OnN
             }
             case R.id.nav_logout: {
                 Intent intent = new Intent(FriendsList.this, MainScreen.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
             }
