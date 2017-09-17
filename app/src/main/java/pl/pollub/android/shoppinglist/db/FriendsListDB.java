@@ -1,34 +1,14 @@
 package pl.pollub.android.shoppinglist.db;
 
+import lombok.*;
+
 /**
  * @author Pawel on 28.07.2017.
  */
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class FriendsListDB {
-    int _id;
-    int _idUser;
-
-    FriendsListDB() {
-    }
-
-    FriendsListDB(int id, int idUser) {
-        this._id = id;
-        this._idUser = idUser;
-    }
-
-    public void setId(int id) {
-        this._id = id;
-    }
-
-    public void setIdUser(int _idUser) {
-        this._idUser = _idUser;
-    }
-
-    public int getId() {
-        return this._id;
-    }
-
-    public int getIdUser() {
-        return this._idUser;
-    }
+    private int _id;
+    private int _idUser;
 }
