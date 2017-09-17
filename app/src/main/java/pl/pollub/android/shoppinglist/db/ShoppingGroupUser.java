@@ -3,7 +3,7 @@ package pl.pollub.android.shoppinglist.db;
 import java.util.Date;
 
 /**
- * Created by pawel on 28.07.2017.
+ * @author Pawel on 28.07.2017.
  */
 
 public class ShoppingGroupUser {
@@ -14,23 +14,24 @@ public class ShoppingGroupUser {
     String _pseudonym;
     Boolean _whetherAdminGroup;
 
-    ShoppingGroupUser(){
+    ShoppingGroupUser() {
+    }
 
+    ShoppingGroupUser(int idShoppingGroup, int idUser, Date userAddDate, String pseudonym, Boolean whetherAdminGroup) {
+        this._idShoppingGroup = idShoppingGroup;
+        this._idUser = idUser;
+        this._userAddDate = userAddDate;
+        this._pseudonym = pseudonym;
+        this._whetherAdminGroup = whetherAdminGroup;
     }
-    ShoppingGroupUser(int idShoppingGroup, int idUser, Date userAddDate, String pseudonym, Boolean whetherAdminGroup){
-        this._idShoppingGroup=idShoppingGroup;
-        this._idUser=idUser;
-        this._userAddDate=userAddDate;
-        this._pseudonym=pseudonym;
-        this._whetherAdminGroup=whetherAdminGroup;
-    }
-    ShoppingGroupUser(int id, int idShoppingGroup, int idUser, Date userAddDate, String pseudonym, Boolean whetherAdminGroup){
-        this._id=id;
-        this._idShoppingGroup=idShoppingGroup;
-        this._idUser=idUser;
-        this._userAddDate=userAddDate;
-        this._pseudonym=pseudonym;
-        this._whetherAdminGroup=whetherAdminGroup;
+
+    ShoppingGroupUser(int id, int idShoppingGroup, int idUser, Date userAddDate, String pseudonym, Boolean whetherAdminGroup) {
+        this._id = id;
+        this._idShoppingGroup = idShoppingGroup;
+        this._idUser = idUser;
+        this._userAddDate = userAddDate;
+        this._pseudonym = pseudonym;
+        this._whetherAdminGroup = whetherAdminGroup;
     }
 
     public void setId(int _id) {

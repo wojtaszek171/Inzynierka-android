@@ -28,7 +28,7 @@ public class TemplatesList extends AppCompatActivity implements NavigationView.O
         setContentView(R.layout.activity_templates_list);
         FloatingActionButton addNew = (FloatingActionButton) findViewById(R.id.addListButton);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.templates);
 
@@ -91,7 +91,7 @@ public class TemplatesList extends AppCompatActivity implements NavigationView.O
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(mToggle.onOptionsItemSelected(item)){
+        if (mToggle.onOptionsItemSelected(item)) {
             return true;
         }
 

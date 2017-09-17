@@ -38,7 +38,7 @@ public class ListsList extends AppCompatActivity implements NavigationView.OnNav
         setContentView(R.layout.activity_lists_list);
         FloatingActionButton addNew = (FloatingActionButton) findViewById(R.id.addListButton);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.menuLists);
 
@@ -108,7 +108,7 @@ public class ListsList extends AppCompatActivity implements NavigationView.OnNav
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(mToggle.onOptionsItemSelected(item)){
+        if (mToggle.onOptionsItemSelected(item)) {
             return true;
         }
 

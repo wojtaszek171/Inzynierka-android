@@ -3,7 +3,7 @@ package pl.pollub.android.shoppinglist.db;
 import java.util.Date;
 
 /**
- * Created by pawel on 28.07.2017.
+ * @author Pawel on 28.07.2017.
  */
 
 public class ShoppingListUser {
@@ -11,19 +11,21 @@ public class ShoppingListUser {
     int _idShoppingList;
     int _idUser;
     Date _syncTime;
-    ShoppingListUser(){
 
+    ShoppingListUser() {
     }
-    ShoppingListUser(int idShoppingList, int idUser, Date syncTime){
-        this._idShoppingList=idShoppingList;
-        this._idUser=idUser;
-        this._syncTime=syncTime;
+
+    ShoppingListUser(int idShoppingList, int idUser, Date syncTime) {
+        this._idShoppingList = idShoppingList;
+        this._idUser = idUser;
+        this._syncTime = syncTime;
     }
-    ShoppingListUser(int id, int idShoppingList, int idUser, Date syncTime){
-        this._id=id;
-        this._idShoppingList=idShoppingList;
-        this._idUser=idUser;
-        this._syncTime=syncTime;
+
+    ShoppingListUser(int id, int idShoppingList, int idUser, Date syncTime) {
+        this._id = id;
+        this._idShoppingList = idShoppingList;
+        this._idUser = idUser;
+        this._syncTime = syncTime;
     }
 
     public void setId(int _id) {

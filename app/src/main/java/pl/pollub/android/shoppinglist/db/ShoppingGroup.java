@@ -3,7 +3,7 @@ package pl.pollub.android.shoppinglist.db;
 import java.util.Date;
 
 /**
- * Created by pawel on 28.07.2017.
+ * @author Pawel on 28.07.2017.
  */
 
 public class ShoppingGroup {
@@ -13,21 +13,22 @@ public class ShoppingGroup {
     Date _createDate;
     int _idIcon;
 
-    ShoppingGroup(){
+    ShoppingGroup() {
+    }
 
+    ShoppingGroup(String name, String description, Date createDate, int idIcon) {
+        this._name = name;
+        this._description = description;
+        this._createDate = createDate;
+        this._idIcon = idIcon;
     }
-    ShoppingGroup(String name, String description, Date createDate, int idIcon){
-        this._name=name;
-        this._description=description;
-        this._createDate=createDate;
-        this._idIcon=idIcon;
-    }
-    ShoppingGroup(int id, String name, String description, Date createDate, int idIcon){
-        this._id=id;
-        this._name=name;
-        this._description=description;
-        this._createDate=createDate;
-        this._idIcon=idIcon;
+
+    ShoppingGroup(int id, String name, String description, Date createDate, int idIcon) {
+        this._id = id;
+        this._name = name;
+        this._description = description;
+        this._createDate = createDate;
+        this._idIcon = idIcon;
     }
 
     public int getId() {

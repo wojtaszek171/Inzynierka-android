@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by pawel on 29.07.2017.
+ * @author Pawel on 29.07.2017.
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -49,81 +49,81 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_ID_SHOPPING_LIST = "idShoppingList";
 
     // CATEGORIES Table - column names
-            private static final String KEY_ID_PARENT = "idParent";
-            //private static final String KEY_NAME = "name";
-            //private static final String KEY_DESCRIPTION = "description";
+    private static final String KEY_ID_PARENT = "idParent";
+    //private static final String KEY_NAME = "name";
+    //private static final String KEY_DESCRIPTION = "description";
 
     // FRIENDS_LISTS Table - column names
-            //private static final String KEY_ID_USER = "idUser";
+    //private static final String KEY_ID_USER = "idUser";
 
     // FRIENDS_LISTS_USERS Table - column names
-            //private static final String KEY_ID_USER = "idUser";
-            private static final String KEY_ID_FRIENDS_LIST = "idFriendsList";
-            //private static final String KEY_ADD_DATE = "addDate";
+    //private static final String KEY_ID_USER = "idUser";
+    private static final String KEY_ID_FRIENDS_LIST = "idFriendsList";
+    //private static final String KEY_ADD_DATE = "addDate";
 
     // ICONS Table - column names
-            //private static final String KEY_NAME = "name";
-            private static final String KEY_ICON = "icon";
+    //private static final String KEY_NAME = "name";
+    private static final String KEY_ICON = "icon";
 
     // NON_STANDARD_PRODUCTS Table - column names
-            //private static final String KEY_NAME = "name";
-            //private static final String KEY_DESCRIPTION = "description";
-            //private static final String KEY_MEASURE = "measure";
-            //private static final String KEY_ADD_DATE = "addDate";
-            //private static final String KEY_MODIFY_DATE = "modifyDate";
-            //private static final String KEY_ID_USER = "idUser";
-            //private static final String KEY_ID_ICON = "idIcon";
+    //private static final String KEY_NAME = "name";
+    //private static final String KEY_DESCRIPTION = "description";
+    //private static final String KEY_MEASURE = "measure";
+    //private static final String KEY_ADD_DATE = "addDate";
+    //private static final String KEY_MODIFY_DATE = "modifyDate";
+    //private static final String KEY_ID_USER = "idUser";
+    //private static final String KEY_ID_ICON = "idIcon";
 
     // PRODUCTS Table - column names
-            //private static final String KEY_NAME = "name";
-            //private static final String KEY_DESCRIPTION = "description";
-            private static final String KEY_ID_CATEGORY = "idCategory";
-            //private static final String KEY_MEASURE = "measure";
+    //private static final String KEY_NAME = "name";
+    //private static final String KEY_DESCRIPTION = "description";
+    private static final String KEY_ID_CATEGORY = "idCategory";
+    //private static final String KEY_MEASURE = "measure";
 
     // SHOPPING_GROUPS Table - column names
-            //private static final String KEY_NAME = "name";
-            //private static final String KEY_DESCRIPTION = "description";
-            //private static final String KEY_CREATE_DATE = "createDate";
-            //private static final String KEY_ID_ICON = "idIcon";
+    //private static final String KEY_NAME = "name";
+    //private static final String KEY_DESCRIPTION = "description";
+    //private static final String KEY_CREATE_DATE = "createDate";
+    //private static final String KEY_ID_ICON = "idIcon";
 
     // SHOPPING_GROUPS_USERS Table - column names
-            //private static final String KEY_ID_SHOPPING_GROUP = "idShoppingGroup";
-            //private static final String KEY_ID_USER = "idUser";
-            private static final String KEY_USER_ADD_DATE = "userAddDate";
-            private static final String KEY_PSEUDONYM = "pseudonym";
-            private static final String KEY_WHETHER_ADMIN_GROUP = "whetherAdminGroup";
+    //private static final String KEY_ID_SHOPPING_GROUP = "idShoppingGroup";
+    //private static final String KEY_ID_USER = "idUser";
+    private static final String KEY_USER_ADD_DATE = "userAddDate";
+    private static final String KEY_PSEUDONYM = "pseudonym";
+    private static final String KEY_WHETHER_ADMIN_GROUP = "whetherAdminGroup";
 
     // SHOPPING_LISTS Table - column names
-            //private static final String KEY_ID_SHOPPING_GROUP = "idShoppingGroup";
-            //private static final String KEY_ID_ICON = "idIcon";
-            //private static final String KEY_CREATE_DATE = "createDate";
-            private static final String KEY_LIST_STATUS = "listStatus";
-            private static final String KEY_LAST_SYNCHRONIZATION = "lastSynchronization";
-            //private static final String KEY_MODIFY_DATE = "modifyDate";
+    //private static final String KEY_ID_SHOPPING_GROUP = "idShoppingGroup";
+    //private static final String KEY_ID_ICON = "idIcon";
+    //private static final String KEY_CREATE_DATE = "createDate";
+    private static final String KEY_LIST_STATUS = "listStatus";
+    private static final String KEY_LAST_SYNCHRONIZATION = "lastSynchronization";
+    //private static final String KEY_MODIFY_DATE = "modifyDate";
 
     // SHOPPING_LISTS_PRODUCTS Table - column names
-            //private static final String KEY_ID_SHOPPING_LIST = "idShoppingList";
-            private static final String KEY_ID_PRODUCT = "idProduct";
-            private static final String KEY_PRODUCT_TYPE = "productType";
-            private static final String KEY_PRICE = "price";
-            //private static final String KEY_DESCRIPTION = "description";
-            private static final String KEY_STATUS = "status";
-            //private static final String KEY_ADD_DATE = "addDate";
-            //private static final String KEY_MODIFY_DATE = "modifyDate";
-            private static final String KEY_QUANTITY = "quantity";
+    //private static final String KEY_ID_SHOPPING_LIST = "idShoppingList";
+    private static final String KEY_ID_PRODUCT = "idProduct";
+    private static final String KEY_PRODUCT_TYPE = "productType";
+    private static final String KEY_PRICE = "price";
+    //private static final String KEY_DESCRIPTION = "description";
+    private static final String KEY_STATUS = "status";
+    //private static final String KEY_ADD_DATE = "addDate";
+    //private static final String KEY_MODIFY_DATE = "modifyDate";
+    private static final String KEY_QUANTITY = "quantity";
 
     // SHOPPING_LISTS_USERS Table - column names
-            //private static final String KEY_ID_SHOPPING_LIST = "idShoppingList";
-            //private static final String KEY_ID_USER = "idUser";
-            private static final String KEY_SYNC_TIME = "syncTime";
+    //private static final String KEY_ID_SHOPPING_LIST = "idShoppingList";
+    //private static final String KEY_ID_USER = "idUser";
+    private static final String KEY_SYNC_TIME = "syncTime";
 
     // USERS Table - column names
-            private static final String KEY_EMAIL = "email";
-            private static final String KEY_PASSWORD = "password";
-            private static final String KEY_REGISTER_DATE = "registerDate";
-            private static final String KEY_LAST_LOGIN_DATE = "lastLoginDate";
-            //private static final String KEY_ID_ICON = "idIcon";
-            private static final String KEY_STAY_LOGGED = "stayLogged";
+    private static final String KEY_EMAIL = "email";
+    private static final String KEY_PASSWORD = "password";
+    private static final String KEY_REGISTER_DATE = "registerDate";
+    private static final String KEY_LAST_LOGIN_DATE = "lastLoginDate";
+    //private static final String KEY_ID_ICON = "idIcon";
+    private static final String KEY_STAY_LOGGED = "stayLogged";
 
     // Table Create Statements
     // CATEGORIES table create statement
@@ -149,17 +149,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_NON_STANDARD_PRODUCTS = "CREATE TABLE "
             + TABLE_NON_STANDARD_PRODUCTS + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_NAME + " TEXT," + KEY_DESCRIPTION + " TEXT,"
-            + KEY_ID_USER + " INTEGER,"+ KEY_MEASURE + " TEXT," + KEY_ADD_DATE + " DATETIME," + KEY_MODIFY_DATE + " DATETIME" + ")";
+            + KEY_ID_USER + " INTEGER," + KEY_MEASURE + " TEXT," + KEY_ADD_DATE + " DATETIME," + KEY_MODIFY_DATE + " DATETIME" + ")";
     // PRODUCTS table create statement
     private static final String CREATE_TABLE_PRODUCTS = "CREATE TABLE "
             + TABLE_PRODUCTS + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_NAME + " TEXT," + KEY_DESCRIPTION + " TEXT,"
-            + KEY_ID_CATEGORY + " INTEGER," + KEY_MEASURE + " TEXT" +")";
+            + KEY_ID_CATEGORY + " INTEGER," + KEY_MEASURE + " TEXT" + ")";
     // SHOPPING_GROUPS table create statement
     private static final String CREATE_TABLE_SHOPPING_GROUPS = "CREATE TABLE "
             + TABLE_SHOPPING_GROUPS + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_NAME + " TEXT," + KEY_DESCRIPTION + " TEXT,"
-            + KEY_ADD_DATE + " DATETIME," + KEY_ID_ICON + " INTEGER" +")";
+            + KEY_ADD_DATE + " DATETIME," + KEY_ID_ICON + " INTEGER" + ")";
     // SHOPPING_GROUPS_USERS table create statement
     private static final String CREATE_TABLE_SHOPPING_GROUPS_USERS = "CREATE TABLE "
             + TABLE_SHOPPING_GROUPS_USERS + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
@@ -169,22 +169,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_SHOPPING_LISTS = "CREATE TABLE "
             + TABLE_SHOPPING_LISTS + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_ID_SHOPPING_GROUP + " INTEGER," + KEY_CREATE_DATE + " DATETIME,"
-            + KEY_STATUS + " TEXT," + KEY_LAST_SYNCHRONIZATION + " DATETIME," + KEY_MODIFY_DATE + " DATETIME" +")";
+            + KEY_STATUS + " TEXT," + KEY_LAST_SYNCHRONIZATION + " DATETIME," + KEY_MODIFY_DATE + " DATETIME" + ")";
     // SHOPPING_LISTS_PRODUCTS table create statement
     private static final String CREATE_TABLE_SHOPPING_LISTS_PRODUCTS = "CREATE TABLE "
             + TABLE_SHOPPING_LISTS_PRODUCTS + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_ID_SHOPPING_LIST + " INTEGER," + KEY_ID_PRODUCT + " INTEGER,"
-            + KEY_PRODUCT_TYPE + " INTEGER," + KEY_PRICE + " REAL," + KEY_DESCRIPTION + " TEXT," + KEY_STATUS + " INTEGER," + KEY_ADD_DATE + " DATETIME," + KEY_MODIFY_DATE + " DATETIME," + KEY_QUANTITY + " INTEGER" +")";
+            + KEY_PRODUCT_TYPE + " INTEGER," + KEY_PRICE + " REAL," + KEY_DESCRIPTION + " TEXT," + KEY_STATUS + " INTEGER," + KEY_ADD_DATE + " DATETIME," + KEY_MODIFY_DATE + " DATETIME," + KEY_QUANTITY + " INTEGER" + ")";
     // SHOPPING_LISTS_USERS table create statement
     private static final String CREATE_TABLE_SHOPPING_LISTS_USERS = "CREATE TABLE "
             + TABLE_SHOPPING_LISTS_USERS + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_ID_SHOPPING_LIST + " INTEGER," + KEY_ID_USER + " INTEGER,"
-            + KEY_SYNC_TIME + " DATETIME" +")";
+            + KEY_SYNC_TIME + " DATETIME" + ")";
     // USERS table create statement
     private static final String CREATE_TABLE_USERS = "CREATE TABLE "
             + TABLE_USERS + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_EMAIL + " TEXT," + KEY_PASSWORD + " TEXT,"
-            + KEY_REGISTER_DATE + " DATETIME," + KEY_LAST_LOGIN_DATE + " DATETIME," + KEY_ID_ICON + " INTEGER," + KEY_STAY_LOGGED + " INTEGER" +")";
+            + KEY_REGISTER_DATE + " DATETIME," + KEY_LAST_LOGIN_DATE + " DATETIME," + KEY_ID_ICON + " INTEGER," + KEY_STAY_LOGGED + " INTEGER" + ")";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

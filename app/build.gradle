@@ -33,6 +33,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:' + project.getSDKIfPossible(25) + '.+'
     compile 'com.android.support.constraint:constraint-layout:+'
     compile 'com.android.support:design:' + project.getSDKIfPossible(25) + '.+'
+    compile "org.projectlombok:lombok:1.16.16"
+    annotationProcessor "org.projectlombok:lombok:1.16.+"
     testCompile 'junit:junit:4.12'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

@@ -5,7 +5,7 @@ import pl.pollub.android.shoppinglist.FriendsList;
 import java.util.Date;
 
 /**
- * Created by pawel on 28.07.2017.
+ * @author Pawel on 28.07.2017.
  */
 
 public class FriendsListUser {
@@ -13,19 +13,21 @@ public class FriendsListUser {
     int _idUser;
     int _idFriendsList;
     Date _addDate;
-    FriendsListUser(){
 
+    FriendsListUser() {
     }
-    FriendsListUser( int idUser, int idFriendsList, Date addDate){
-        this._idUser=idUser;
-        this._idFriendsList=idFriendsList;
-        this._addDate=addDate;
+
+    FriendsListUser(int idUser, int idFriendsList, Date addDate) {
+        this._idUser = idUser;
+        this._idFriendsList = idFriendsList;
+        this._addDate = addDate;
     }
-    FriendsListUser(int id, int idUser, int idFriendsList, Date addDate){
-        this._id=id;
-        this._idUser=idUser;
-        this._idFriendsList=idFriendsList;
-        this._addDate=addDate;
+
+    FriendsListUser(int id, int idUser, int idFriendsList, Date addDate) {
+        this._id = id;
+        this._idUser = idUser;
+        this._idFriendsList = idFriendsList;
+        this._addDate = addDate;
     }
 
     public void setIdUser(int _idUser) {
