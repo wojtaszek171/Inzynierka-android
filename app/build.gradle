@@ -39,7 +39,7 @@ dependencies {
         //exclude group: 'javax.annotation', module: 'javax.annotation-api'
     })
     // third party libs
-    compile "org.projectlombok:lombok:1.16.16"
+    compile "org.projectlombok:lombok:1.16.+"
     annotationProcessor "org.projectlombok:lombok:1.16.+"
     compile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
     //provided 'javax.annotation:javax.annotation-api:1.3.+'
