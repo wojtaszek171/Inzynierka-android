@@ -1,8 +1,7 @@
-package pl.pollub.android.shoppinglist.db;
+package pl.pollub.android.shoppinglist.model;
 
 import org.threeten.bp.LocalDateTime;
 import lombok.*;
-import pl.pollub.android.shoppinglist.FriendsList;
 
 /**
  * @author Pawel on 28.07.2017.

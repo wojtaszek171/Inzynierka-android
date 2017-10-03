@@ -1,4 +1,4 @@
-package pl.pollub.android.shoppinglist.db;
+package pl.pollub.android.shoppinglist.model;
 
 import java.sql.Blob;
 
