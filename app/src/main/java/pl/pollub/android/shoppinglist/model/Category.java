@@ -1,16 +1,17 @@
 package pl.pollub.android.shoppinglist.model;
 
+import android.arch.persistence.room.ColumnInfo;
 import lombok.*;
 
 /**
- * @author Pawel on 27.07.2017.
+ * @author Pawel
+ * @since 2017-07-27
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category {
-    private int _idCategory;
-    private int _idParent;
-    private String _name;
-    private String _description;
+public class Category extends NamedEntity {
+    @ColumnInfo(index = true)
+    private int parentId;
 }

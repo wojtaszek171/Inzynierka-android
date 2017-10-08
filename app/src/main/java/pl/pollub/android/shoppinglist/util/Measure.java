@@ -1,4 +1,4 @@
-package pl.pollub.android.shoppinglist.model;
+package pl.pollub.android.shoppinglist.util;
 
 /**
  * @author Pawel on 27.07.2017.

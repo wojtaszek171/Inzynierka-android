@@ -2,7 +2,6 @@ package pl.pollub.android.shoppinglist.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
-
 import lombok.*;
 import pl.pollub.android.shoppinglist.util.Measure;
 
@@ -23,8 +22,11 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
                 onUpdate = CASCADE
         )
 })
-public class Product extends NamedEntity {
-    private int categoryId;
+public class CustomProduct extends Product {
+    private int iconId;
     private Measure measure;
-    private boolean predefined = true;
+
+    public CustomProduct() {
+        setPredefined(false);
+    }
 }
