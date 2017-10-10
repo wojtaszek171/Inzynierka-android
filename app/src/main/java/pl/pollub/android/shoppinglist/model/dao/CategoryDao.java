@@ -20,4 +20,8 @@ public interface CategoryDao extends BaseDao<Category> {
     @Override
     @Query("SELECT * FROM category WHERE id = :id")
     Category findById(int id);
+
+    @Override
+    @Query("SELECT COUNT(*) FROM category")
+    int count();
 }

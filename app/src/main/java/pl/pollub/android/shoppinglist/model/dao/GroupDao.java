@@ -14,10 +14,14 @@ import pl.pollub.android.shoppinglist.model.Group;
 @Dao
 public interface GroupDao extends BaseDao<Group> {
     @Override
-    @Query("SELECT * FROM group")
+    @Query("SELECT * FROM shopping_group")
     List<Group> findAll();
 
     @Override
-    @Query("SELECT * FROM group WHERE id = :id")
+    @Query("SELECT * FROM shopping_group WHERE id = :id")
     Group findById(int id);
+
+    @Override
+    @Query("SELECT COUNT(*) FROM shopping_group")
+    int count();
 }

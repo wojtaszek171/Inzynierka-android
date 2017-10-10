@@ -7,10 +7,17 @@ import lombok.*;
 /**
  * @author Pawel on 28.07.2017.
  */
-@Data
 @EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
-@Entity
+@ToString
+@Entity(tableName = "shopping_group")
 public class Group extends NamedEntity {
     private String icon;
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 }

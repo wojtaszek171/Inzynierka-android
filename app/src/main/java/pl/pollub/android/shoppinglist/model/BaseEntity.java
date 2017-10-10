@@ -12,12 +12,40 @@ import java.io.Serializable;
  * @author Adrian
  * @since 2017-10-03
  */
-@Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
-public class BaseEntity implements Serializable {
+@EqualsAndHashCode
+@ToString
+class BaseEntity implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    protected BaseEntity() {
+        createdAt = LocalDateTime.now();
+        updatedAt = createdAt;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

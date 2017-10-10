@@ -12,7 +12,7 @@ import pl.pollub.android.shoppinglist.model.ShoppingListProduct;
  * @author Adrian
  * @since 2017-10-08
  */
-public class ShoppingListWithShoppingListProduct {
+public class ShoppingListWithShoppingListProducts {
     @Embedded
     ShoppingList shoppingList;
     @Relation(parentColumn = "id", entityColumn = "shopping_list_product_id", entity = ShoppingListProduct.class)

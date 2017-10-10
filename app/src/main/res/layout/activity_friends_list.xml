@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.pollub.android.shoppinglist.ListsList">
+    tools:context="pl.pollub.android.shoppinglist.FriendsList">
 
     <LinearLayout
         android:layout_width="match_parent"

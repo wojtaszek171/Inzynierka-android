@@ -5,9 +5,9 @@ import android.app.Application;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 /**
- * @author Adrian on 17.09.2017.
+ * @author Adrian
+ * @since 2017-09-17
  */
-
 public class ShoppingListApp extends Application {
     @Override
     public void onCreate() {

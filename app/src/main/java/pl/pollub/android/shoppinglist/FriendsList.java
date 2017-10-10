@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import javax.xml.transform.Templates;
 
 public class FriendsList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private ActivityFriendsListBinding
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
 
@@ -77,10 +78,7 @@ public class FriendsList extends AppCompatActivity implements NavigationView.OnN
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return mToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     @Override

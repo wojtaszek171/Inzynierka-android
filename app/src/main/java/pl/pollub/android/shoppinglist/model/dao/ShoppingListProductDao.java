@@ -22,4 +22,8 @@ public interface ShoppingListProductDao extends BaseDao<ShoppingListProduct> {
     @Override
     @Query("SELECT * FROM shopping_list_product WHERE id = :id")
     ShoppingListProduct findById(int id);
+
+    @Override
+    @Query("SELECT COUNT(*) FROM shopping_list_product")
+    int count();
 }

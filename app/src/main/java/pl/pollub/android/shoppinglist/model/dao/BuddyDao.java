@@ -11,7 +11,6 @@ import pl.pollub.android.shoppinglist.model.Buddy;
  * @author Adrian
  * @since 2017-10-03
  */
-
 @Dao
 public interface BuddyDao extends BaseDao<Buddy> {
     @Override
@@ -19,15 +18,20 @@ public interface BuddyDao extends BaseDao<Buddy> {
     List<Buddy> findAll();
 
     @Override
-    @Query("SELECT * FROM buddy where id = :id")
+    @Query("SELECT * FROM buddy WHERE id = :id")
     Buddy findById(int id);
 
-    @Query("SELECT * FROM buddy where name LIKE :name%")
+    @Override
+    @Query("SELECT COUNT(*) FROM buddy")
+    int count();
+
+    // TODO: to search only part of the string, consult this: https://stackoverflow.com/a/44185385/5982796
+    @Query("SELECT * FROM buddy WHERE name LIKE :name")
     Buddy findByName(String name);
 
-    @Query("SELECT * FROM buddy where nickname LIKE :nickname%")
+    @Query("SELECT * FROM buddy WHERE nickname LIKE :nickname")
     Buddy findByNickname(String nickname);
 
-    @Query("SELECT * FROM buddy where email LIKE :email%")
+    @Query("SELECT * FROM buddy WHERE email LIKE :email")
     Buddy findByEmail(String email);
 }

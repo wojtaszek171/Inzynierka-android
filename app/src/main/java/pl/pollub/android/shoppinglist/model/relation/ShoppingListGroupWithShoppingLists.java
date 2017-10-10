@@ -6,15 +6,15 @@ import android.arch.persistence.room.Relation;
 import java.util.List;
 
 import pl.pollub.android.shoppinglist.model.ShoppingList;
-import pl.pollub.android.shoppinglist.model.ShoppingListProduct;
+import pl.pollub.android.shoppinglist.model.ShoppingListGroup;
 
 /**
  * @author Adrian
- * @since 2017-10-08
+ * @since 2017-10-09
  */
-public class ShoppingListProductWithShoppingList {
+public class ShoppingListGroupWithShoppingLists {
     @Embedded
-    ShoppingListProduct shoppingListProduct;
+    ShoppingListGroup shoppingListGroup;
     @Relation(parentColumn = "id", entityColumn = "shopping_list_id", entity = ShoppingList.class)
     List<ShoppingList> shoppingLists;
 }

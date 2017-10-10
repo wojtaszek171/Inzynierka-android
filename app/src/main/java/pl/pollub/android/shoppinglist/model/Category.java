@@ -1,17 +1,36 @@
 package pl.pollub.android.shoppinglist.model;
 
 import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+
 import lombok.*;
+import pl.pollub.android.shoppinglist.util.Icon;
 
 /**
  * @author Pawel
  * @since 2017-07-27
  */
-@Data
 @EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
-@AllArgsConstructor
+@ToString
+@Entity(tableName = "category")
 public class Category extends NamedEntity {
-    @ColumnInfo(index = true)
+    @ColumnInfo(index = true, name = "parent_id")
     private int parentId;
+    private Icon icon;
+
+    public int getParentId() {
+        return parentId;
+    }
+
+    public Icon getIcon() {
+        return icon;
+    }
+
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
+    }
+
+    public void setIcon(Icon icon) {
+        this.icon = icon;
+    }
 }

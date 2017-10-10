@@ -13,10 +13,14 @@ import java.util.List;
 @Dao
 public interface ProductDao extends BaseDao<Product> {
     @Override
-    @Query("SELECT * FROM user")
+    @Query("SELECT * FROM product")
     List<Product> findAll();
 
     @Override
     @Query("SELECT * FROM product WHERE id = :id")
     Product findById(int id);
+
+    @Override
+    @Query("SELECT COUNT(*) FROM product")
+    int count();
 }

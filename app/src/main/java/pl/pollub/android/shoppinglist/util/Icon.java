@@ -1,15 +1,20 @@
 package pl.pollub.android.shoppinglist.util;
 
-import java.nio.file.Path;
-
-import lombok.*;
+import lombok.Getter;
+import pl.pollub.android.shoppinglist.R;
 
 /**
- * @author Pawel on 28.07.2017.
+ * @author Pawel
+ * @since 2017-07-28
  */
-@Data
-@NoArgsConstructor
-public class Icon {
-    private String name;
-    private Path path;
+@Getter
+public enum Icon {
+    UNKNOWN(R.drawable.logo),
+    BURGER(R.drawable.burger);
+
+    private final int resourceId;
+
+    Icon(int resourceId) {
+        this.resourceId = resourceId;
+    }
 }
