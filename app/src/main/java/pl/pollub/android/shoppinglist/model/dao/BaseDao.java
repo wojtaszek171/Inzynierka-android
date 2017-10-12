@@ -4,13 +4,15 @@ import android.arch.persistence.room.*;
 
 import java.util.List;
 
+import pl.pollub.android.shoppinglist.model.BaseEntity;
+
 /**
  * @author Adrian
  * @since 2017-10-03
  */
 @SuppressWarnings("unchecked")
 @Dao
-interface BaseDao<T> {
+interface BaseDao<T extends BaseEntity> {
     List<T> findAll();
     T findById(int id);
     int count();

@@ -1,7 +1,10 @@
-package pl.pollub.android.shoppinglist;
+package pl.pollub.android.shoppinglist.activity;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,20 +14,29 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
 
-import javax.xml.transform.Templates;
+import pl.pollub.android.shoppinglist.R;
 
-public class Settings extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ListsList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_lists_list);
+        FloatingActionButton addNew = (FloatingActionButton) findViewById(R.id.addListButton);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(R.string.settings);
+        setTitle(R.string.menuLists);
+
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
@@ -32,10 +44,23 @@ public class Settings extends AppCompatActivity implements NavigationView.OnNavi
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
+        addNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(context);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.add_list_dialog);
+
+                // set the custom dialog components - text, image and button
+
+                // if button is clicked, close the custom dialog
+
+                dialog.show();
+            }
+        });
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -43,26 +68,26 @@ public class Settings extends AppCompatActivity implements NavigationView.OnNavi
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_friends: {
-                Intent intent = new Intent(Settings.this, FriendsList.class);
+                Intent intent = new Intent(ListsList.this, BuddiesActivity.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_lists: {
-                Intent intent = new Intent(Settings.this, ListsList.class);
-                startActivity(intent);
+                mDrawerLayout.closeDrawer(GravityCompat.START);
                 break;
             }
             case R.id.nav_templates: {
-                Intent intent = new Intent(Settings.this, TemplatesList.class);
+                Intent intent = new Intent(ListsList.this, TemplatesList.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_settings: {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
+                Intent intent = new Intent(ListsList.this, Settings.class);
+                startActivity(intent);
                 break;
             }
             case R.id.nav_logout: {
-                Intent intent = new Intent(Settings.this, MainScreen.class);
+                Intent intent = new Intent(ListsList.this, MainScreen.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;

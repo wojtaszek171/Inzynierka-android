@@ -1,10 +1,11 @@
-package pl.pollub.android.shoppinglist;
+package pl.pollub.android.shoppinglist.activity;
 
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
+
+import pl.pollub.android.shoppinglist.R;
 
 public class Splash extends AppCompatActivity {
 

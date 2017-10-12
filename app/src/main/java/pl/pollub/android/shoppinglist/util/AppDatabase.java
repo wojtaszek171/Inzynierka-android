@@ -12,6 +12,10 @@ import android.arch.persistence.room.*;
 import android.content.Context;
 import android.support.annotation.VisibleForTesting;
 
+import org.threeten.bp.LocalDateTime;
+
+import java.util.Random;
+
 /**
  * @author Adrian
  * @since 2017-10-04
@@ -83,7 +87,7 @@ public abstract class AppDatabase extends RoomDatabase {
      * Inserts the dummy data into the database if it is currently empty
      */
     public void populateInitialData() {
-        if (productDao().count() == 0) {
+        /*if (productDao().count() == 0) {
             Product product;
             beginTransaction();
             try {
@@ -98,10 +102,11 @@ public abstract class AppDatabase extends RoomDatabase {
             } finally {
                 endTransaction();
             }
-        }
+        }*/
 
         if (buddyDao().count() == 0) {
             Buddy buddy;
+            Random randomGen = new Random();
             beginTransaction();
             try {
                 for (int i = 0; i < 15; i++) {
@@ -109,6 +114,13 @@ public abstract class AppDatabase extends RoomDatabase {
                     buddy.setName("Friend no." + i);
                     buddy.setNickname("cool" + i + "ega" + (15-i));
                     buddy.setEmail("fr"+i+"@google.com");
+                    buddy.setLastActiveAt(LocalDateTime.of(
+                            2017,
+                            randomGen.nextInt(12) + 1,
+                            randomGen.nextInt(26) + 1,
+                            randomGen.nextInt(24),
+                            randomGen.nextInt(60)
+                    ));
                     buddyDao().insert(buddy);
                 }
                 setTransactionSuccessful();

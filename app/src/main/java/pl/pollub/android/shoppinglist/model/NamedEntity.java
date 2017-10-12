@@ -10,7 +10,7 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-class NamedEntity extends BaseEntity {
+public class NamedEntity extends BaseEntity {
     private String name;
     private String description;
 

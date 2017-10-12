@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode
 @ToString
-class BaseEntity implements Serializable {
+public class BaseEntity implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private LocalDateTime createdAt;
