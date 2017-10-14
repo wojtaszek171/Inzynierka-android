@@ -8,7 +8,6 @@ import pl.pollub.android.shoppinglist.viewmodel.BuddiesViewModel;
  * @author Adrian
  * @since 2017-10-11
  */
-
 public class BuddyBinder extends ConditionalDataBinder<Buddy> {
 
     public BuddyBinder(int bindingVariable, int layoutId) {

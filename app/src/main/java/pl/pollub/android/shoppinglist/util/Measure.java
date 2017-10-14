@@ -1,9 +1,9 @@
 package pl.pollub.android.shoppinglist.util;
 
 /**
- * @author Pawel on 27.07.2017.
+ * @author Pawel
+ * @since 2017-07-27
  */
-
 public enum Measure {
     PIECE,
     WEIGHT

@@ -1,5 +1,9 @@
 package pl.pollub.android.shoppinglist.util.recyclerview.binder;
 
+/**
+ * @author Adrian
+ * @since 2017-10-11
+ */
 public class CompositeItemBinder<T> implements ItemBinder<T> {
     private final ConditionalDataBinder<T>[] conditionalDataBinders;
 

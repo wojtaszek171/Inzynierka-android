@@ -7,18 +7,17 @@ import android.view.MenuItem;
 
 import pl.pollub.android.shoppinglist.R;
 
-public class LogInto extends AppCompatActivity {
+public class RegistrationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_log_into);
+        setContentView(R.layout.activity_registration);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(R.string.menuLogInto);
+        setTitle(R.string.menuRegister);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
     @Override
@@ -28,9 +27,7 @@ public class LogInto extends AppCompatActivity {
                 this.finish();
                 return true;
         }
+
         return super.onOptionsItemSelected(item);
-
     }
-
-
 }

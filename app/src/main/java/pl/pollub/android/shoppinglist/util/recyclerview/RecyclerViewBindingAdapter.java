@@ -3,14 +3,7 @@ package pl.pollub.android.shoppinglist.util.recyclerview;
 import android.databinding.BindingAdapter;
 import android.support.v7.widget.RecyclerView;
 
-import pl.pollub.android.shoppinglist.BR;
-import pl.pollub.android.shoppinglist.R;
-import pl.pollub.android.shoppinglist.model.Buddy;
-import pl.pollub.android.shoppinglist.util.recyclerview.BindingRecyclerViewAdapter;
 import pl.pollub.android.shoppinglist.util.recyclerview.binder.ItemBinder;
-import pl.pollub.android.shoppinglist.util.recyclerview.ClickHandler;
-import pl.pollub.android.shoppinglist.util.recyclerview.LongClickHandler;
-import pl.pollub.android.shoppinglist.util.recyclerview.binder.ItemBinderBase;
 
 import java.util.Collection;
 

@@ -19,7 +19,7 @@ import android.view.Window;
 
 import pl.pollub.android.shoppinglist.R;
 
-public class ListsList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ShoppingListsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     final Context context = this;
@@ -27,7 +27,7 @@ public class ListsList extends AppCompatActivity implements NavigationView.OnNav
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lists_list);
+        setContentView(R.layout.activity_shopping_lists);
         FloatingActionButton addNew = (FloatingActionButton) findViewById(R.id.addListButton);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -68,7 +68,7 @@ public class ListsList extends AppCompatActivity implements NavigationView.OnNav
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_friends: {
-                Intent intent = new Intent(ListsList.this, BuddiesActivity.class);
+                Intent intent = new Intent(ShoppingListsActivity.this, BuddiesActivity.class);
                 startActivity(intent);
                 break;
             }
@@ -77,17 +77,17 @@ public class ListsList extends AppCompatActivity implements NavigationView.OnNav
                 break;
             }
             case R.id.nav_templates: {
-                Intent intent = new Intent(ListsList.this, TemplatesList.class);
+                Intent intent = new Intent(ShoppingListsActivity.this, TemplatesActivity.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_settings: {
-                Intent intent = new Intent(ListsList.this, Settings.class);
+                Intent intent = new Intent(ShoppingListsActivity.this, SettingsActivity.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_logout: {
-                Intent intent = new Intent(ListsList.this, MainScreen.class);
+                Intent intent = new Intent(ShoppingListsActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;

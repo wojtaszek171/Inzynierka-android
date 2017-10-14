@@ -7,16 +7,16 @@ import android.view.MenuItem;
 
 import pl.pollub.android.shoppinglist.R;
 
-public class Register extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_login);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(R.string.menuRegister);
+        setTitle(R.string.menuLogInto);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
@@ -31,4 +31,6 @@ public class Register extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
 
     }
+
+
 }

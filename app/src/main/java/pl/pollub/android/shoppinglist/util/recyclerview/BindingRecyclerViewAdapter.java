@@ -15,6 +15,10 @@ import java.util.Collection;
 
 import pl.pollub.android.shoppinglist.util.recyclerview.binder.ItemBinder;
 
+/**
+ * @author Adrian
+ * @since 2017-10-11
+ */
 public class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter<BindingRecyclerViewAdapter.ViewHolder> implements View.OnClickListener, View.OnLongClickListener {
     private static final int ITEM_MODEL = -124;
     private final WeakReferenceOnListChangedCallback onListChangedCallback;

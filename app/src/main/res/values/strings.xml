@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">MyEngineer</string>
+    <string name="app_name">Shopping List</string>
     <string name="menuLogInto">Zaloguj się</string>
     <string name="menuMainScreen">MyEngineer</string>
     <string name="menuRegister">Zarejestruj się</string>
     <string name="menuLists">TWOJE LISTY</string>
-    <string name="zaloguj"></string>
+    <string name="zaloguj">Zaloguj się</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="friends">Znajomi</string>

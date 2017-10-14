@@ -1,5 +1,9 @@
 package pl.pollub.android.shoppinglist.util.recyclerview.binder;
 
+/**
+ * @author Adrian
+ * @since 2017-10-11
+ */
 public class ItemBinderBase<T> implements ItemBinder<T> {
     protected final int bindingVariable;
     protected final int layoutId;

@@ -10,14 +10,14 @@ import android.view.MenuItem;
 
 import pl.pollub.android.shoppinglist.R;
 
-public class ListItems extends AppCompatActivity {
+public class ShoppingListDetailsActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_items);
+        setContentView(R.layout.activity_shopping_list_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.menuLists);

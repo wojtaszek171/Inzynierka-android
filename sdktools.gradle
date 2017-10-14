@@ -4,30 +4,29 @@
 import org.codehaus.groovy.runtime.StackTraceUtils
 
 // use the newest SDK automatically if the given one is not available
-// accessible via: project.getSDKIfPossible(21)
-project.ext.set("getSDKIfPossible",
-        {preferred ->
-            return highestSdkAvailable(preferred)
-        });
-// Use the lastest patch BuildTool Version for the given version available, default to the given value on error
-// The input "21.1.2" will result in "21.1.XX" where XX stands for the newest installed build tools version
-// accessible via: project.getHighestAvailableTools("21.1.2")
-project.ext.set("getHighestAvailableTools",
-        {preferred ->
-            return latestBuildToolsAvailable(preferred)
-        });
+// accessible via: project.sdkForVer(21)
+project.ext.set("sdkForVer", {
+    preferred -> return latestSdkAvailable(preferred)
+});
 
-public String androidSDKDir() {
-    def sdkDir = android.getSdkDirectory().toString()
+// Use the latest minor buildToolsVersion for the given major version, default to the given value on error
+// The input "21.1.2" will result in "21.1.XX" where XX stands for the newest installed build tools version
+// accessible via: project.latestToolsForMinVer("21.1.2")
+project.ext.set("latestToolsForMinVer", {
+    preferred -> return latestBuildToolsAvailable(preferred)
+});
+
+public String androidSdkDir() {
+    def sdkDir = android.sdkDirectory.path
     return sdkDir
 }
 
 public int[] sdksAvailable() {
     def sdks = new ByteArrayOutputStream()
-    def androidSdkDir = androidSDKDir()
+    def androidSdkDir = androidSdkDir()
     exec {
         workingDir androidSdkDir + "/tools"
-        if(isWindows()) {
+        if (isWindows()) {
             commandLine 'cmd', '/c','android', 'list'
         } else {
             commandLine './android', 'list'
@@ -44,11 +43,11 @@ public int[] sdksAvailable() {
     // extract the API levels
             .collect { (it =~ /\s*API level:\s*(\d+).*/)[0][1].toInteger() }
     // sort from highest to lowest
-            .sort( { a, b -> b <=> a } )
+            .sort { a, b -> b <=> a }
     sdks
 }
 
-public int highestSdkAvailable(int preferredSdk) {
+public int latestSdkAvailable(int preferredSdk) {
     try {
         def sdks = sdksAvailable()
         def highestSdk = sdks[0]
@@ -70,8 +69,8 @@ public int highestSdkAvailable(int preferredSdk) {
 }
 
 public String[] buildToolsAvailable() {
-    println "sdk dir: " + androidSDKDir()
-    def buildToolsDir = new File(androidSDKDir(), "build-tools")
+    println "sdk dir: " + androidSdkDir()
+    def buildToolsDir = new File(androidSdkDir(), "build-tools")
     String[] collection = buildToolsDir.list([accept:{ d, f-> !f.contains("android") }] as FilenameFilter)
     for (int i = 0; i < collection.length; i++) {
         String s = collection[i]
@@ -84,9 +83,9 @@ public String latestBuildToolsAvailable(String defaultBuildTools) {
     try {
         def buildToolsVersions = buildToolsAvailable()
         //defaultBuildTools.substring(0,defaultBuildTools.lastIndexOf("."))
-        //find the newest build-tools version with the given minor version
+        // find the newest build-tools version with the given minor version
         def latestBuildTools = null
-        for (String buildTool: buildToolsVersions) {
+        for (String buildTool : buildToolsVersions) {
             if (buildTool.contains(defaultBuildTools.substring(0,defaultBuildTools.lastIndexOf(".")))) {
                 latestBuildTools = buildTool
                 break
@@ -109,9 +108,6 @@ public String latestBuildToolsAvailable(String defaultBuildTools) {
 }
 
 import org.apache.tools.ant.taskdefs.condition.Os
-public boolean isWindows() {
-    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-        return true
-    }
-    return false
+public static boolean isWindows() {
+    return Os.isFamily(Os.FAMILY_WINDOWS)
 }

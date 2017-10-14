@@ -69,22 +69,22 @@ public class BuddiesActivity extends AppCompatActivity implements NavigationView
                 break;
             }
             case R.id.nav_lists: {
-                Intent intent = new Intent(BuddiesActivity.this, ListsList.class);
+                Intent intent = new Intent(BuddiesActivity.this, ShoppingListsActivity.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_templates: {
-                Intent intent = new Intent(BuddiesActivity.this, TemplatesList.class);
+                Intent intent = new Intent(BuddiesActivity.this, TemplatesActivity.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_settings: {
-                Intent intent = new Intent(BuddiesActivity.this, Settings.class);
+                Intent intent = new Intent(BuddiesActivity.this, SettingsActivity.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_logout: {
-                Intent intent = new Intent(BuddiesActivity.this, MainScreen.class);
+                Intent intent = new Intent(BuddiesActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
@@ -123,10 +123,12 @@ public class BuddiesActivity extends AppCompatActivity implements NavigationView
         }.execute();
     }
 
+    // TODO: implement
     public ClickHandler<BuddiesViewModel> clickHandler() {
         return null;
     }
 
+    // TODO: implement
     public LongClickHandler<BuddiesViewModel> longClickHandler() {
         return null;
     }

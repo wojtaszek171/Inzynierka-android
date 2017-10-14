@@ -6,15 +6,15 @@ import android.support.v7.widget.Toolbar;
 
 import pl.pollub.android.shoppinglist.R;
 
-public class Add_Product extends AppCompatActivity {
+public class BuddyManagerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add__product);
+        setContentView(R.layout.activity_buddy_appender);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(R.string.addProduct);
+        setTitle(R.string.addFriend);
     }
 }

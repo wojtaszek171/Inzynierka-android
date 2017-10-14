@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawer_layout"
-    tools:context="pl.pollub.android.shoppinglist.activity.Settings">
+    tools:context="pl.pollub.android.shoppinglist.activity.SettingsActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -14,6 +14,6 @@
         layout="@layout/toolbar"/>
     </LinearLayout>
 
-    <include layout="@layout/burger_menu" />
+    <include layout="@layout/menu_burger" />
 
 </android.support.v4.widget.DrawerLayout>

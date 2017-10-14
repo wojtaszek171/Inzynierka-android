@@ -8,7 +8,7 @@ import android.view.View;
 
 import pl.pollub.android.shoppinglist.R;
 
-public class MainScreen extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,17 +21,17 @@ public class MainScreen extends AppCompatActivity {
     }
 
     public void logInto(View view) {
-        Intent intent = new Intent(MainScreen.this, LogInto.class);
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
     }
 
     public void register(View view) {
-        Intent intent = new Intent(MainScreen.this, Register.class);
+        Intent intent = new Intent(MainActivity.this, RegistrationActivity.class);
         startActivity(intent);
     }
 
     public void Lists(View view) {
-        Intent intent = new Intent(MainScreen.this, ListsList.class);
+        Intent intent = new Intent(MainActivity.this, ShoppingListsActivity.class);
         startActivity(intent);
     }
 }

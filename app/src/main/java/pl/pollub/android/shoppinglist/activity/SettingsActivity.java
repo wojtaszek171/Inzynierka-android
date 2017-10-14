@@ -1,9 +1,7 @@
 package pl.pollub.android.shoppinglist.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,28 +11,20 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import pl.pollub.android.shoppinglist.R;
 
-public class TemplatesList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class SettingsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_templates_list);
-        FloatingActionButton addNew = (FloatingActionButton) findViewById(R.id.addListButton);
-
+        setContentView(R.layout.activity_settings);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(R.string.templates);
-
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        setTitle(R.string.settings);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
@@ -42,15 +32,10 @@ public class TemplatesList extends AppCompatActivity implements NavigationView.O
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
-        addNew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -58,29 +43,28 @@ public class TemplatesList extends AppCompatActivity implements NavigationView.O
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_friends: {
-                Intent intent = new Intent(TemplatesList.this, BuddiesActivity.class);
+                Intent intent = new Intent(SettingsActivity.this, BuddiesActivity.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_lists: {
-                Intent intent = new Intent(TemplatesList.this, ListsList.class);
+                Intent intent = new Intent(SettingsActivity.this, ShoppingListsActivity.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_templates: {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
+                Intent intent = new Intent(SettingsActivity.this, TemplatesActivity.class);
+                startActivity(intent);
                 break;
             }
             case R.id.nav_settings: {
-                Intent intent = new Intent(TemplatesList.this, Settings.class);
-                startActivity(intent);
+                mDrawerLayout.closeDrawer(GravityCompat.START);
                 break;
             }
             case R.id.nav_logout: {
-                Intent intent = new Intent(TemplatesList.this, MainScreen.class);
+                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-
                 break;
             }
         }

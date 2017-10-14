@@ -50,7 +50,7 @@
 
         <include
             android:id="@+id/burger_layout"
-            layout="@layout/burger_menu" />
+            layout="@layout/menu_burger" />
 
     </android.support.v4.widget.DrawerLayout>
 </layout>

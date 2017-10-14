@@ -10,24 +10,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainScreen" />
-        <activity android:name=".activity.LogInto" />
-        <activity android:name=".activity.Register" />
-        <activity android:name=".activity.ListsList" />
-        <activity android:name=".activity.ListItems" />
+
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.RegistrationActivity" />
+        <activity android:name=".activity.ShoppingListsActivity" />
+        <activity android:name=".activity.ShoppingListDetailsActivity" />
         <activity android:name=".activity.BuddiesActivity" />
-        <activity android:name=".activity.AddFriend" />
-        <activity android:name=".activity.Add_Product" />
-        <activity android:name=".activity.Settings" />
-        <activity android:name=".activity.Splash">
+        <activity android:name=".activity.BuddyManagerActivity" />
+        <activity android:name=".activity.ProductAppenderActivity" />
+        <activity android:name=".activity.SettingsActivity" />
+        <activity android:name=".activity.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Templates" />
-        <activity android:name=".activity.TemplatesList"></activity>
+        <activity android:name=".activity.TemplatesActivity"></activity>
+
     </application>
 
 </manifest>

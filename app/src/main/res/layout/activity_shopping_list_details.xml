@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pl.pollub.android.shoppinglist.activity.ListsList">
+    tools:context="pl.pollub.android.shoppinglist.activity.ShoppingListsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,8 +15,8 @@
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />
 
-        <ListView
-            android:id="@+id/buddies_recycler_view"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/items_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/toolbar"
@@ -35,7 +35,7 @@
 
     </LinearLayout>
 
-    <include layout="@layout/burger_menu" />
+    <include layout="@layout/menu_burger" />
 
 
 </android.support.v4.widget.DrawerLayout>

@@ -1,5 +1,9 @@
 package pl.pollub.android.shoppinglist.util.recyclerview.binder;
 
+/**
+ * @author Adrian
+ * @since 2017-10-11
+ */
 public abstract class ConditionalDataBinder<T> extends ItemBinderBase<T> {
     public ConditionalDataBinder(int bindingVariable, int layoutId) {
         super(bindingVariable, layoutId);
