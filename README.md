@@ -14,8 +14,8 @@
 In order to develop and test the application seamlessly, you need:
 
 * Android SDK 26 (8.0 Oreo)
-* SDK Build-Tools 26.0.0
-* Gradle 3.3
+* SDK Build-Tools 26.0.0 or newer
+* Gradle 3.3 or newer
 * Device/emulator running Android 4.4 Kitkat or newer (API level 19)
 
 ## Authors

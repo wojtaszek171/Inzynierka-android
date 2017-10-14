@@ -5,7 +5,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion project.latestToolsForMinVer("26.0.0")
     defaultConfig {
-        applicationId "pl.pollub.android.shoppinglist"
+        applicationId "pl.pollub.shoppinglist"
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1

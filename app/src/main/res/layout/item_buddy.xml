@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="buddy" type="pl.pollub.android.shoppinglist.model.Buddy" />
+        <variable name="buddy" type="pl.pollub.shoppinglist.model.Buddy" />
     </data>
 
     <LinearLayout

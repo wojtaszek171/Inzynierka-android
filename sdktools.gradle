@@ -1,6 +1,5 @@
 // get the installed SDK and build tools version
-// based on: http://www.egeek.me/2013/12/07/gradle-auto-detect-android-sdk-and-build-tools-versions/
-// modified by Ari Ayvazyan
+// based on: http://www.egeek.me/2013/12/07/gradle-auto-detect-android-sdk-and-build-tools-versions
 import org.codehaus.groovy.runtime.StackTraceUtils
 
 // use the newest SDK automatically if the given one is not available
@@ -9,8 +8,8 @@ project.ext.set("sdkForVer", {
     preferred -> return latestSdkAvailable(preferred)
 });
 
-// Use the latest minor buildToolsVersion for the given major version, default to the given value on error
-// The input "21.1.2" will result in "21.1.XX" where XX stands for the newest installed build tools version
+// use the latest minor Build-Tools version for the given major version, defaults to the given value on error
+// the input "21.1.2" will result in "21.1.XX" where XX stands for the newest installed build tools version
 // accessible via: project.latestToolsForMinVer("21.1.2")
 project.ext.set("latestToolsForMinVer", {
     preferred -> return latestBuildToolsAvailable(preferred)
@@ -83,7 +82,7 @@ public String latestBuildToolsAvailable(String defaultBuildTools) {
     try {
         def buildToolsVersions = buildToolsAvailable()
         //defaultBuildTools.substring(0,defaultBuildTools.lastIndexOf("."))
-        // find the newest build-tools version with the given minor version
+        // find the newest Build-Tools version with the given minor version
         def latestBuildTools = null
         for (String buildTool : buildToolsVersions) {
             if (buildTool.contains(defaultBuildTools.substring(0,defaultBuildTools.lastIndexOf(".")))) {

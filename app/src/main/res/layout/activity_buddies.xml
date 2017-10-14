@@ -4,9 +4,9 @@
 
     <data>
         <variable name="buddiesViewModel"
-            type="pl.pollub.android.shoppinglist.viewmodel.BuddiesViewModel"/>
+            type="pl.pollub.shoppinglist.viewmodel.BuddiesViewModel"/>
         <variable name="view"
-            type="pl.pollub.android.shoppinglist.activity.BuddiesActivity"/>
+            type="pl.pollub.shoppinglist.activity.BuddiesActivity"/>
     </data>
 
     <android.support.v4.widget.DrawerLayout
