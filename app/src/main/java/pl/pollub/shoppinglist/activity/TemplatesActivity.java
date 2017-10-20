@@ -45,7 +45,8 @@ public class TemplatesActivity extends AppCompatActivity implements NavigationVi
         addNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(TemplatesActivity.this, AddTemplate.class);
+                startActivity(intent);
 
             }
         });

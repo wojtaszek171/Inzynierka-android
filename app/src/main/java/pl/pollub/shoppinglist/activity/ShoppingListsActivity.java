@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 
 import pl.pollub.shoppinglist.R;
 
@@ -28,7 +29,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_lists);
-        FloatingActionButton addNew = (FloatingActionButton) findViewById(R.id.addListButton);
+        final FloatingActionButton addNew = (FloatingActionButton) findViewById(R.id.addListButton);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -50,7 +51,14 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
                 final Dialog dialog = new Dialog(context);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.add_list_dialog);
-
+                Button addList = (Button) dialog.findViewById(R.id.addList);
+                addList.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(ShoppingListsActivity.this, AddShoppingList.class);
+                        startActivity(intent);
+                    }
+                });
                 // set the custom dialog components - text, image and button
 
                 // if button is clicked, close the custom dialog
