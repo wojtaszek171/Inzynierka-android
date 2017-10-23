@@ -47,5 +47,7 @@ dependencies {
     compile 'org.projectlombok:lombok:1.+'
     annotationProcessor 'org.projectlombok:lombok:1.+'
     compile 'com.jakewharton.threetenabp:threetenabp:1.+'
+    //Parse Server sdk for Android:
+    compile 'com.parse:parse-android:1.15.8'
     testCompile 'junit:junit:4.12'
 }
