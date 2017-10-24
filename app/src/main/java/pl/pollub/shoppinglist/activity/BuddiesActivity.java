@@ -2,9 +2,6 @@ package pl.pollub.shoppinglist.activity;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableList;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,37 +10,31 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.List;
-
-import pl.pollub.shoppinglist.BR;
 import pl.pollub.shoppinglist.R;
-import pl.pollub.shoppinglist.databinding.ActivityBuddiesBinding;
-import pl.pollub.shoppinglist.model.Buddy;
-import pl.pollub.shoppinglist.util.AppDatabase;
-import pl.pollub.shoppinglist.util.recyclerview.*;
-import pl.pollub.shoppinglist.util.recyclerview.binder.*;
-import pl.pollub.shoppinglist.viewmodel.BuddiesViewModel;
 
 public class BuddiesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private ActivityBuddiesBinding viewBinding;
+    private Toolbar toolbar;
+    private NavigationView navView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
-    private BuddiesViewModel buddiesViewModel = new BuddiesViewModel();
-    private final ObservableList<Buddy> buddies = new ObservableArrayList<>();
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewBinding = DataBindingUtil.setContentView(this, R.layout.activity_buddies);
+        setContentView(R.layout.activity_buddies);
 
-        setSupportActionBar(viewBinding.toolbarLayout.toolbar);
+        toolbar = findViewById(R.id.toolbar_layout);
+        setSupportActionBar(toolbar);
         setTitle(R.string.friends);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        drawerLayout = viewBinding.drawerLayout;
+        drawerLayout = findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
 
         drawerLayout.addDrawerListener(toggle);
@@ -51,13 +42,10 @@ public class BuddiesActivity extends AppCompatActivity implements NavigationView
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        viewBinding.burgerLayout.navView.setNavigationItemSelectedListener(this);
-        viewBinding.buddiesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        buddiesViewModel.setModel(buddies);
-        viewBinding.setBuddiesViewModel(buddiesViewModel);
-
-        getBuddiesAsync();
+        navView = findViewById(R.id.burger_layout);
+        navView.setNavigationItemSelectedListener(this);
+        recyclerView = findViewById(R.id.buddies_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -105,35 +93,5 @@ public class BuddiesActivity extends AppCompatActivity implements NavigationView
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menulists, menu);
         return true;
-    }
-
-    private void getBuddiesAsync() {
-        new AsyncTask<Void, Void, List<Buddy>>() {
-            @Override
-            protected List<Buddy> doInBackground(Void... params) {
-                AppDatabase.getInstance(BuddiesActivity.this.getApplicationContext()).populateInitialData();
-                return AppDatabase.getInstance(BuddiesActivity.this.getApplicationContext())
-                        .buddyDao().findAll();
-            }
-
-            @Override
-            protected void onPostExecute(List<Buddy> buddies) {
-                BuddiesActivity.this.buddies.addAll(buddies);
-            }
-        }.execute();
-    }
-
-    // TODO: implement
-    public ClickHandler<BuddiesViewModel> clickHandler() {
-        return null;
-    }
-
-    // TODO: implement
-    public LongClickHandler<BuddiesViewModel> longClickHandler() {
-        return null;
-    }
-
-    public ItemBinder<Buddy> itemViewBinder() {
-        return new ItemBinderBase<>(BR.buddy, R.layout.item_buddy);
     }
 }

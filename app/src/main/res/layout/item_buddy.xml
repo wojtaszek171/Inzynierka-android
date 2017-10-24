@@ -2,10 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-        <variable name="buddy" type="pl.pollub.shoppinglist.model.Buddy" />
-    </data>
-
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -24,22 +20,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@{buddy.nickname}"
             android:textSize="22sp" />
+            <!--android:text="@{buddy.nickname}"-->
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@{buddy.name}"
             android:textSize="22sp" />
+            <!--android:text="@{buddy.name}"-->
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@{buddy.lastActiveAt.toString()}"
             android:textSize="22sp" />
+            <!--android:text="@{buddy.lastActiveAt.toString()}"-->
 
     </LinearLayout>
 
