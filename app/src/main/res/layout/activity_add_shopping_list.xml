@@ -11,12 +11,14 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/toolbar">
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="300dp">
+            android:layout_height="500dp">
+
             <TextView
                 android:id="@+id/textView17"
                 android:layout_width="match_parent"
@@ -28,45 +30,53 @@
                 android:text="Nazwa listy" />
 
             <TextView
+                style="@style/Base.V12.Widget.AppCompat.EditText"
+                android:id="@+id/listDeadline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/listName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="36dp"
+                android:text="Termin" />
+
+            <TextView
                 android:id="@+id/textView20"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="131dp"
                 android:gravity="center_horizontal"
                 android:text="Ikonka"
-                android:layout_below="@+id/editText2"
+                android:layout_below="@+id/listName"
                 android:layout_alignParentStart="true" />
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/listName"
                 android:layout_width="256dp"
                 android:layout_height="45dp"
-                android:layout_marginTop="11dp"
+                android:layout_below="@+id/textView17"
+                android:layout_centerHorizontal="true"
                 android:background="@drawable/edittextstyle"
                 android:inputType="textPersonName"
                 android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_below="@+id/textView17"
-                android:layout_centerHorizontal="true" />
+                android:paddingRight="5dp" />
+
             <ImageButton
-                android:id="@+id/imageButton2"
+                android:id="@+id/setListImage"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginTop="134dp"
-                app:srcCompat="@android:drawable/ic_menu_add"
-                android:layout_below="@+id/toolbar"
-                android:layout_centerHorizontal="true" />
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""/>
+                android:layout_below="@+id/textView20"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="14dp"
+                app:srcCompat="@android:drawable/ic_menu_add" />
+
             <Button
-                android:id="@+id/button7"
+                android:id="@+id/saveNewList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:background="@color/colorPrimary"
                 android:text="OK" />
+
         </RelativeLayout>
 
     </ScrollView>

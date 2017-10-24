@@ -11,7 +11,6 @@
         android:weightSum="1"
         android:id="@+id/linearLayout"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
         <CheckBox
@@ -23,13 +22,14 @@
             android:checked="false" />
 
         <ImageView
+            android:id="@+id/listImage"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:minWidth="40dp" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/listNameItem"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.45"
@@ -44,7 +44,7 @@
             app:srcCompat="@drawable/callendar" />
 
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/listDeadline"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"

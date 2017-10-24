@@ -12,11 +12,22 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ListView;
+
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 
@@ -24,7 +35,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     final Context context = this;
-
+    ListView list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +55,31 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
+        query.fromLocalDatastore();
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> scoreList, ParseException e) {
+                if (e == null) {
+                    ArrayList<String> names = new ArrayList<String>();
+                    for(ParseObject s : scoreList){
+                        names.add(s.getString("name"));
+                    }
+
+                    ShoppingListsAdapter listAdapter = new
+                            ShoppingListsAdapter(ShoppingListsActivity.this, names);
+                    list=(ListView)findViewById(R.id.list);
+                    list.setAdapter(listAdapter);
+                    Log.d("score", "Retrieved " + scoreList.size() + " scores");
+                } else {
+                    Log.d("score", "Error: " + e.getMessage());
+                }
+            }
+        });
+
+
+
+
 
         addNew.setOnClickListener(new View.OnClickListener() {
             @Override

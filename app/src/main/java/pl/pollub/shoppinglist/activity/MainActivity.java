@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         setTitle(R.string.menuMainScreen);
 
         //Parse Server init (configuration in manifest file):
+        Parse.enableLocalDatastore(this);
         Parse.initialize(this);
 
     }
@@ -36,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    public void Lists(View view) {
-//        Intent intent = new Intent(MainActivity.this, ShoppingListsActivity.class);
-//        startActivity(intent);
-//    }
+    public void Lists(View view) {
+        Intent intent = new Intent(MainActivity.this, ShoppingListsActivity.class);
+        startActivity(intent);
+    }
 }
