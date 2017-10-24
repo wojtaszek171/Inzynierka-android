@@ -11,15 +11,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!-- PARSE SERVER CONFIGURATION: -->
+        <meta-data
+            android:name="com.parse.SERVER_URL"
+            android:value="@string/parse_server_url" />
+        <meta-data
+            android:name="com.parse.APPLICATION_ID"
+            android:value="@string/parse_app_id" />
+
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.RegistrationActivity" />
-        <activity android:name=".activity.ShoppingListsActivity" />
         <activity android:name=".activity.ShoppingListDetailsActivity" />
-        <activity android:name=".activity.BuddiesActivity" />
         <activity android:name=".activity.BuddyManagerActivity" />
-        <activity android:name=".activity.ProductAppenderActivity" />
-        <activity android:name=".activity.SettingsActivity" />
         <activity android:name=".activity.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.TemplatesActivity" />
 
     </application>
 

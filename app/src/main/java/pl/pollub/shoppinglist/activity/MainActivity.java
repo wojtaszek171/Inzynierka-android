@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
+
 import pl.pollub.shoppinglist.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.menuMainScreen);
+
+        //Parse Server init (configuration in manifest file):
+        Parse.initialize(this);
 
     }
 
@@ -30,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void Lists(View view) {
-        Intent intent = new Intent(MainActivity.this, ShoppingListsActivity.class);
-        startActivity(intent);
-    }
+//    public void Lists(View view) {
+//        Intent intent = new Intent(MainActivity.this, ShoppingListsActivity.class);
+//        startActivity(intent);
+//    }
 }
