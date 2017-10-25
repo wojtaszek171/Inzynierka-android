@@ -68,9 +68,9 @@ public class CustomProductAppenderActivity extends AppCompatActivity implements 
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
-        
-        initFormInputComponents();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        initFormInputComponents();
 
     }
 
