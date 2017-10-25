@@ -33,22 +33,22 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // Android specific libs
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support.constraint:constraint-layout:1.+'
-    compile 'com.android.support:design:26.+'
-    compile 'android.arch.persistence.room:runtime:1.+'
-    compile 'android.arch.lifecycle:extensions:1.+'
-    compile 'android.arch.paging:runtime:1.+'
-    annotationProcessor 'android.arch.persistence.room:compiler:1.+'
-    annotationProcessor 'android.arch.lifecycle:compiler:1.+'
     androidTestCompile('com.android.support.test.espresso:espresso-core:3.+', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     // third party libs
-    compile 'org.projectlombok:lombok:1.+'
-    annotationProcessor 'org.projectlombok:lombok:1.+'
-    compile 'com.jakewharton.threetenabp:threetenabp:1.+'
     //Parse Server sdk for Android:
+    compile 'com.android.support:appcompat-v7:26.+'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:design:26.+'
+    compile 'android.arch.persistence.room:runtime:1.+'
+    compile 'android.arch.lifecycle:extensions:1.+'
+    compile 'android.arch.paging:runtime:1.+'
+    compile 'org.projectlombok:lombok:1.+'
+    compile 'com.jakewharton.threetenabp:threetenabp:1.+'
     compile 'com.parse:parse-android:1.15.8'
     testCompile 'junit:junit:4.12'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.+'
+    annotationProcessor 'android.arch.lifecycle:compiler:1.+'
+    annotationProcessor 'org.projectlombok:lombok:1.+'
 }

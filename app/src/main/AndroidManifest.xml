@@ -25,7 +25,7 @@
         <activity android:name=".activity.ShoppingListDetailsActivity" />
         <activity android:name=".activity.BuddyManagerActivity" />
         <activity android:name=".activity.ShoppingListsActivity" />
-        <activity android:name=".activity.AddShoppingList"/>
+        <activity android:name=".activity.AddShoppingList" />
         <activity android:name=".activity.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +33,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+        <activity android:name=".activity.AddProductToList"></activity>
     </application>
 
 </manifest>
