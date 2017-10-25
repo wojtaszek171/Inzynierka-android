@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logInto(View view) {
+//        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//        startActivity(intent);
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
     }
