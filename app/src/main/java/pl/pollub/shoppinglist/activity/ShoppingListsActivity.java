@@ -17,8 +17,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -36,6 +38,8 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
     private ActionBarDrawerToggle mToggle;
     final Context context = this;
     ListView list;
+    ArrayList<String> names;
+    ArrayList<String> dates;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,27 +60,29 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
+
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
         query.fromLocalDatastore();
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> scoreList, ParseException e) {
+                names = new ArrayList<String>();
+                dates = new ArrayList<String>();
                 if (e == null) {
-                    ArrayList<String> names = new ArrayList<String>();
                     for(ParseObject s : scoreList){
                         names.add(s.getString("name"));
+                        dates.add(s.getString("deadline"));
                     }
-
                     ShoppingListsAdapter listAdapter = new
-                            ShoppingListsAdapter(ShoppingListsActivity.this, names);
+                            ShoppingListsAdapter(ShoppingListsActivity.this, names, dates);
                     list=(ListView)findViewById(R.id.list);
                     list.setAdapter(listAdapter);
+                    
                     Log.d("score", "Retrieved " + scoreList.size() + " scores");
                 } else {
                     Log.d("score", "Error: " + e.getMessage());
                 }
             }
         });
-
 
 
 

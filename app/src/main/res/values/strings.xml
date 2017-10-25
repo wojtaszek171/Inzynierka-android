@@ -27,6 +27,7 @@
     <string name="createTemplate">Stwórz szablon</string>
     <string name="settings">Ustawienia</string>
     <string name="useTemplate">Użyj szablonu</string>
+    <string name="addList">Utwórz nową listę</string>
 
     <!--PARSE SERVER CONFIG VALUES:-->
     <string name="parse_server_url">http://94.23.7.172:9652/parsesl/</string>
