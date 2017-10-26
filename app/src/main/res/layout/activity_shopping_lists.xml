@@ -18,6 +18,7 @@
             <ListView
                 android:id="@+id/list"
                 android:layout_width="wrap_content"
+                android:layout_height="443dp" >
                 android:layout_height="754dp"></ListView>
 
             <android.support.design.widget.FloatingActionButton
