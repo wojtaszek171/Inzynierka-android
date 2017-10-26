@@ -31,24 +31,29 @@ android {
 
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    // Android specific libs
-    androidTestCompile('com.android.support.test.espresso:espresso-core:3.+', {
-        exclude group: 'com.android.support', module: 'support-annotations'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    // Google's libs
+    implementation "com.android.support:appcompat-v7:26.1.+"
+    implementation "com.android.support.constraint:constraint-layout:1.+"
+    implementation "com.android.support:design:26.1.+"
+    //implementation "android.arch.persistence.room:runtime:1.+"
+    implementation "android.arch.lifecycle:extensions:1.+"
+    implementation "android.arch.paging:runtime:1.+"
+
+    // 3rd party libs
+    implementation "org.projectlombok:lombok:1.+"
+    implementation "com.jakewharton.threetenabp:threetenabp:1.+"
+    implementation "com.parse:parse-android:1.16.+"
+    implementation "com.parse:parse-livequery-android:1.0.+"
+
+    // annotation processors
+    annotationProcessor "android.arch.persistence.room:compiler:1.+"
+    annotationProcessor "android.arch.lifecycle:compiler:1.+"
+    annotationProcessor "org.projectlombok:lombok:1.+"
+
+    // testing
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:3.+", {
+        exclude group: "com.android.support", module: "support-annotations"
     })
-    // third party libs
-    //Parse Server sdk for Android:
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:design:26.+'
-    compile 'android.arch.persistence.room:runtime:1.+'
-    compile 'android.arch.lifecycle:extensions:1.+'
-    compile 'android.arch.paging:runtime:1.+'
-    compile 'org.projectlombok:lombok:1.+'
-    compile 'com.jakewharton.threetenabp:threetenabp:1.+'
-    compile 'com.parse:parse-android:1.15.8'
-    testCompile 'junit:junit:4.12'
-    annotationProcessor 'android.arch.persistence.room:compiler:1.+'
-    annotationProcessor 'android.arch.lifecycle:compiler:1.+'
-    annotationProcessor 'org.projectlombok:lombok:1.+'
+    testImplementation "junit:junit:4.12"
 }
