@@ -18,14 +18,13 @@
             <ListView
                 android:id="@+id/list"
                 android:layout_width="wrap_content"
-                android:layout_height="443dp" >
-            </ListView>
+                android:layout_height="754dp"></ListView>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/addListButton"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:layout_margin="10dp"
                 android:clickable="true"
                 app:backgroundTint="@color/colorPrimary"
