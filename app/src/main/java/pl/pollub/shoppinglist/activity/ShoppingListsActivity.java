@@ -65,17 +65,25 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         query.fromLocalDatastore();
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> scoreList, ParseException e) {
-                ArrayList<String> names1;
-                ArrayList<String> dates1;
-                names1 = new ArrayList<String>();
-                dates1 = new ArrayList<String>();
+
                 if (e == null) {
                     for(ParseObject s : scoreList){
                         names.add(s.getString("name"));
                         dates.add(s.getString("deadline"));
+
+                        ShoppingListsAdapter listAdapter = new
+                                ShoppingListsAdapter(ShoppingListsActivity.this, names, dates);
+                        list=(ListView)findViewById(R.id.list);
+                        list.setAdapter(listAdapter);
+                        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                                Context context = ShoppingListsActivity.this;
+                                Toast.makeText(context, "item " + position + " was clicked", Toast.LENGTH_LONG).show();
+
+                            }
+                        });
                     }
-                    names = names1;
-                    dates = dates1;
                     Log.d("score", "Retrieved " + scoreList.size() + " scores");
                 } else {
                     Log.d("score", "Error: " + e.getMessage());
@@ -83,18 +91,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
             }
         });
 
-        ShoppingListsAdapter listAdapter = new
-                ShoppingListsAdapter(ShoppingListsActivity.this, names, dates);
-        list=(ListView)findViewById(R.id.list);
-        list.setAdapter(listAdapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Context context = ShoppingListsActivity.this;
-                //Toast.makeText(context, "item " + position + " was clicked", Toast.LENGTH_LONG).show();
 
-            }
-        });
 
 
 
@@ -121,7 +118,6 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
 

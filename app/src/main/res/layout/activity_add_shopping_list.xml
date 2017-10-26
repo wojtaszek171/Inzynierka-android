@@ -70,11 +70,13 @@
 
             <Button
                 android:id="@+id/saveNewList"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:background="@color/colorPrimary"
-                android:text="OK" />
+                android:text="OK"
+                android:layout_below="@+id/setListImage"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp" />
 
         </RelativeLayout>
 
