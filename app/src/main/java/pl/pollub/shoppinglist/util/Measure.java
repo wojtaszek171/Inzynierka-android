@@ -6,5 +6,8 @@ package pl.pollub.shoppinglist.util;
  */
 public enum Measure {
     PIECE,
-    WEIGHT
+    WEIGHT,
+    LIQUID_CAPACITY,
+    BOTTLE,
+    BOX
 }

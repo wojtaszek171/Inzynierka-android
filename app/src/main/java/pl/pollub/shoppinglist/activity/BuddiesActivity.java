@@ -66,6 +66,11 @@ public class BuddiesActivity extends AppCompatActivity implements NavigationView
                 startActivity(intent);
                 break;
             }
+            case R.id.nav_custom_user_products: {
+                Intent intent = new Intent(BuddiesActivity.this, CustomProductsListActivity.class);
+                startActivity(intent);
+                break;
+            }
             case R.id.nav_settings: {
                 Intent intent = new Intent(BuddiesActivity.this, SettingsActivity.class);
                 startActivity(intent);

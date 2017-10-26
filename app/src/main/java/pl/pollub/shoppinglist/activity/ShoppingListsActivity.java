@@ -139,6 +139,11 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
                 startActivity(intent);
                 break;
             }
+            case R.id.nav_custom_user_products: {
+                Intent intent = new Intent(ShoppingListsActivity.this, CustomProductsListActivity.class);
+                startActivity(intent);
+                break;
+            }
             case R.id.nav_settings: {
                 Intent intent = new Intent(ShoppingListsActivity.this, SettingsActivity.class);
                 startActivity(intent);
