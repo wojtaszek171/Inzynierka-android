@@ -22,8 +22,10 @@ public class MainActivity extends AppCompatActivity {
         setTitle(R.string.menuMainScreen);
 
         //Parse Server init (configuration in manifest file):
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(this);
+        if (!Parse.isLocalDatastoreEnabled()) {
+            Parse.enableLocalDatastore(this);
+            Parse.initialize(this);
+        }
 
     }
 

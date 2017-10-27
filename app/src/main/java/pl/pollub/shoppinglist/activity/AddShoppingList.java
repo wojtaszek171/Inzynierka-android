@@ -75,7 +75,7 @@ public class AddShoppingList extends AppCompatActivity {
                 DatePickerDialog datePicker = new DatePickerDialog(AddShoppingList.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        String date = String.valueOf(year) +"-"+String.valueOf(monthOfYear)
+                        String date = String.valueOf(year) +"-"+String.valueOf(monthOfYear + 1)
                                 +"-"+String.valueOf(dayOfMonth);
                         textDate.setText(date);
                     }
