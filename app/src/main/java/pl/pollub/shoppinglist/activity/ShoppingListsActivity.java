@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -64,7 +65,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
         query.fromLocalDatastore();
         query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> scoreList, ParseException e) {
+            public void done(final List<ParseObject> scoreList, ParseException e) {
 
                 if (e == null) {
                     for(ParseObject s : scoreList){
@@ -79,8 +80,13 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
                             @Override
                             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                                 Context context = ShoppingListsActivity.this;
-                                Toast.makeText(context, "item " + position + " was clicked", Toast.LENGTH_LONG).show();
-
+                                //Toast.makeText(context, "Position: "+String.valueOf(position), Toast.LENGTH_SHORT).show();
+                                String idList = scoreList.get(position).getString("objectId");
+                                String nameList = scoreList.get(position).getString("name");
+                                Intent intent = new Intent(getBaseContext(), ShoppingListDetailsActivity.class);
+                                intent.putExtra("LIST_ID", idList);
+                                intent.putExtra("LIST_NAME", nameList);
+                                startActivity(intent);
                             }
                         });
                     }

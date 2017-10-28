@@ -7,33 +7,53 @@
     android:layout_height="match_parent"
     tools:context="pl.pollub.shoppinglist.activity.ShoppingListsActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/items_recycler_view"
+        <ScrollView
+            android:id="@+id/scroll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"
-            android:layout_weight="1" />
+            android:layout_height="446dp"
+            android:layout_below="@+id/toolbar">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"><![CDATA[
+
+
+                android:layout_height="754dp"/>
+
+
+            ]]>
+
+                <ListView
+                    android:id="@+id/list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="443dp"/>
+            </RelativeLayout>
+        </ScrollView>
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/addProductButton"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_gravity="right"
-            android:layout_margin="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="end"
+            android:layout_marginBottom="11dp"
+            android:layout_marginEnd="14dp"
             android:clickable="true"
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="mini"
             app:srcCompat="@android:drawable/ic_menu_add" />
 
-    </LinearLayout>
+
+    </RelativeLayout>
 
     <include layout="@layout/menu_burger" />
 

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar"/>
@@ -16,10 +17,155 @@
         android:layout_below="@+id/toolbar">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="500dp">
 
+            <TableLayout
+                android:id="@+id/custom_products_form_table_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
+
+                <TableRow
+                    android:id="@+id/custom_products_name_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/custom_products_name_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:text="Nazwa" />
+
+                    <EditText
+                        android:id="@+id/product_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        tools:layout_editor_absoluteY="61dp" />
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/products_name_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:text="Ilość" />
+
+                    <EditText
+                        android:id="@+id/product_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:ems="10"
+                        android:inputType="number"
+                        tools:layout_editor_absoluteY="61dp" />
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/custom_products_category_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/custom_products_category_label"
+                        android:layout_width="79dp"
+                        android:layout_height="19dp"
+                        android:layout_column="0"
+                        android:text="Kategoria" />
+
+                    <Spinner
+                        android:id="@+id/product_categories_spinner"
+                        style="@style/Widget.AppCompat.Button"
+                        android:layout_width="375dp"
+                        android:layout_height="42dp"
+                        android:layout_column="1"
+                        android:ems="10" />
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/custom_products_description_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/custom_products_description_label"
+                        android:layout_width="99dp"
+                        android:layout_height="wrap_content"
+                        android:text="Opis" />
+
+                    <EditText
+                        android:id="@+id/product_description"
+                        android:layout_width="349dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:ems="10"
+                        android:inputType="textMultiLine"
+                        tools:layout_editor_absoluteY="168dp" />
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/custom_products_measure_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="51dp">
+
+                    <TextView
+                        android:id="@+id/custom_products_measure_label"
+                        android:layout_width="108dp"
+                        android:layout_height="19dp"
+                        android:layout_column="0"
+                        android:text="Jednostka miary" />
+
+                    <Spinner
+                        android:id="@+id/product_measure_spinner"
+                        style="@style/Widget.AppCompat.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/custom_products_price_per_unit_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ikonka" />
+
+                    <Button
+                        android:id="@+id/product_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="numberDecimal"
+                        android:text="+" />
+                </TableRow>
+
+            </TableLayout>
+
+            <Button
+                android:id="@+id/saveProductButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/custom_products_form_table_layout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="58dp"
+                android:text="Zapisz produkt" />
         </RelativeLayout>
+
 
     </ScrollView>
 
