@@ -35,12 +35,13 @@ import java.util.List;
 import pl.pollub.shoppinglist.R;
 
 public class ShoppingListsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private DrawerLayout mDrawerLayout;
+        private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     final Context context = this;
     ListView list;
     ArrayList<String> names = new ArrayList<String>();
     ArrayList<String> dates = new ArrayList<String>();
+    static int id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,17 +62,17 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
-
+        setIdForLocal();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
         query.fromLocalDatastore();
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(final List<ParseObject> scoreList, ParseException e) {
 
                 if (e == null) {
-                    for(ParseObject s : scoreList){
+                    for(ParseObject s : scoreList) {
                         names.add(s.getString("name"));
                         dates.add(s.getString("deadline"));
-
+                    }
                         ShoppingListsAdapter listAdapter = new
                                 ShoppingListsAdapter(ShoppingListsActivity.this, names, dates);
                         list=(ListView)findViewById(R.id.list);
@@ -86,10 +87,12 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
                                 Intent intent = new Intent(getBaseContext(), ShoppingListDetailsActivity.class);
                                 intent.putExtra("LIST_ID", idList);
                                 intent.putExtra("LIST_NAME", nameList);
+                                intent.putExtra("LIST_OBJECT",scoreList.get(position));
+
                                 startActivity(intent);
                             }
                         });
-                    }
+
                     Log.d("score", "Retrieved " + scoreList.size() + " scores");
                 } else {
                     Log.d("score", "Error: " + e.getMessage());
@@ -111,7 +114,9 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
                 addList.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
                         Intent intent = new Intent(ShoppingListsActivity.this, AddShoppingList.class);
+                        intent.putExtra("LOCAL_LIST_ID",id);
                         startActivity(intent);
                     }
                 });
@@ -126,6 +131,31 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    public void setIdForLocal(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("localId");
+        query.fromLocalDatastore();
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(final List<ParseObject> scoreList, ParseException e) {
+                if (e == null) {
+                    for(ParseObject s : scoreList){
+                        id = s.getInt("id");
+                        s.put("id",id+1);
+                        s.pinInBackground();
+
+                    }
+                    Log.d("score", "Retrieved " + scoreList.size() + " scores");
+                    if(scoreList.size()==0){
+                        ParseObject localId = new ParseObject("localId");
+                        localId.put("id",1);
+                        localId.pinInBackground();
+                        id = 1;
+                    }
+                } else {
+                    Log.d("score", "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
