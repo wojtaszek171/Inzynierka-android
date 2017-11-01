@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,9 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -26,27 +23,28 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import pl.pollub.shoppinglist.R;
-import pl.pollub.shoppinglist.util.customProductsList.CustomProductDataModel;
-import pl.pollub.shoppinglist.util.customProductsList.CustomProductsAdapter;
+import pl.pollub.shoppinglist.model.Product;
+import pl.pollub.shoppinglist.util.customproductlist.CustomProductDataModel;
+import pl.pollub.shoppinglist.util.customproductlist.CustomProductsAdapter;
+
+import static pl.pollub.shoppinglist.util.Measure.Converter.measureToString;
 
 /**
  * Created by jrwoj on 24.10.2017.
  */
 
-public class CustomProductsListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class CustomProductsListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mToggle;
-    final Context context = this;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
 
-    private ListView list ;
-    private CustomProductsAdapter adapter ;
-    private List<ParseObject> allCustomProducts = null;
-    ArrayList<CustomProductDataModel> dataModels;
+    private ListView list;
+    private CustomProductsAdapter adapter;
+    private List<Product> allCustomProducts;
+    private ArrayList<CustomProductDataModel> dataModels;
 
 
     @Override
@@ -54,45 +52,45 @@ public class CustomProductsListActivity extends AppCompatActivity implements Nav
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_products_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("PRODUKTY UŻYTKOWNIKA");
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_products_list_drawer_layout);
-        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+        drawerLayout = findViewById(R.id.custom_products_list_drawer_layout);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
 
-        mDrawerLayout.addDrawerListener(mToggle);
-        mToggle.syncState();
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        list = (ListView) findViewById(R.id.custom_products_list_view);
+        list = findViewById(R.id.custom_products_list_view);
         getAllCustomProducts();
     }
 
     ////////////////////////////////////////////
-    public void getAllCustomProducts(){
+    private void getAllCustomProducts() {
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomProduct");
+        ParseQuery<Product> query = ParseQuery.getQuery(Product.class);
         query.fromLocalDatastore();
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> resultList, ParseException e) {
+        query.findInBackground(new FindCallback<Product>() {
+            public void done(List<Product> resultList, ParseException e) {
                 if (e == null) {
                     Log.d("score", "Retrieved " + resultList.size() + " scores");
 
                     dataModels = convertAllParseObjects(resultList);
-                    adapter = new CustomProductsAdapter( dataModels, CustomProductsListActivity.this );
+                    adapter = new CustomProductsAdapter(dataModels, CustomProductsListActivity.this);
                     list.setAdapter(adapter);
                     list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                            CustomProductDataModel dataModel= dataModels.get(position);
+                            CustomProductDataModel dataModel = dataModels.get(position);
 
-                            Snackbar.make(view, dataModel.getName()+"\n"+dataModel.getCategory()+" API: "+dataModel.getDescription(), Snackbar.LENGTH_SHORT)
+                            Snackbar.make(view, dataModel.getName() + "\n" + dataModel.getCategory() + " API: " + dataModel.getDescription(), Snackbar.LENGTH_SHORT)
                                     .setAction("No action", null).show();
                         }
                     });
@@ -104,24 +102,24 @@ public class CustomProductsListActivity extends AppCompatActivity implements Nav
 
     }
 
-    public void goToCustomProductCreation(View view){
+    private void goToCustomProductCreation(View view) {
         Intent intent = new Intent(CustomProductsListActivity.this, CustomProductAppenderActivity.class);
         startActivity(intent);
     }
 
-    public CustomProductDataModel convertParseObject(ParseObject parseObject){
-        String name = parseObject.getString("name");
+    private CustomProductDataModel convertParseObject(Product parseObject) {
+        String name = parseObject.getName();
         String category = parseObject.getString("category");
-        String measure = parseObject.getString("measure");
-        String description = parseObject.getString("description");
+        String measure = measureToString(parseObject.getMeasure());
+        String description = parseObject.getDescription();
 //        Double pricePerUnit = Double.parseDouble(parseObject.getString("pricePerUnit"));
 
         return new CustomProductDataModel(name, category, description, measure, 0.0);
     }
 
-    public ArrayList<CustomProductDataModel> convertAllParseObjects(List<ParseObject> parseObjectList){
+    private ArrayList<CustomProductDataModel> convertAllParseObjects(List<Product> parseObjectList) {
         ArrayList<CustomProductDataModel> resultList = new ArrayList<>();
-        for(ParseObject parseObject : parseObjectList){
+        for (Product parseObject : parseObjectList) {
             resultList.add(convertParseObject(parseObject));
         }
         return resultList;
@@ -164,17 +162,13 @@ public class CustomProductsListActivity extends AppCompatActivity implements Nav
             }
         }
         //close navigation drawer
-        //mDrawerLayout.closeDrawer(GravityCompat.START);
+        //drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
 

@@ -14,19 +14,12 @@ import pl.pollub.shoppinglist.R;
 public class MainActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.menuMainScreen);
-
-        //Parse Server init (configuration in manifest file):
-        if (!Parse.isLocalDatastoreEnabled()) {
-            Parse.enableLocalDatastore(this);
-            Parse.initialize(this);
-        }
-
     }
 
     public void logInto(View view) {

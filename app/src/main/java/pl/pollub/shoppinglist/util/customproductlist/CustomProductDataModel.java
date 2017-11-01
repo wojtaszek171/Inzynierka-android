@@ -1,10 +1,4 @@
-package pl.pollub.shoppinglist.util.customProductsList;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import pl.pollub.shoppinglist.util.Measure;
+package pl.pollub.shoppinglist.util.customproductlist;
 
 /**
  * Created by jrwoj on 25.10.2017.

@@ -17,17 +17,16 @@ import com.parse.SignUpCallback;
 import pl.pollub.shoppinglist.R;
 
 public class RegistrationActivity extends AppCompatActivity {
+    private TextView registerEmail;
+    private TextView registerLogin;
+    private TextView registerPassword;
+    private TextView registerRepeatedPassword;
+    private Button registerButton;
 
-    TextView registerEmail;
-    TextView registerLogin;
-    TextView registerPassword;
-    TextView registerRepeatedPassword;
-    Button registerButton;
-
-    String email;
-    String login;
-    String password;
-    String repeatedPassword;
+    private String email;
+    private String login;
+    private String password;
+    private String repeatedPassword;
 
 
     @Override
@@ -40,30 +39,29 @@ public class RegistrationActivity extends AppCompatActivity {
         setTitle(R.string.menuRegister);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        registerEmail = (TextView) findViewById(R.id.register_email);
-        registerLogin = (TextView) findViewById(R.id.register_login);
-        registerPassword = (TextView) findViewById(R.id.login_password);
-        registerRepeatedPassword = (TextView) findViewById(R.id.register_repeat_password);
-        registerButton = (Button) findViewById(R.id.register_button);
+        registerEmail = findViewById(R.id.register_email);
+        registerLogin = findViewById(R.id.register_login);
+        registerPassword = findViewById(R.id.login_password);
+        registerRepeatedPassword = findViewById(R.id.register_repeat_password);
+        registerButton = findViewById(R.id.register_button);
 
-        registerButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 fetchRegisterFormData();
 
                 //TODO: walidacja danych
 
-                if(password.equals(repeatedPassword)){
+                if (password.equals(repeatedPassword)) {
                     ParseUser newUser = new ParseUser();
                     newUser.setUsername(login);
                     newUser.setPassword(password);
                     newUser.setEmail(email);
 
                     newUser.signUpInBackground(new SignUpCallback() {
-                        Context context = getApplicationContext();
-                        int duration = Toast.LENGTH_SHORT;
-                        CharSequence text = "";
-
                         public void done(ParseException e) {
+                            Context context = getApplicationContext();
+                            String text;
+
                             if (e == null) {
                                 // Hooray! Let them use the app now.
 
@@ -77,12 +75,11 @@ public class RegistrationActivity extends AppCompatActivity {
                                 text = e.getMessage();
 
                             }
-                            Toast toast = Toast.makeText(context, text, duration);
+                            Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
                             toast.show();
                         }
                     });
                 }
-
             }
         });
     }
@@ -98,23 +95,21 @@ public class RegistrationActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /////////////////////////////////////////////////
-    private void resetPasswordTextView(){
+    private void resetPasswordTextView() {
         registerPassword.setText("");
         registerRepeatedPassword.setText("");
     }
 
-    private void resetRegistrationForm(){
+    private void resetRegistrationForm() {
         resetPasswordTextView();
         registerEmail.setText("");
         registerLogin.setText("");
     }
 
-    private void fetchRegisterFormData(){
+    private void fetchRegisterFormData() {
         email = registerEmail.getText().toString();
         login = registerLogin.getText().toString();
         password = registerPassword.getText().toString();
         repeatedPassword = registerRepeatedPassword.getText().toString();
     }
-
 }

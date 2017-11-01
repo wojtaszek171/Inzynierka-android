@@ -17,29 +17,28 @@ import com.parse.ParseUser;
 import pl.pollub.shoppinglist.R;
 
 public class LoginActivity extends AppCompatActivity {
+    private TextView loginTextView;
+    private TextView loginPassword;
+    private Button loginButton;
 
-    TextView loginTextView;
-    TextView loginPassword;
-    Button loginButton;
-
-    String login, password;
+    private String login, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.menuLogInto);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        loginTextView = (TextView) findViewById(R.id.login_login);
-        loginPassword = (TextView) findViewById(R.id.login_password);
-        loginButton = (Button) findViewById(R.id.login_button);
+        loginTextView = findViewById(R.id.login_login);
+        loginPassword = findViewById(R.id.login_password);
+        loginButton = findViewById(R.id.login_button);
 
-        loginButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 getLoginFormData();
                 attemptUserLogin();
             }
@@ -54,22 +53,19 @@ public class LoginActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-
     }
 
-    ////////////////////////////////////////////////////////
-    public void getLoginFormData(){
+    private void getLoginFormData() {
         login = loginTextView.getText().toString();
         password = loginPassword.getText().toString();
     }
 
-    public void attemptUserLogin(){
+    private void attemptUserLogin() {
         ParseUser.logInInBackground(login, password, new LogInCallback() {
-            Context context = getApplicationContext();
-            int duration = Toast.LENGTH_SHORT;
-            CharSequence text = "";
-
             public void done(ParseUser user, ParseException e) {
+                Context context = getApplicationContext();
+                String text;
+
                 if (user != null) {
                     // Hooray! The user is logged in.
                     text = login + " - pomyślnie zalogowano!";
@@ -77,11 +73,9 @@ public class LoginActivity extends AppCompatActivity {
                     // Signup failed. Look at the ParseException to see what happened.
                     text = e.getMessage();
                 }
-                Toast toast = Toast.makeText(context, text, duration);
+                Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
     }
-
-
 }

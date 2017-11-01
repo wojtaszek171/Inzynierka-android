@@ -18,12 +18,10 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -31,24 +29,26 @@ import com.parse.ParseQuery;
 import java.util.List;
 
 import pl.pollub.shoppinglist.R;
+import pl.pollub.shoppinglist.model.Product;
 import pl.pollub.shoppinglist.util.Measure;
+
+import static pl.pollub.shoppinglist.util.Measure.Converter.stringToMeasure;
 
 /**
  * Created by jrwoj on 24.10.2017.
  */
 
-public class CustomProductAppenderActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class CustomProductAppenderActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mToggle;
-    final Context context = this;
-    
-    AutoCompleteTextView measureSpinner;
-    Button resetButton, addButton;
-    TextView productNameField;
-    EditText productDescriptionField;
-    EditText productCategoryField;
-    EditText productPricePerUnitField;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+
+    private AutoCompleteTextView measureSpinner;
+    private Button resetButton, addButton;
+    private TextView productNameField;
+    private EditText productDescriptionField;
+    private EditText productCategoryField;
+    private EditText productPricePerUnitField;
 
 
     @Override
@@ -56,67 +56,67 @@ public class CustomProductAppenderActivity extends AppCompatActivity implements 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_product_appender);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("PRODUKTY UŻYTKOWNIKA");
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.custom_products_appender_drawer_layout);
-        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+        drawerLayout = findViewById(R.id.custom_products_appender_drawer_layout);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
 
-        mDrawerLayout.addDrawerListener(mToggle);
-        mToggle.syncState();
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initFormInputComponents();
 
     }
 
-    //////////////////////////////////////////
-    private void initFormInputComponents(){
-        resetButton = (Button) findViewById(R.id.custom_products_reset_button);
-        addButton = (Button) findViewById(R.id.custom_products_add_button);
-        productNameField = (TextView) findViewById(R.id.custom_products_name);
-        productDescriptionField = (EditText) findViewById(R.id.custom_products_description);
-        productCategoryField = (EditText) findViewById(R.id.custom_products_category);
-        productPricePerUnitField = (EditText) findViewById(R.id.custom_products_price_per_unit);
+    private void initFormInputComponents() {
+        resetButton = findViewById(R.id.custom_products_reset_button);
+        addButton = findViewById(R.id.custom_products_add_button);
+        productNameField = findViewById(R.id.custom_products_name);
+        productDescriptionField = findViewById(R.id.custom_products_description);
+        productCategoryField = findViewById(R.id.custom_products_category);
+        productPricePerUnitField = findViewById(R.id.custom_products_price_per_unit);
         initMeasureAutocomplete();
     }
 
-    private void initMeasureAutocomplete(){
-        measureSpinner = (AutoCompleteTextView) findViewById(R.id.custom_products_measure_autocomplete);
+    private void initMeasureAutocomplete() {
+        measureSpinner = findViewById(R.id.custom_products_measure_autocomplete);
         measureSpinner.setAdapter(new ArrayAdapter<Measure>(this, android.R.layout.simple_list_item_1, Measure.values()));
     }
 
-    public void resetFormValues(View view){
+    public void resetFormValues(View view) {
         productNameField.setText("");
         productDescriptionField.setText("");
         measureSpinner.setSelection(0);
     }
 
     public void storeCustomProduct(View view) throws ParseException {
-        ParseObject newCustomProduct = new ParseObject("CustomProduct");
-        newCustomProduct.put("name", productNameField.getText().toString());
-        newCustomProduct.put("measure", measureSpinner.getText().toString());
-        newCustomProduct.put("description", productDescriptionField.getText().toString());
+        Product newCustomProduct = new Product();
+        newCustomProduct.setName(productNameField.getText().toString());
+        newCustomProduct.setMeasure(stringToMeasure(measureSpinner.getText().toString()));
+        newCustomProduct.setDescription(productDescriptionField.getText().toString());
+        //newCustomProduct.setCategory(); TODO: KATEGORIA MUSI NAJPIERW ISTNIEC
         newCustomProduct.put("category", productCategoryField.getText().toString());
+        // Price nie powinno byc w produkcie a w klasie 'przejsciowej' ProductShoppingList
         newCustomProduct.put("pricePerUnit", productPricePerUnitField.getText().toString());
 
         newCustomProduct.pinInBackground();
         testQuery();
     }
 
-    public void testQuery(){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomProduct");
+    public void testQuery() {
+        ParseQuery<Product> query = ParseQuery.getQuery(Product.class);
         query.fromLocalDatastore();
         query.whereEqualTo("name", productNameField.getText().toString());
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> resultList, ParseException e) {
+        query.findInBackground(new FindCallback<Product>() {
+            public void done(List<Product> resultList, ParseException e) {
                 Context context = getApplicationContext();
-                int duration = Toast.LENGTH_SHORT;
-                CharSequence text = "";
+                String text;
 
                 if (e == null) {
                     text = "Retrieved " + resultList.size() + " scores";
@@ -127,13 +127,13 @@ public class CustomProductAppenderActivity extends AppCompatActivity implements 
                     Log.d("score", "Error: " + e.getMessage());
                     text = e.getMessage();
                 }
-                Toast toast = Toast.makeText(context, text, duration);
+                Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
     }
 
-    public void goToCustomProductsList(){
+    public void goToCustomProductsList() {
         Intent intent = new Intent(CustomProductAppenderActivity.this, CustomProductsListActivity.class);
         startActivity(intent);
     }
@@ -148,7 +148,7 @@ public class CustomProductAppenderActivity extends AppCompatActivity implements 
                 break;
             }
             case R.id.nav_lists: {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
+                drawerLayout.closeDrawer(GravityCompat.START);
                 break;
             }
             case R.id.nav_templates: {
@@ -174,17 +174,13 @@ public class CustomProductAppenderActivity extends AppCompatActivity implements 
             }
         }
         //close navigation drawer
-        //mDrawerLayout.closeDrawer(GravityCompat.START);
+        //drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
 
