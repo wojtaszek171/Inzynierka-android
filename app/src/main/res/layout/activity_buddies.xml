@@ -43,7 +43,6 @@
         </LinearLayout>
 
         <include
-            android:id="@+id/burger_layout"
             layout="@layout/menu_burger" />
 
     </android.support.v4.widget.DrawerLayout>

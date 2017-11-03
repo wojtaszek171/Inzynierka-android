@@ -2,7 +2,10 @@ package pl.pollub.shoppinglist.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -22,13 +26,14 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 
-public class ShoppingListDetailsActivity extends AppCompatActivity {
+public class ShoppingListDetailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     String listId;
@@ -47,10 +52,30 @@ public class ShoppingListDetailsActivity extends AppCompatActivity {
      //   listId = getIntent().getStringExtra("LIST_ID");
         setTitle(listName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
+
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+
+        String user;
+        user = ParseUser.getCurrentUser().getUsername().toString();
+        if(ParseUser.getCurrentUser()!=null){
+            View hView = navigationView.getHeaderView(0);
+            TextView username =(TextView) hView.findViewById(R.id.user_pseudonym);
+            username.setText(user);
+        }
+
         setIdForLocal();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
         query.fromLocalDatastore();
@@ -143,5 +168,47 @@ public class ShoppingListDetailsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        switch (item.getItemId()) {
+            case R.id.nav_friends: {
+                Intent intent = new Intent(getApplicationContext(), BuddiesActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_lists: {
+                Intent intent = new Intent(getApplicationContext(), ShoppingListsActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_templates: {
+                Intent intent = new Intent(getApplicationContext(), TemplatesActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_custom_user_products: {
+                Intent intent = new Intent(getApplicationContext(), CustomProductsListActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_settings: {
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.nav_logout: {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
+                break;
+            }
+        }
+        //close navigation drawer
+        //mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

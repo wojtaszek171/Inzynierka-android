@@ -14,12 +14,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import com.parse.ParseUser;
 
 import pl.pollub.shoppinglist.R;
 
 public class BuddiesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar toolbar;
-    private NavigationView navView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private RecyclerView recyclerView;
@@ -34,18 +37,27 @@ public class BuddiesActivity extends AppCompatActivity implements NavigationView
         setTitle(R.string.friends);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
 
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        String user;
+        user = ParseUser.getCurrentUser().getUsername().toString();
+
+        if(ParseUser.getCurrentUser()!=null){
+            View hView = navigationView.getHeaderView(0);
+            TextView username =(TextView) hView.findViewById(R.id.user_pseudonym);
+            username.setText(user);
+        }
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        navView = findViewById(R.id.burger_layout);
-        navView.setNavigationItemSelectedListener(this);
-        recyclerView = findViewById(R.id.buddies_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override

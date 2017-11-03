@@ -16,11 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +69,12 @@ public class CustomProductsListActivity extends AppCompatActivity implements Nav
         drawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        if (ParseUser.getCurrentUser() != null) {
+            String user = ParseUser.getCurrentUser().getUsername().toString();
+            View hView = navigationView.getHeaderView(0);
+            TextView username =(TextView) hView.findViewById(R.id.user_pseudonym);
+            username.setText(user);
+        }
 
         list = findViewById(R.id.custom_products_list_view);
         getAllCustomProducts();

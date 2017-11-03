@@ -11,7 +11,7 @@
         android:icon="@mipmap/ic_content_copy_black_24dp"/>
     <item android:id="@+id/nav_custom_user_products"
         android:title="Produkty użytkownika"
-        android:icon="@mipmap/ic_content_copy_black_24dp"></item>
+        android:icon="@mipmap/ic_content_copy_black_24dp"/>
     <item android:id="@+id/nav_settings"
         android:title="@string/options"
         android:icon="@mipmap/ic_settings_black_24dp"/>

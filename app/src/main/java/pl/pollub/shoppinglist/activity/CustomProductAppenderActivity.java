@@ -25,6 +25,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -68,10 +69,17 @@ public class CustomProductAppenderActivity extends AppCompatActivity implements 
 
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
+
+        if (ParseUser.getCurrentUser() != null) {
+            String user = ParseUser.getCurrentUser().getUsername().toString();
+            View hView = navigationView.getHeaderView(0);
+            TextView username = (TextView) hView.findViewById(R.id.user_pseudonym);
+            username.setText(user);
+        }
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initFormInputComponents();
-
     }
 
     private void initFormInputComponents() {

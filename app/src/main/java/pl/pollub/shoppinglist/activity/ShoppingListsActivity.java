@@ -3,6 +3,7 @@ package pl.pollub.shoppinglist.activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceActivity;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -21,13 +22,18 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +59,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         setTitle(R.string.menuLists);
 
 
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -61,6 +68,14 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
+
+        String user;
+        user = ParseUser.getCurrentUser().getUsername().toString();
+        if(ParseUser.getCurrentUser()!=null){
+            View hView = navigationView.getHeaderView(0);
+            TextView username =(TextView) hView.findViewById(R.id.user_pseudonym);
+            username.setText(user);
+        }
 
         setIdForLocal();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
@@ -162,7 +177,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_friends: {
-                Intent intent = new Intent(ShoppingListsActivity.this, BuddiesActivity.class);
+                Intent intent = new Intent(getApplicationContext(), BuddiesActivity.class);
                 startActivity(intent);
                 break;
             }
@@ -171,22 +186,22 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
                 break;
             }
             case R.id.nav_templates: {
-                Intent intent = new Intent(ShoppingListsActivity.this, TemplatesActivity.class);
+                Intent intent = new Intent(getApplicationContext(), TemplatesActivity.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_custom_user_products: {
-                Intent intent = new Intent(ShoppingListsActivity.this, CustomProductsListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), CustomProductsListActivity.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_settings: {
-                Intent intent = new Intent(ShoppingListsActivity.this, SettingsActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(intent);
                 break;
             }
             case R.id.nav_logout: {
-                Intent intent = new Intent(ShoppingListsActivity.this, MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;

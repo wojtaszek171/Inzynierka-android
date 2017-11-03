@@ -14,6 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+
+import com.parse.ParseUser;
 
 import pl.pollub.shoppinglist.R;
 
@@ -41,6 +44,15 @@ public class TemplatesActivity extends AppCompatActivity implements NavigationVi
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
+
+        String user;
+        user = ParseUser.getCurrentUser().getUsername().toString();
+
+        if(ParseUser.getCurrentUser()!=null){
+            View hView = navigationView.getHeaderView(0);
+            TextView username =(TextView) hView.findViewById(R.id.user_pseudonym);
+            username.setText(user);
+        }
 
         addNew.setOnClickListener(new View.OnClickListener() {
             @Override

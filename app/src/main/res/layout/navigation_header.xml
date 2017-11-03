@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:background="@color/colorPrimary"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/burger_header">
 
     <TextView
         android:id="@+id/textView10"

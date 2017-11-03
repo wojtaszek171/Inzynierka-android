@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import pl.pollub.shoppinglist.R;
 
@@ -20,6 +21,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.menuMainScreen);
+
+        if (ParseUser.getCurrentUser() != null){
+            Intent intent = new Intent(getApplicationContext(), ShoppingListsActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void logInto(View view) {
