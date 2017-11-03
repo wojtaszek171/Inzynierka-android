@@ -1,18 +1,15 @@
 package pl.pollub.shoppinglist.activity;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
 import pl.pollub.shoppinglist.R;
 
@@ -45,41 +42,37 @@ public class RegistrationActivity extends AppCompatActivity {
         registerRepeatedPassword = findViewById(R.id.register_repeat_password);
         registerButton = findViewById(R.id.register_button);
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                fetchRegisterFormData();
+        registerButton.setOnClickListener(view -> {
+            fetchRegisterFormData();
 
-                //TODO: walidacja danych
+            //TODO: walidacja danych
 
-                if (password.equals(repeatedPassword)) {
-                    ParseUser newUser = new ParseUser();
-                    newUser.setUsername(login);
-                    newUser.setPassword(password);
-                    newUser.setEmail(email);
+            if (password.equals(repeatedPassword)) {
+                ParseUser newUser = new ParseUser();
+                newUser.setUsername(login);
+                newUser.setPassword(password);
+                newUser.setEmail(email);
 
-                    newUser.signUpInBackground(new SignUpCallback() {
-                        public void done(ParseException e) {
-                            Context context = getApplicationContext();
-                            String text;
+                newUser.signUpInBackground(exception -> {
+                    Context context = getApplicationContext();
+                    String text;
 
-                            if (e == null) {
-                                // Hooray! Let them use the app now.
+                    if (exception == null) {
+                        // Hooray! Let them use the app now.
 
-                                resetRegistrationForm();
-                                text = "Pomyślnie zarejestrowano!";
+                        resetRegistrationForm();
+                        text = "Pomyślnie zarejestrowano!";
 
-                            } else {
-                                // Sign up didn't succeed. Look at the ParseException
-                                // to figure out what went wrong
-                                resetPasswordTextView();
-                                text = e.getMessage();
+                    } else {
+                        // Sign up didn't succeed. Look at the ParseException
+                        // to figure out what went wrong
+                        resetPasswordTextView();
+                        text = exception.getMessage();
 
-                            }
-                            Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-                            toast.show();
-                        }
-                    });
-                }
+                    }
+                    Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+                    toast.show();
+                });
             }
         });
     }

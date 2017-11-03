@@ -1,6 +1,5 @@
 package pl.pollub.shoppinglist.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,14 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -70,9 +64,9 @@ public class CustomProductsListActivity extends AppCompatActivity implements Nav
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (ParseUser.getCurrentUser() != null) {
-            String user = ParseUser.getCurrentUser().getUsername().toString();
+            String user = ParseUser.getCurrentUser().getUsername();
             View hView = navigationView.getHeaderView(0);
-            TextView username =(TextView) hView.findViewById(R.id.user_pseudonym);
+            TextView username = (TextView) hView.findViewById(R.id.user_pseudonym);
             username.setText(user);
         }
 
@@ -85,27 +79,22 @@ public class CustomProductsListActivity extends AppCompatActivity implements Nav
 
         ParseQuery<Product> query = ParseQuery.getQuery(Product.class);
         query.fromLocalDatastore();
-        query.findInBackground(new FindCallback<Product>() {
-            public void done(List<Product> resultList, ParseException e) {
-                if (e == null) {
-                    Log.d("score", "Retrieved " + resultList.size() + " scores");
+        query.findInBackground((resultList, exception) -> {
+            if (exception == null) {
+                Log.d("score", "Retrieved " + resultList.size() + " scores");
 
-                    dataModels = convertAllParseObjects(resultList);
-                    adapter = new CustomProductsAdapter(dataModels, CustomProductsListActivity.this);
-                    list.setAdapter(adapter);
-                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                dataModels = convertAllParseObjects(resultList);
+                adapter = new CustomProductsAdapter(dataModels, CustomProductsListActivity.this);
+                list.setAdapter(adapter);
+                list.setOnItemClickListener((parent, view, position, id) -> {
 
-                            CustomProductDataModel dataModel = dataModels.get(position);
+                    CustomProductDataModel dataModel = dataModels.get(position);
 
-                            Snackbar.make(view, dataModel.getName() + "\n" + dataModel.getCategory() + " API: " + dataModel.getDescription(), Snackbar.LENGTH_SHORT)
-                                    .setAction("No action", null).show();
-                        }
-                    });
-                } else {
-                    Log.d("score", "Error: " + e.getMessage());
-                }
+                    Snackbar.make(view, dataModel.getName() + "\n" + dataModel.getCategory() + " API: " + dataModel.getDescription(), Snackbar.LENGTH_SHORT)
+                            .setAction("No action", null).show();
+                });
+            } else {
+                Log.d("score", "Error: " + exception.getMessage());
             }
         });
 
@@ -179,7 +168,6 @@ public class CustomProductsListActivity extends AppCompatActivity implements Nav
     public boolean onOptionsItemSelected(MenuItem item) {
         return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

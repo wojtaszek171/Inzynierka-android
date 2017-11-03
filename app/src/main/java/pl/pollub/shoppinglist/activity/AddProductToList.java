@@ -1,15 +1,14 @@
 package pl.pollub.shoppinglist.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,36 +16,35 @@ import android.widget.Spinner;
 
 import com.parse.ParseObject;
 
-import java.util.ArrayList;
-
 import pl.pollub.shoppinglist.R;
 
 public class AddProductToList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-        String listId;
-        String listName;
-    EditText productName;
-    EditText productAmount;
-    Spinner productCategory;
-    EditText productDescription;
-    Spinner productMeasure;
-    Button productIcon;
-    Button saveProductB;
-    ParseObject list;
-    String localId;
-    private ActionBarDrawerToggle mToggle;
+    private String listId;
+    private String listName;
+    private EditText productName;
+    private EditText productAmount;
+    private Spinner productCategory;
+    private EditText productDescription;
+    private Spinner productMeasure;
+    private Button productIcon;
+    private Button saveProductB;
+    private ParseObject list;
+    private String localId;
+    private ActionBarDrawerToggle drawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product_to_list);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        saveProductB = (Button) findViewById(R.id.saveProductButton);
-        productName = (EditText) findViewById(R.id.product_name);
-        productAmount = (EditText) findViewById(R.id.product_amount);
-        productCategory = (Spinner) findViewById(R.id.product_categories_spinner);
-        productDescription = (EditText) findViewById(R.id.product_description);
-        productMeasure = (Spinner) findViewById(R.id.product_measure_spinner);
-        productIcon = (Button) findViewById(R.id.product_icon);
+        saveProductB = findViewById(R.id.saveProductButton);
+        productName = findViewById(R.id.product_name);
+        productAmount = findViewById(R.id.product_amount);
+        productCategory = findViewById(R.id.product_categories_spinner);
+        productDescription = findViewById(R.id.product_description);
+        productMeasure = findViewById(R.id.product_measure_spinner);
+        productIcon = findViewById(R.id.product_icon);
 
         ArrayAdapter<CharSequence> adapterCategory = ArrayAdapter.createFromResource(this,
                 R.array.product_categories, android.R.layout.simple_spinner_item);
@@ -60,59 +58,53 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
         list = getIntent().getParcelableExtra("LIST_OBJECT");
         localId = Integer.toString(getIntent().getIntExtra("LOCAL_ID", 1));
         final ParseObject productObject = getIntent().getParcelableExtra("PRODUCT_OBJECT");
-        if(productObject!=null){//editing product
+        if (productObject != null) {//editing product
             String title = "Edytuj " + productObject.getString("name");
             setTitle(title);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             productName.setText(productObject.getString("name"));
             productAmount.setText(productObject.getString("amount"));
-                int spinnerPositionCategory = adapterCategory.getPosition(productObject.getString("category"));
-                productCategory.setSelection(spinnerPositionCategory);
+            int spinnerPositionCategory = adapterCategory.getPosition(productObject.getString("category"));
+            productCategory.setSelection(spinnerPositionCategory);
             productDescription.setText(productObject.getString("description"));
             int spinnerPositionMeasure = adapterMeasure.getPosition(productObject.getString("measure"));
             productMeasure.setSelection(spinnerPositionMeasure);
             productIcon.setText(productObject.getString("icon"));
-            
-            saveProductB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    productObject.put("name", productName.getText().toString());
-                    productObject.put("amount", productAmount.getText().toString());
-                    productObject.put("category", productCategory.getSelectedItem().toString());
-                    productObject.put("description", productDescription.getText().toString());
-                    productObject.put("measure", productMeasure.getSelectedItem().toString());
-                    productObject.put("icon", productIcon.getText().toString());
-                    productObject.pinInBackground();
 
-                    Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
-                    intent.putExtra("LIST_OBJECT", list);
-                    startActivity(intent);
-                }
+            saveProductB.setOnClickListener(view -> {
+                productObject.put("name", productName.getText().toString());
+                productObject.put("amount", productAmount.getText().toString());
+                productObject.put("category", productCategory.getSelectedItem().toString());
+                productObject.put("description", productDescription.getText().toString());
+                productObject.put("measure", productMeasure.getSelectedItem().toString());
+                productObject.put("icon", productIcon.getText().toString());
+                productObject.pinInBackground();
+
+                Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
+                intent.putExtra("LIST_OBJECT", list);
+                startActivity(intent);
             });
-        }else {
+        } else {
             String title = listName + " " + R.string.newProductToList;
             setTitle(title);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-            saveProductB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ParseObject product = new ParseObject("ProductOfList");
-                    product.put("name", productName.getText().toString());
-                    product.put("status", "0"); //status wykupienia produktu
-                    product.put("amount", productAmount.getText().toString());
-                    product.put("category", productCategory.getSelectedItem().toString());
-                    product.put("description", productDescription.getText().toString());
-                    product.put("measure", productMeasure.getSelectedItem().toString());
-                    product.put("icon", productIcon.getText().toString());
-                    product.put("belongsTo", list);
-                    product.pinInBackground();
-                    product.setObjectId(localId);
-                    Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra("LIST_OBJECT", list);
-                    startActivity(intent);
-                }
+            saveProductB.setOnClickListener(view -> {
+                ParseObject product = new ParseObject("ProductOfList");
+                product.put("name", productName.getText().toString());
+                product.put("status", "0"); //status wykupienia produktu
+                product.put("amount", productAmount.getText().toString());
+                product.put("category", productCategory.getSelectedItem().toString());
+                product.put("description", productDescription.getText().toString());
+                product.put("measure", productMeasure.getSelectedItem().toString());
+                product.put("icon", productIcon.getText().toString());
+                product.put("belongsTo", list);
+                product.pinInBackground();
+                product.setObjectId(localId);
+                Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("LIST_OBJECT", list);
+                startActivity(intent);
             });
         }
 
@@ -156,13 +148,10 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
         }
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
 

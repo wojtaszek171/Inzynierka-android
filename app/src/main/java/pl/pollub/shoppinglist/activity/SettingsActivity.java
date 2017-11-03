@@ -1,13 +1,13 @@
 package pl.pollub.shoppinglist.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,36 +19,33 @@ import com.parse.ParseUser;
 import pl.pollub.shoppinglist.R;
 
 public class SettingsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mToggle;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.settings);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
 
-        mDrawerLayout.addDrawerListener(mToggle);
-        mToggle.syncState();
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
 
-
-        String user;
-        user = ParseUser.getCurrentUser().getUsername().toString();
-
-        if(ParseUser.getCurrentUser()!=null){
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (ParseUser.getCurrentUser() != null) {
+            String user = ParseUser.getCurrentUser().getUsername();
+            NavigationView navigationView = findViewById(R.id.nav_view);
             View hView = navigationView.getHeaderView(0);
-            TextView username =(TextView) hView.findViewById(R.id.user_pseudonym);
+            TextView username = hView.findViewById(R.id.user_pseudonym);
             username.setText(user);
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -72,7 +69,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                 break;
             }
             case R.id.nav_settings: {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
+                drawerLayout.closeDrawer(GravityCompat.START);
                 break;
             }
             case R.id.nav_logout: {
@@ -83,17 +80,13 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             }
         }
         //close navigation drawer
-        //mDrawerLayout.closeDrawer(GravityCompat.START);
+        //drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
 

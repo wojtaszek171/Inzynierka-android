@@ -21,13 +21,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.model.Product;
@@ -71,9 +67,9 @@ public class CustomProductAppenderActivity extends AppCompatActivity implements 
         drawerToggle.syncState();
 
         if (ParseUser.getCurrentUser() != null) {
-            String user = ParseUser.getCurrentUser().getUsername().toString();
+            String user = ParseUser.getCurrentUser().getUsername();
             View hView = navigationView.getHeaderView(0);
-            TextView username = (TextView) hView.findViewById(R.id.user_pseudonym);
+            TextView username = hView.findViewById(R.id.user_pseudonym);
             username.setText(user);
         }
 
@@ -121,23 +117,21 @@ public class CustomProductAppenderActivity extends AppCompatActivity implements 
         ParseQuery<Product> query = ParseQuery.getQuery(Product.class);
         query.fromLocalDatastore();
         query.whereEqualTo("name", productNameField.getText().toString());
-        query.findInBackground(new FindCallback<Product>() {
-            public void done(List<Product> resultList, ParseException e) {
-                Context context = getApplicationContext();
-                String text;
+        query.findInBackground((resultList, exception) -> {
+            Context context = getApplicationContext();
+            String text;
 
-                if (e == null) {
-                    text = "Retrieved " + resultList.size() + " scores";
-                    Log.d("score", "Retrieved " + resultList.size() + " scores");
-                    goToCustomProductsList();
+            if (exception == null) {
+                text = "Retrieved " + resultList.size() + " scores";
+                Log.d("score", "Retrieved " + resultList.size() + " scores");
+                goToCustomProductsList();
 
-                } else {
-                    Log.d("score", "Error: " + e.getMessage());
-                    text = e.getMessage();
-                }
-                Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-                toast.show();
+            } else {
+                Log.d("score", "Error: " + exception.getMessage());
+                text = exception.getMessage();
             }
+            Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+            toast.show();
         });
     }
 

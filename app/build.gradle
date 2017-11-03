@@ -20,15 +20,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     dataBinding {
         enabled true
     }
 }
-
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -47,7 +46,7 @@ dependencies {
     implementation "com.parse:parse-livequery-android:1.0.+"
 
     // annotation processors
-    annotationProcessor "android.arch.persistence.room:compiler:1.+"
+    //annotationProcessor "android.arch.persistence.room:compiler:1.+"
     annotationProcessor "android.arch.lifecycle:compiler:1.+"
     annotationProcessor "org.projectlombok:lombok:1.+"
 

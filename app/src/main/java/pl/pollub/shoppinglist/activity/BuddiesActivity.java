@@ -1,15 +1,13 @@
 package pl.pollub.shoppinglist.activity;
 
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -37,22 +35,18 @@ public class BuddiesActivity extends AppCompatActivity implements NavigationView
         setTitle(R.string.friends);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout = findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        String user;
-        user = ParseUser.getCurrentUser().getUsername().toString();
-
-        if(ParseUser.getCurrentUser()!=null){
+        if (ParseUser.getCurrentUser() != null) {
+            String user = ParseUser.getCurrentUser().getUsername();
             View hView = navigationView.getHeaderView(0);
-            TextView username =(TextView) hView.findViewById(R.id.user_pseudonym);
+            TextView username = hView.findViewById(R.id.user_pseudonym);
             username.setText(user);
         }
 
