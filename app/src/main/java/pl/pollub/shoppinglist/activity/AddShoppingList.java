@@ -10,14 +10,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.Calendar;
 
@@ -42,26 +45,33 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
         ImageButton setListImage = findViewById(R.id.setListImage);
         final Button textDate = findViewById(R.id.listDeadline);
 
+
         saveNewList.setOnClickListener(view -> {
             EditText listName = findViewById(R.id.listName);
             String listNameString = listName.getText().toString();
-            if (isLogged == 0) {
 
                 ParseObject list = ParseObject.create("ShoppingList");
+
                 list.put("name", listNameString);
                 list.put("status", "0");
                 list.put("deadline", textDate.getText().toString());
-                //list.put("localId", id);
-                list.setObjectId(Integer.toString(id));
+
+                if (ParseUser.getCurrentUser() != null) {
+                    String user = ParseUser.getCurrentUser().getUsername();
+                    list.put("belongsTo", ParseUser.getCurrentUser());
+                    list.put("localId",user+Integer.toString(id));
+                    list.saveEventually();
+
+                }else {
+                    list.setObjectId(Integer.toString(id));
+                    list.pinInBackground();
+                }
                 list.pinInBackground();
-                //id = list.getObjectId();
                 //list.saveInBackground();
                 Intent intent = new Intent(AddShoppingList.this, ShoppingListDetailsActivity.class);
                 intent.putExtra("LIST_OBJECT", list);
                 startActivity(intent);
-            } else {
 
-            }
         });
 
         setListImage.setOnClickListener(view -> {

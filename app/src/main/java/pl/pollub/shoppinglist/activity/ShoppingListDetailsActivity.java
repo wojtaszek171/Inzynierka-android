@@ -1,6 +1,9 @@
 package pl.pollub.shoppinglist.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -61,17 +64,25 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
+
+
+
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
         if (ParseUser.getCurrentUser() != null) {
             String user = ParseUser.getCurrentUser().getUsername();
             View hView = navigationView.getHeaderView(0);
             TextView username = hView.findViewById(R.id.user_pseudonym);
             username.setText(user);
+            query.whereEqualTo("belongsTo", list.getString("localId"));
+            if(!isNetworkAvailable()){
+                query.fromLocalDatastore();
+            }
+        }else {
+            query.fromLocalDatastore();
+            query.whereEqualTo("belongsTo", list);
         }
-
         setIdForLocal();
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
-        query.fromLocalDatastore();
-        query.whereEqualTo("belongsTo", list);
         query.findInBackground((scoreList, exception) -> {
             if (exception == null) {
                 ArrayList<ParseObject> products = new ArrayList<>();
@@ -91,6 +102,7 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
                     //Toast.makeText(context, "Position: "+String.valueOf(position), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getBaseContext(), AddProductToList.class);
                     intent.putExtra("PRODUCT_OBJECT", scoreList.get(position));
+                    intent.putExtra("PRODUCT_OBJECT_ID", scoreList.get(position).getString("localId"));
                     intent.putExtra("LIST_NAME", listName);
                     intent.putExtra("LIST_OBJECT", list);
 
@@ -193,5 +205,11 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
         //close navigation drawer
         //drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

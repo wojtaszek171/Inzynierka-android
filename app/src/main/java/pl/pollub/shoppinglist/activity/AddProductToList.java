@@ -7,6 +7,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -15,14 +16,20 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 
 public class AddProductToList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private String listId;
     private String listName;
+    private String productId;
     private EditText productName;
     private EditText productAmount;
     private Spinner productCategory;
@@ -59,6 +66,7 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
         listName = getIntent().getStringExtra("LIST_NAME");
         list = getIntent().getParcelableExtra("LIST_OBJECT");
         localId = Integer.toString(getIntent().getIntExtra("LOCAL_ID", 1));
+        productId = getIntent().getStringExtra("PRODUCT_OBJECT_ID");
         final ParseObject productObject = getIntent().getParcelableExtra("PRODUCT_OBJECT");
         if (productObject != null) {//editing product
             String title = "Edytuj " + productObject.getString("name");
@@ -74,14 +82,40 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
             productIcon.setText(productObject.getString("icon"));
 
             saveProductB.setOnClickListener(view -> {
-                productObject.put("name", productName.getText().toString());
-                productObject.put("amount", productAmount.getText().toString());
-                productObject.put("category", productCategory.getSelectedItem().toString());
-                productObject.put("description", productDescription.getText().toString());
-                productObject.put("measure", productMeasure.getSelectedItem().toString());
-                productObject.put("icon", productIcon.getText().toString());
-                productObject.pinInBackground();
-
+            if (ParseUser.getCurrentUser() != null) {
+                //String user = ParseUser.getCurrentUser().getUsername();
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
+                query.whereEqualTo("localId", productId);
+                query.fromLocalDatastore();
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    public void done(List<ParseObject> scoreList,
+                                     ParseException e) {
+                        if (e == null) {
+                            for (ParseObject s : scoreList) {
+                                s.put("name", productName.getText().toString());
+                                s.put("amount", productAmount.getText().toString());
+                                s.put("category", productCategory.getSelectedItem().toString());
+                                s.put("description", productDescription.getText().toString());
+                                s.put("measure", productMeasure.getSelectedItem().toString());
+                                s.put("icon", productIcon.getText().toString());
+                                s.pinInBackground();
+                                s.saveEventually();
+                            }
+                            Log.d("score", "Retrieved " + scoreList.size());
+                        } else {
+                            Log.d("score", "Error: " + e.getMessage());
+                        }
+                    }
+                });
+            }else {
+                    productObject.put("name", productName.getText().toString());
+                    productObject.put("amount", productAmount.getText().toString());
+                    productObject.put("category", productCategory.getSelectedItem().toString());
+                    productObject.put("description", productDescription.getText().toString());
+                    productObject.put("measure", productMeasure.getSelectedItem().toString());
+                    productObject.put("icon", productIcon.getText().toString());
+                    productObject.pinInBackground();
+            }
                 Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
                 intent.putExtra("LIST_OBJECT", list);
                 startActivity(intent);
@@ -100,9 +134,19 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
                 product.put("description", productDescription.getText().toString());
                 product.put("measure", productMeasure.getSelectedItem().toString());
                 product.put("icon", productIcon.getText().toString());
-                product.put("belongsTo", list);
-                product.pinInBackground();
-                product.setObjectId(localId);
+
+                if (ParseUser.getCurrentUser() != null) {
+                    String user = ParseUser.getCurrentUser().getUsername();
+                    product.put("localId",localId);
+                    product.put("belongsTo", list.getString("localId"));
+                    product.saveEventually();
+                    product.pinInBackground();
+                }else {
+                    product.put("belongsTo", list);
+                    //product.setObjectId(localId);
+                    product.pinInBackground();
+                }
+
                 Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("LIST_OBJECT", list);

@@ -3,6 +3,8 @@ package pl.pollub.shoppinglist.activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -59,17 +61,20 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
         if (ParseUser.getCurrentUser() != null) {
             String user = ParseUser.getCurrentUser().getUsername();
             View hView = navigationView.getHeaderView(0);
             TextView username = hView.findViewById(R.id.user_pseudonym);
             username.setText(user);
+            query.whereEqualTo("belongsTo",ParseUser.getCurrentUser());
+            if(!isNetworkAvailable()){
+                query.fromLocalDatastore();
+            }
+        }else {
+            query.fromLocalDatastore();
         }
-
         setIdForLocal();
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
-        query.fromLocalDatastore();
         query.findInBackground((scoreList, exception) -> {
 
             if (exception == null) {
@@ -198,5 +203,11 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menulists, menu);
         return true;
+    }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
