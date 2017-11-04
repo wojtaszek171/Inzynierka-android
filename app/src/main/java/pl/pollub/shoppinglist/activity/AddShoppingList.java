@@ -45,7 +45,7 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
             String listNameString = listName.getText().toString();
             if (isLogged == 0) {
 
-                ParseObject list = new ParseObject("ShoppingList");
+                ParseObject list = ParseObject.create("ShoppingList");
                 list.put("name", listNameString);
                 list.put("status", "0");
                 list.put("deadline", textDate.getText().toString());
