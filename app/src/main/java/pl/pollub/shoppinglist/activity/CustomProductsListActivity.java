@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -153,6 +154,8 @@ public class CustomProductsListActivity extends AppCompatActivity implements Nav
                 break;
             }
             case R.id.nav_logout: {
+                ParseUser.logOut();
+                Toast.makeText(getApplicationContext(), "Wylogowano", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(CustomProductsListActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.ParseUser;
 
@@ -73,6 +74,8 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
                 break;
             }
             case R.id.nav_logout: {
+                ParseUser.logOut();
+                Toast.makeText(getApplicationContext(), "Wylogowano", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

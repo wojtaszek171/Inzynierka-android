@@ -169,6 +169,8 @@ public class CustomProductAppenderActivity extends AppCompatActivity implements 
                 break;
             }
             case R.id.nav_logout: {
+                ParseUser.logOut();
+                Toast.makeText(getApplicationContext(), "Wylogowano", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(CustomProductAppenderActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

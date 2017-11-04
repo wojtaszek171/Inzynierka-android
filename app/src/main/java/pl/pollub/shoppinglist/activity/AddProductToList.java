@@ -13,8 +13,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import pl.pollub.shoppinglist.R;
 
@@ -140,6 +142,8 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
                 break;
             }
             case R.id.nav_logout: {
+                ParseUser.logOut();
+                Toast.makeText(getApplicationContext(), "Wylogowano", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(AddProductToList.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
