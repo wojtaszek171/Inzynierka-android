@@ -1,70 +1,35 @@
-
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:orientation="vertical"
-android:padding="10dp">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/custom_product_item_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="10dp"
+        app:srcCompat="@drawable/shopping_bag_icon" />
 
-        <ImageView
-            android:id="@+id/custom_product_item_icon"
-            android:layout_width="54dp"
-            android:layout_height="54dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/star_big_on" />
+    <TextView
+        android:id="@+id/custom_product_item_name"
+        android:layout_width="382dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/custom_product_item_category"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/custom_product_item_icon"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="19sp" />
 
-        <TextView
-            android:id="@+id/custom_product_item_category"
-            android:layout_width="366dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:textColor="@android:color/black"
-            android:textSize="13sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.142"
-            app:layout_constraintStart_toEndOf="@+id/custom_product_item_icon"
-            app:layout_constraintTop_toBottomOf="@+id/custom_product_item_name" />
-
-        <TextView
-            android:id="@+id/custom_product_item_name"
-            android:layout_width="382dp"
-            android:layout_height="37dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="4dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="19sp"
-            app:layout_constraintStart_toEndOf="@+id/custom_product_item_icon"
-            app:layout_constraintTop_toTopOf="parent"></TextView>
-
-        <ImageView
-            android:id="@+id/custom_products_item_delete"
-            android:layout_width="54dp"
-            android:layout_height="54dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView2"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_delete" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="54dp"
-            android:layout_height="54dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintStart_toEndOf="@+id/custom_product_item_name"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
-
-    </android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/custom_product_item_category"
+        android:layout_width="366dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/custom_product_item_icon"
+        android:layout_toEndOf="@+id/custom_product_item_icon"
+        android:textColor="@android:color/black"
+        android:textSize="13sp" />
 
 </RelativeLayout>

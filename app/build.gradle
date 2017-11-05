@@ -44,6 +44,8 @@ dependencies {
     implementation "com.jakewharton.threetenabp:threetenabp:1.+"
     implementation "com.parse:parse-android:1.16.+"
     implementation "com.parse:parse-livequery-android:1.0.+"
+    compile 'com.mobsandgeeks:android-saripaar:+'
+    compile 'com.satsuware.lib:usefulviews:2.3.6'
 
     // annotation processors
     //annotationProcessor "android.arch.persistence.room:compiler:1.+"

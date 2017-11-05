@@ -24,8 +24,6 @@ public class CustomProductsAdapter extends ArrayAdapter implements View.OnClickL
         TextView nameField;
         TextView categoryField;
         TextView descriptionField;
-        TextView measureField;
-        TextView pricePerUnitField;
     }
 
     public CustomProductsAdapter(ArrayList<CustomProductDataModel> data, Context context) {

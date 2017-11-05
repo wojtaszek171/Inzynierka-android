@@ -33,24 +33,53 @@
     <!--PARSE SERVER CONFIG VALUES:-->
     <string name="parse_server_url">http://94.23.7.172:9652/parsesl/</string>
     <string name="parse_app_id">R3J9pslx57inrTP8IEUIykY</string>
+    <string name="msg_custom_product_invalid_input">Podano niewłaściwe dane!</string>
+    <string name="customProductName">Nazwa</string>
+    <string name="customProductCategory">Kategoria</string>
+    <string name="customProductDescription">Opis</string>
+    <string name="customProductMeasure">Jednostka miary</string>
+    <string name="customProductPrice">Cena za jednostkę</string>
+    <string name="clear">Wyczyść</string>
+    <string name="customUserProducts">PRODUKTY UŻYTKOWNIKA</string>
+    <string name="save">Zapisz</string>
+    <string name="cancel">Anuluj</string>
 
-        <string-array name="product_categories">
-            <item>Pieczywo</item>
-            <item>Nabiał</item>
-            <item>Warzywa i owoce</item>
-            <item>Mrożonki</item>
-            <item>Napoje</item>
-            <item>Chemia</item>
-            <item>Dla dzieci</item>
-            <item>Dla zwierząt</item>
-            <item>RTV/AGD</item>
-        </string-array>
+    <!--CATEGORIES:-->
+    <string-array name="product_categories">
+        <item>Inne</item>
+        <item>Alkohol</item>
+        <item>Chemia i kosmetyki</item>
+        <item>Dla zwierząt</item>
+        <item>Kasza i ryż</item>
+        <item>Konserwy</item>
+        <item>Mięso</item>
+        <item>Mrożonki i lody</item>
+        <item>Nabiał</item>
+        <item>Napoje</item>
+        <item>Owoce</item>
+        <item>Pieczywo</item>
+        <item>Przekąski</item>
+        <item>Przybory do samochodu</item>
+        <item>Przyprawy</item>
+        <item>Urządzenia elektroniczne</item>
+        <item>Warzywa</item>
+        <item>Zabawki</item>
+    </string-array>
 
+
+    <!--MEASURES:-->
     <string-array name="product_measure">
-        <item>Kilogramy</item>
+        <item>Inne</item>
+        <item>Butelka</item>
+        <item>Dekagramy</item>
         <item>Gramy</item>
-        <item>Sztuki</item>
+        <item>Kilogramy</item>
         <item>Litry</item>
+        <item>Mililitry</item>
+        <item>Opakowania</item>
+        <item>Pudełko</item>
+        <item>Puszka</item>
+        <item>Sztuki</item>
     </string-array>
 
 </resources>
