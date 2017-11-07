@@ -137,13 +137,13 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
 
                 if (ParseUser.getCurrentUser() != null) {
                     String user = ParseUser.getCurrentUser().getUsername();
-                    product.put("localId",localId);
+                    product.put("localId",user + localId);
                     product.put("belongsTo", list.getString("localId"));
                     product.saveEventually();
                     product.pinInBackground();
                 }else {
                     product.put("belongsTo", list);
-                    //product.setObjectId(localId);
+                    product.setObjectId(localId);
                     product.pinInBackground();
                 }
 

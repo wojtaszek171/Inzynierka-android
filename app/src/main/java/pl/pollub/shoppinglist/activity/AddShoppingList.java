@@ -63,7 +63,7 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
                     list.saveEventually();
 
                 }else {
-                   // list.setObjectId(Integer.toString(id));
+                    list.setObjectId(Integer.toString(id));
                     list.pinInBackground();
                 }
                 list.pinInBackground();

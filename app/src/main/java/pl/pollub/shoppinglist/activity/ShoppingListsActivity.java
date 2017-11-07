@@ -139,11 +139,13 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
                                     if(selecteditems.get(i).getObjectId()==null){
                                         ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
                                                     query.fromLocalDatastore();
+                                                    String ident = selecteditems.get(i).getString("localId");
                                                     query.whereEqualTo("localId",selecteditems.get(i).getString("localId"));
                                                     query.findInBackground((scoreList, exception) -> {
                                                         if (exception == null) {
                                                             for (ParseObject s : scoreList) {
                                                                 s.unpinInBackground();
+                                                                s.deleteEventually();
                                                             }
                                                         } else {
 

@@ -154,6 +154,7 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
                                             if (exception == null) {
                                                 for (ParseObject s : scoreList) {
                                                     s.unpinInBackground();
+                                                    s.deleteEventually();
                                                 }
                                             } else {
 
