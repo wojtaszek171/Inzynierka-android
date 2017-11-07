@@ -29,7 +29,7 @@
         <activity android:name=".activity.RegistrationActivity" />
         <activity android:name=".activity.ShoppingListDetailsActivity" />
         <activity android:name=".activity.BuddyManagerActivity" />
-        <activity android:name=".activity.ShoppingListsActivity" />
+        <activity android:name=".activity.ShoppingListsActivity" ></activity>
         <activity android:name=".activity.CustomProductAppenderActivity"/>
         <activity android:name=".activity.CustomProductsListActivity"/>
         <activity android:name=".activity.AddShoppingList" />

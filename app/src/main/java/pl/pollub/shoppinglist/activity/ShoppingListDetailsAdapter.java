@@ -2,6 +2,7 @@ package pl.pollub.shoppinglist.activity;
 
 
 import android.app.Activity;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,12 @@ import pl.pollub.shoppinglist.R;
 public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
     private final Activity context;
     private ArrayList<ParseObject> products;
+    private SparseBooleanArray mSelectedItemsIds;
 
     public ShoppingListDetailsAdapter(Activity context,
                                       ArrayList<String> name, ArrayList<ParseObject> products) {
         super(context, R.layout.lists_list_item, name);
+        mSelectedItemsIds = new SparseBooleanArray();
         this.context = context;
         this.products = products;
 
@@ -39,6 +42,28 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
         productMeasure.setText(product.getString("measure"));
 
         return rowView;
+    }
+
+    public void toggleSelection(int position) {
+        selectView(position, !mSelectedItemsIds.get(position));
+
+    }
+
+    public void removeSelection() {
+        mSelectedItemsIds = new SparseBooleanArray();
+        notifyDataSetChanged();
+    }
+
+    public void selectView(int position, boolean value) {
+        if(value) {
+            mSelectedItemsIds.put(position, value);
+        } else {
+            mSelectedItemsIds.delete(position);
+        }
+        notifyDataSetChanged();
+    }
+    public SparseBooleanArray getSelectedIds() {
+        return mSelectedItemsIds;
     }
 
 }

@@ -13,9 +13,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +39,7 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
     private ParseObject list;
     private ListView product;
     private int id;
+    public int selectedItemPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +112,74 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
 
                     startActivity(intent);
                 });
+                product.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+                product.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                    @Override
+                    public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+                        final int checkedCount = product.getCheckedItemCount();
+                        actionMode.setTitle(checkedCount + " Zaznaczono");
+                        selectedItemPos = i;
+                        productAdapter.toggleSelection(i);
+                    }
 
+                    @Override
+                    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+
+                        actionMode.getMenuInflater().inflate(R.menu.main, menu);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                        switch (menuItem.getItemId()){
+                            case R.id.delete:
+                                ArrayList<ParseObject> selecteditems = new ArrayList<ParseObject>();
+                                SparseBooleanArray selected = productAdapter.getSelectedIds();
+                                for(int i = (selected.size() - 1); i>=0; i--){
+                                    if (selected.valueAt(i)){
+                                        selecteditems.add(scoreList.get(selected.keyAt(i)));
+                                    }
+                                }
+                                for(int i=0; i< selecteditems.size();i++){
+                                    if(selecteditems.get(i).getObjectId()==null){
+                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
+                                        query.fromLocalDatastore();
+                                        query.whereEqualTo("localId",selecteditems.get(i).get("localId"));
+                                        query.findInBackground((scoreList, exception) -> {
+                                            if (exception == null) {
+                                                for (ParseObject s : scoreList) {
+                                                    s.unpinInBackground();
+                                                }
+                                            } else {
+
+                                            }
+                                        });
+                                    }else {
+                                        selecteditems.get(i).deleteInBackground();
+                                        selecteditems.get(i).unpinInBackground();
+                                    }
+                                }
+                                actionMode.finish();
+                                finish();
+                                overridePendingTransition( 0, 0);
+                                startActivity(getIntent());
+                                overridePendingTransition( 0, 0);
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+
+                    @Override
+                    public void onDestroyActionMode(ActionMode actionMode) {
+                        productAdapter.removeSelection();
+                    }
+                });
                 Log.d("score", "Retrieved " + scoreList.size() + " scores");
             } else {
                 Log.d("score", "Error: " + exception.getMessage());

@@ -46,7 +46,6 @@ dependencies {
     implementation "com.parse:parse-livequery-android:1.0.+"
     compile 'com.mobsandgeeks:android-saripaar:+'
     compile 'com.satsuware.lib:usefulviews:2.3.6'
-
     // annotation processors
     //annotationProcessor "android.arch.persistence.room:compiler:1.+"
     annotationProcessor "android.arch.lifecycle:compiler:1.+"

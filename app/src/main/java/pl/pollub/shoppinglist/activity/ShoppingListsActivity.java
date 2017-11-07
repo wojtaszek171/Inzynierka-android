@@ -15,10 +15,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +32,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 
@@ -40,7 +44,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
     private ArrayList<String> names = new ArrayList<>();
     private ArrayList<String> dates = new ArrayList<>();
     private static int id;
-
+    public int selectedItemPos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +101,75 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
                     intent.putExtra("LIST_OBJECT", scoreList.get(position));
 
                     startActivity(intent);
+                });
+                list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+                list.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                    @Override
+                    public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+                        final int checkedCount = list.getCheckedItemCount();
+                        actionMode.setTitle(checkedCount + " Zaznaczono");
+                        selectedItemPos = i;
+                        listAdapter.toggleSelection(i);
+                    }
+
+                    @Override
+                    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+
+                        actionMode.getMenuInflater().inflate(R.menu.main, menu);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                        switch (menuItem.getItemId()){
+                            case R.id.delete:
+                                ArrayList<ParseObject> selecteditems = new ArrayList<ParseObject>();
+                                SparseBooleanArray selected = listAdapter.getSelectedIds();
+                                for(int i = (selected.size() - 1); i>=0; i--){
+                                    if (selected.valueAt(i)){
+                                        selecteditems.add(scoreList.get(selected.keyAt(i)));
+                                    }
+                                }
+                                for(int i=0; i< selecteditems.size();i++){
+                                    if(selecteditems.get(i).getObjectId()==null){
+                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
+                                                    query.fromLocalDatastore();
+                                                    query.whereEqualTo("localId",selecteditems.get(i).getString("localId"));
+                                                    query.findInBackground((scoreList, exception) -> {
+                                                        if (exception == null) {
+                                                            for (ParseObject s : scoreList) {
+                                                                s.unpinInBackground();
+                                                            }
+                                                        } else {
+
+                                                        }
+                                                    });
+                                    }else {
+                                        selecteditems.get(i).deleteEventually();
+                                        selecteditems.get(i).unpinInBackground();
+                                    }
+
+                                }
+                                actionMode.finish();
+                                finish();
+                                overridePendingTransition( 0, 0);
+                                startActivity(getIntent());
+                                overridePendingTransition( 0, 0);
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+
+                    @Override
+                    public void onDestroyActionMode(ActionMode actionMode) {
+                        listAdapter.removeSelection();
+                    }
                 });
 
                 Log.d("score", "Retrieved " + scoreList.size() + " scores");

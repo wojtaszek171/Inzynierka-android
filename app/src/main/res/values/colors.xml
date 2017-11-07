@@ -6,4 +6,6 @@
     <color name="colorText">#ffffff</color>
     <color name="colorText2">#000000</color>
     <color name="red">#FF0000</color>
+    <color name="SelectedColor">#857c7c</color>
+    <color name="DefaultColor">#ffffff</color>
 </resources>
