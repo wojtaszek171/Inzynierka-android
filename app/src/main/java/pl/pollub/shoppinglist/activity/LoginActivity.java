@@ -38,8 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(view -> {
             getLoginFormData();
             attemptUserLogin();
-            Intent intent = new Intent(LoginActivity.this, ShoppingListsActivity.class);
-            startActivity(intent);
+
         });
     }
 
@@ -66,6 +65,8 @@ public class LoginActivity extends AppCompatActivity {
             if (user != null) {
                 // Hooray! The user is logged in.
                 text = login + " - pomyślnie zalogowano!";
+                Intent intent = new Intent(LoginActivity.this, ShoppingListsActivity.class);
+                startActivity(intent);
             } else {
                 // Signup failed. Look at the ParseException to see what happened.
                 text = exception.getMessage();

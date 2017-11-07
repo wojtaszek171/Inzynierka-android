@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -186,7 +187,6 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
             dialog.setContentView(R.layout.add_list_dialog);
             Button addList = dialog.findViewById(R.id.addList);
             addList.setOnClickListener(view1 -> {
-
                 Intent intent = new Intent(ShoppingListsActivity.this, AddShoppingList.class);
                 intent.putExtra("LOCAL_LIST_ID", id);
                 startActivity(intent);
@@ -210,7 +210,6 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
                     id = s.getInt("id");
                     s.put("id", id + 1);
                     s.pinInBackground();
-
                 }
                 Log.d("score", "Retrieved " + scoreList.size() + " scores");
                 if (scoreList.size() == 0) {
