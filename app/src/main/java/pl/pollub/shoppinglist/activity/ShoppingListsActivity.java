@@ -28,6 +28,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.pollub.shoppinglist.R;
+import pl.pollub.shoppinglist.model.ShoppingList;
 
 public class ShoppingListsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
@@ -45,6 +47,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
     private ArrayList<String> names = new ArrayList<>();
     private ArrayList<String> dates = new ArrayList<>();
     private static int id;
+    private NavigationView navigationView;
     public int selectedItemPos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,16 +59,37 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         setSupportActionBar(toolbar);
         setTitle(R.string.menuLists);
 
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
+        displayListsAndSetActions();
+
+        addNew.setOnClickListener(view -> {
+            addNewShoppingListDialog();
+        });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void addNewShoppingListDialog() {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.add_list_dialog);
+        Button addList = dialog.findViewById(R.id.addList);
+        addList.setOnClickListener(view1 -> {
+            Intent intent = new Intent(ShoppingListsActivity.this, AddShoppingList.class);
+            intent.putExtra("LOCAL_LIST_ID", id);
+            startActivity(intent);
+        });
+        dialog.show();
+    }
+
+    private void displayListsAndSetActions() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
         if (ParseUser.getCurrentUser() != null) {
             String user = ParseUser.getCurrentUser().getUsername();
@@ -92,113 +116,108 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
                 list = findViewById(R.id.list);
                 list.setAdapter(listAdapter);
                 list.setOnItemClickListener((adapterView, view, position, id) -> {
-                    Context context = ShoppingListsActivity.this;
-                    //Toast.makeText(context, "Position: "+String.valueOf(position), Toast.LENGTH_SHORT).show();
-                    String idList = scoreList.get(position).getString("objectId");
-                    String nameList = scoreList.get(position).getString("name");
-                    Intent intent = new Intent(getBaseContext(), ShoppingListDetailsActivity.class);
-                    intent.putExtra("LIST_ID", idList);
-                    intent.putExtra("LIST_NAME", nameList);
-                    intent.putExtra("LIST_OBJECT", scoreList.get(position));
-
-                    startActivity(intent);
+                    goToListDetails(scoreList , position);
                 });
                 list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-                list.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-                    @Override
-                    public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
-                        final int checkedCount = list.getCheckedItemCount();
-                        actionMode.setTitle(checkedCount + " Zaznaczono");
-                        selectedItemPos = i;
-                        listAdapter.toggleSelection(i);
-                    }
-
-                    @Override
-                    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-
-                        actionMode.getMenuInflater().inflate(R.menu.main, menu);
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-                        switch (menuItem.getItemId()){
-                            case R.id.delete:
-                                ArrayList<ParseObject> selecteditems = new ArrayList<ParseObject>();
-                                SparseBooleanArray selected = listAdapter.getSelectedIds();
-                                for(int i = (selected.size() - 1); i>=0; i--){
-                                    if (selected.valueAt(i)){
-                                        selecteditems.add(scoreList.get(selected.keyAt(i)));
-                                    }
-                                }
-                                for(int i=0; i< selecteditems.size();i++){
-                                    if(selecteditems.get(i).getObjectId()==null){
-                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
-                                                    query.fromLocalDatastore();
-                                                    String ident = selecteditems.get(i).getString("localId");
-                                                    query.whereEqualTo("localId",selecteditems.get(i).getString("localId"));
-                                                    query.findInBackground((scoreList, exception) -> {
-                                                        if (exception == null) {
-                                                            for (ParseObject s : scoreList) {
-                                                                s.unpinInBackground();
-                                                                s.deleteEventually();
-                                                            }
-                                                        } else {
-
-                                                        }
-                                                    });
-                                    }else {
-                                        selecteditems.get(i).deleteEventually();
-                                        selecteditems.get(i).unpinInBackground();
-                                    }
-
-                                }
-                                actionMode.finish();
-                                finish();
-                                overridePendingTransition( 0, 0);
-                                startActivity(getIntent());
-                                overridePendingTransition( 0, 0);
-                                return true;
-                            default:
-                                return false;
-                        }
-                    }
-
-                    @Override
-                    public void onDestroyActionMode(ActionMode actionMode) {
-                        listAdapter.removeSelection();
-                    }
-                });
+                multiChoiceForDelete(list, listAdapter, scoreList);
 
                 Log.d("score", "Retrieved " + scoreList.size() + " scores");
             } else {
                 Log.d("score", "Error: " + exception.getMessage());
             }
         });
+    }
 
-        addNew.setOnClickListener(view -> {
-            final Dialog dialog = new Dialog(context);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.add_list_dialog);
-            Button addList = dialog.findViewById(R.id.addList);
-            addList.setOnClickListener(view1 -> {
-                Intent intent = new Intent(ShoppingListsActivity.this, AddShoppingList.class);
-                intent.putExtra("LOCAL_LIST_ID", id);
-                startActivity(intent);
-            });
-            // set the custom dialog components - text, image and button
+    private void multiChoiceForDelete(ListView list, ShoppingListsAdapter listAdapter, List<ParseObject> scoreList) {
+        list.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+                final int checkedCount = list.getCheckedItemCount();
+                actionMode.setTitle(checkedCount + " Zaznaczono");
+                selectedItemPos = i;
+                listAdapter.toggleSelection(i);
+            }
 
-            // if button is clicked, close the custom dialog
+            @Override
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
 
-            dialog.show();
+                actionMode.getMenuInflater().inflate(R.menu.main, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.delete:
+                        ArrayList<ParseObject> selecteditems = new ArrayList<ParseObject>();
+                        changeSelectedIdsToObjects(listAdapter, selecteditems, scoreList);
+                        deleteListAction(listAdapter, selecteditems, actionMode);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode actionMode) {
+                listAdapter.removeSelection();
+            }
         });
+    }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    private void changeSelectedIdsToObjects(ShoppingListsAdapter listAdapter, ArrayList<ParseObject> selecteditems, List<ParseObject> scoreList) {
+        SparseBooleanArray selected = listAdapter.getSelectedIds();
+        for(int i = (selected.size() - 1); i>=0; i--){
+            if (selected.valueAt(i)){
+                selecteditems.add(scoreList.get(selected.keyAt(i)));
+            }
+        }
+    }
+
+    private void deleteListAction(ShoppingListsAdapter listAdapter, ArrayList<ParseObject> selecteditems, ActionMode actionMode) {
+        for(int i=0; i< selecteditems.size();i++){
+            if(selecteditems.get(i).getObjectId()==null){
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
+                query.fromLocalDatastore();
+                String ident = selecteditems.get(i).getString("localId");
+                query.whereEqualTo("localId",selecteditems.get(i).getString("localId"));
+                query.findInBackground((scoreList, exception) -> {
+                    if (exception == null) {
+                        for (ParseObject s : scoreList) {
+                            s.unpinInBackground();
+                            s.deleteEventually();
+                        }
+                    } else {
+
+                    }
+                });
+            }else {
+                selecteditems.get(i).deleteEventually();
+                selecteditems.get(i).unpinInBackground();
+            }
+
+        }
+        actionMode.finish();
+        finish();
+        overridePendingTransition( 0, 0);
+        startActivity(getIntent());
+        overridePendingTransition( 0, 0);
+    }
+
+    private void goToListDetails(List<ParseObject> scoreList, int position) {
+        Context context = ShoppingListsActivity.this;
+        String idList = scoreList.get(position).getString("objectId");
+        String nameList = scoreList.get(position).getString("name");
+        Intent intent = new Intent(getBaseContext(), ShoppingListDetailsActivity.class);
+        intent.putExtra("LIST_ID", idList);
+        intent.putExtra("LIST_NAME", nameList);
+        intent.putExtra("LIST_OBJECT", scoreList.get(position));
+        startActivity(intent);
     }
 
     public void setIdForLocal() {
