@@ -4,9 +4,9 @@ import com.parse.ParseClassName;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import pl.pollub.shoppinglist.util.Icon;
+import pl.pollub.shoppinglist.model.complextype.Icon;
 
-import static pl.pollub.shoppinglist.util.Icon.Converter.*;
+import static pl.pollub.shoppinglist.model.complextype.Icon.Converter.*;
 
 /**
  * @author Adrian

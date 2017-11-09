@@ -1,4 +1,4 @@
-package pl.pollub.shoppinglist.util;
+package pl.pollub.shoppinglist.model.complextype;
 
 import android.support.annotation.NonNull;
 
