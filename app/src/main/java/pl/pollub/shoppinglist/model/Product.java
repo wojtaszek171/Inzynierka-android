@@ -4,11 +4,11 @@ import com.parse.ParseClassName;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import pl.pollub.shoppinglist.util.Icon;
-import pl.pollub.shoppinglist.util.Measure;
+import pl.pollub.shoppinglist.model.complextype.Icon;
+import pl.pollub.shoppinglist.model.complextype.Measure;
 
-import static pl.pollub.shoppinglist.util.Icon.Converter.*;
-import static pl.pollub.shoppinglist.util.Measure.Converter.*;
+import static pl.pollub.shoppinglist.model.complextype.Icon.Converter.*;
+import static pl.pollub.shoppinglist.model.complextype.Measure.Converter.*;
 
 /**
  * @author Adrian
