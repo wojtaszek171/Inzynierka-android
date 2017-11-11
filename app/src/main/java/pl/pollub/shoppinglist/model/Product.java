@@ -4,11 +4,9 @@ import com.parse.ParseClassName;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import pl.pollub.shoppinglist.model.complextype.Category;
 import pl.pollub.shoppinglist.model.complextype.Icon;
 import pl.pollub.shoppinglist.model.complextype.Measure;
-
-import static pl.pollub.shoppinglist.model.complextype.Icon.Converter.*;
-import static pl.pollub.shoppinglist.model.complextype.Measure.Converter.*;
 
 /**
  * @author Adrian
@@ -20,18 +18,19 @@ import static pl.pollub.shoppinglist.model.complextype.Measure.Converter.*;
 public class Product extends NamedEntity {
     public static final String CLASS_NAME = "Product";
 
-    public static final String KEY_CATEGORY_POINTER = "categoryId";
+    public static final String KEY_CATEGORY = "category";
     public static final String KEY_MEASURE = "measure";
     public static final String KEY_PREDEFINED = "predefined";
     public static final String KEY_ICON = "icon";
 
     public Category getCategory() {
-        return getEntity(KEY_CATEGORY_POINTER);
+        String category = getString(KEY_CATEGORY);
+        return Category.fromString(category);
     }
 
     public Measure getMeasure() {
         String measure = getString(KEY_MEASURE);
-        return stringToMeasure(measure);
+        return Measure.fromString(measure);
     }
 
     public boolean isPredefined() {
@@ -40,15 +39,15 @@ public class Product extends NamedEntity {
 
     public Icon getIcon() {
         String icon = getString(KEY_ICON);
-        return stringToIcon(icon);
+        return Icon.fromString(icon);
     }
 
     public void setCategory(Category category) {
-        put(KEY_CATEGORY_POINTER, category);
+        put(KEY_CATEGORY, category.toString());
     }
 
     public void setMeasure(Measure measure) {
-        put(KEY_MEASURE, measureToString(measure));
+        put(KEY_MEASURE, measure.toString());
     }
 
     public void setPredefined(boolean predefined) {
@@ -56,6 +55,6 @@ public class Product extends NamedEntity {
     }
 
     public void setIcon(Icon icon) {
-        put(KEY_ICON, iconToString(icon));
+        put(KEY_ICON, icon.toString());
     }
 }

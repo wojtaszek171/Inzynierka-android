@@ -7,8 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import pl.pollub.shoppinglist.model.complextype.Icon;
 
-import static pl.pollub.shoppinglist.model.complextype.Icon.Converter.*;
-
 /**
  * @author Adrian
  * @since 2017-10-26
@@ -27,7 +25,7 @@ public class ShoppingList extends NamedEntity {
 
     public Icon getIcon() {
         String icon = getString(KEY_ICON);
-        return stringToIcon(icon);
+        return Icon.fromString(icon);
     }
 
     public String getStatus() {
@@ -39,7 +37,7 @@ public class ShoppingList extends NamedEntity {
     }
 
     public void setIcon(Icon icon) {
-        put(KEY_ICON, iconToString(icon));
+        put(KEY_ICON, icon.toString());
     }
 
     public void setStatus(String status) {

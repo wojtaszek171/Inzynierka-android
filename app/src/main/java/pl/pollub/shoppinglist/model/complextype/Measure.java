@@ -18,18 +18,11 @@ public enum Measure {
 
     public static final Measure DEFAULT = PIECE;
 
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static final class Converter {
-        public static Measure stringToMeasure(@NonNull String value) {
-            try {
-                return valueOf(value.toUpperCase());
-            } catch (Exception e) {
-                return DEFAULT;
-            }
-        }
-
-        public static String measureToString(Measure measure) {
-            return measure == null ? null : measure.name();
+    public static Measure fromString(@NonNull String value) {
+        try {
+            return valueOf(value.toUpperCase());
+        } catch (Exception e) {
+            return DEFAULT;
         }
     }
 }

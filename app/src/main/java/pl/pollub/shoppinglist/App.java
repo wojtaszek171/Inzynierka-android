@@ -22,7 +22,6 @@ public class App extends Application {
     }
 
     private static void registerParseApi(Context context) {
-        ParseObject.registerSubclass(Category.class);
         ParseObject.registerSubclass(Group.class);
         ParseObject.registerSubclass(Product.class);
         ParseObject.registerSubclass(ProductShoppingList.class);
