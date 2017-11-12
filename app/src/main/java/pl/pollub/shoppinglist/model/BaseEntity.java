@@ -19,14 +19,17 @@ import pl.pollub.shoppinglist.util.DateTimeWrapper;
 @EqualsAndHashCode(callSuper = true)
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BaseEntity extends ParseObject {
+public abstract class BaseEntity extends ParseObject {
     /*private DateTimeWrapper createdAt = new DateTimeWrapper();
     private DateTimeWrapper updatedAt = new DateTimeWrapper();*/
 
     @SuppressWarnings("unchecked")
     public <T extends ParseObject> T getEntity(String key) {
-        ParseObject entity = Objects.requireNonNull(
-                super.getParseObject(key), getClass().getSimpleName() + "can't be null");
+        ParseObject entity = super.getParseObject(key);
+
+        if (entity == null) {
+            return null;
+        }
 
         // check if returned ParseObject is an instance of the specific Entity
         if (!(getClass().isInstance(entity))) {

@@ -14,7 +14,7 @@ import pl.pollub.shoppinglist.model.complextype.Icon;
 @EqualsAndHashCode(callSuper = true)
 @ToString
 @ParseClassName(ShoppingList.CLASS_NAME)
-public class ShoppingList extends NamedEntity {
+public class ShoppingList extends DescribedEntity {
     public static final String CLASS_NAME = "ShoppingList";
 
     public static final String KEY_GROUP_POINTER = "groupId";

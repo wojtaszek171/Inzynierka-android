@@ -13,7 +13,7 @@ import pl.pollub.shoppinglist.model.complextype.Icon;
 @EqualsAndHashCode(callSuper = true)
 @ToString
 @ParseClassName(Group.CLASS_NAME)
-public class Group extends NamedEntity {
+public class Group extends DescribedEntity {
     public static final String CLASS_NAME = "Group";
 
     public static final String KEY_ICON = "icon";

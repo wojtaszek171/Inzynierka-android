@@ -1,6 +1,7 @@
 package pl.pollub.shoppinglist.model.complextype;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,8 @@ public enum Measure {
         try {
             return valueOf(value.toUpperCase());
         } catch (Exception e) {
+            Log.d("ComplexType", Measure.class.getSimpleName()
+                    + ": " + value + " not found.");
             return DEFAULT;
         }
     }

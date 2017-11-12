@@ -1,5 +1,8 @@
 package pl.pollub.shoppinglist.model.complextype;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import lombok.Getter;
 
 /**
@@ -52,10 +55,12 @@ public enum Category {
         this.icon = icon;
     }
 
-    public static Category fromString(String value) {
+    public static Category fromString(@NonNull String value) {
         try {
             return valueOf(value.toUpperCase());
         } catch (Exception e) {
+            Log.d("ComplexType", Category.class.getSimpleName()
+                    + ": " + value + " not found.");
             return OTHER;
         }
     }
