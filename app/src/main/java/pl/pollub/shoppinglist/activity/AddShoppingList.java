@@ -1,13 +1,17 @@
 package pl.pollub.shoppinglist.activity;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,9 +23,11 @@ import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import pl.pollub.shoppinglist.R;
@@ -32,6 +38,8 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
     private ActionBarDrawerToggle drawerToggle;
     private Button textDate;
     private boolean template;
+    private ParseObject listTemplate;
+    private ParseObject list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,10 +49,14 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
         setSupportActionBar(toolbar);
         id = getIntent().getIntExtra("LOCAL_LIST_ID", 1);
         template = getIntent().getBooleanExtra("TEMPLATE", false);
+        listTemplate = getIntent().getParcelableExtra("LIST_TEMPLATE");
+
         textDate = findViewById(R.id.listDeadline);
         if(template==true){
             setTitle(R.string.addTemplate);
             textDate.setVisibility(View.GONE);
+        }else if(listTemplate!=null) {
+            setTitle("Podaj szczegóły listy");
         }
         else {
             setTitle(R.string.addList);
@@ -81,7 +93,7 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
         EditText listName = findViewById(R.id.listName);
         String listNameString = listName.getText().toString();
 
-        ParseObject list = ParseObject.create("ShoppingList");
+        list = ParseObject.create("ShoppingList");
 
         list.put("name", listNameString);
         list.put("status", "0");
@@ -99,12 +111,93 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
             list.setObjectId(Integer.toString(id));
         }
         list.pinInBackground(e -> {if (e == null) {
-            finish();
-            Intent intent = new Intent(AddShoppingList.this, ShoppingListDetailsActivity.class);
-            intent.putExtra("LIST_OBJECT", list);
-            startActivity(intent);
+            if(listTemplate!=null){
+                recoveryTempalte(listTemplate,list.get("localId"));
+            }else {
+                finish();
+                Intent intent = new Intent(AddShoppingList.this, ShoppingListDetailsActivity.class);
+                intent.putExtra("LIST_OBJECT", list);
+                startActivity(intent);
+            }
         } else {
         }});
+    }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+    public void setIdForLocal() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("localId");
+        query.fromLocalDatastore();
+        query.findInBackground((scoreList, exception) -> {
+            if (exception == null) {
+                for (ParseObject s : scoreList) {
+                    id = s.getInt("id");
+                    s.put("id", id + 1);
+                    s.pinInBackground();
+
+                }
+                Log.d("score", "Retrieved " + scoreList.size() + " scores");
+                if (scoreList.size() == 0) {
+                    ParseObject localId = new ParseObject("localId");
+                    localId.put("id", 1);
+                    localId.pinInBackground();
+                    id = 1;
+                }
+            } else {
+                Log.d("score", "Error: " + exception.getMessage());
+            }
+        });
+    }
+    private void recoveryTempalte(ParseObject listTemplate, Object localIdd) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
+        if (ParseUser.getCurrentUser() != null) {
+            String user = ParseUser.getCurrentUser().getUsername();
+            if(!isNetworkAvailable()){
+                query.fromLocalDatastore();
+            }
+            query.whereEqualTo("belongsTo", listTemplate.get("localId"));
+        }else {
+            query.fromLocalDatastore();
+        }
+
+        setIdForLocal();
+        query.findInBackground((scoreList, exception) -> {
+            if (exception == null) {
+                ArrayList<ParseObject> products = new ArrayList<>();
+                ArrayList<String> names = new ArrayList<>();
+                for (ParseObject s : scoreList) {
+                    ParseObject product = new ParseObject("ProductOfList");
+                    product.put("name", s.get("name"));
+                    product.put("status", "0"); //status wykupienia produktu
+                    product.put("amount", s.get("amount"));
+                    product.put("category", s.get("category"));
+                    product.put("description", s.get("description"));
+                    product.put("measure", s.get("measure"));
+                    product.put("icon", s.get("icon"));
+
+                    if (ParseUser.getCurrentUser() != null) {
+                        String user = ParseUser.getCurrentUser().getUsername();
+                        product.put("localId",user + id);
+                        product.put("belongsTo", localIdd);
+                        product.saveEventually();
+                    }else {
+                        product.put("belongsTo", list);
+                        product.setObjectId(localIdd.toString());
+                    }
+                    product.pinInBackground();
+                }
+                finish();
+                Intent intent = new Intent(getApplicationContext(), ShoppingListDetailsActivity.class);
+                intent.putExtra("LIST_OBJECT", list);
+                startActivity(intent);
+                Log.d("score", "Retrieved " + scoreList.size() + " scores");
+            } else {
+                Log.d("score", "Error: " + exception.getMessage());
+            }
+        });
     }
 
     @Override

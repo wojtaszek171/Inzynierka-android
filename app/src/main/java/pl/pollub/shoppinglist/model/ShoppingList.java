@@ -22,6 +22,7 @@ public class ShoppingList extends NamedEntity {
     public static final String KEY_GROUP_POINTER = "groupId";
     public static final String KEY_ICON = "icon";
     public static final String KEY_STATUS = "status";
+    public static final String KEY_TEMPLATE = "isTemplate";
     // TODO: is it needed at all? doesnt parse resolve the problem with synchronization?
     //public static final String KEY_LAST_SYNCHRONIZED_AT = "lastSynchronizedAt";
 

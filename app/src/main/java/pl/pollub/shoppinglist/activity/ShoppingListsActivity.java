@@ -1,5 +1,6 @@
 package pl.pollub.shoppinglist.activity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -47,6 +49,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
     private ArrayList<String> names = new ArrayList<>();
     private ArrayList<String> dates = new ArrayList<>();
     private static int id;
+    ListView listView=null;
     private NavigationView navigationView;
     public int selectedItemPos;
     @Override
@@ -86,7 +89,72 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
             intent.putExtra("LOCAL_LIST_ID", id);
             startActivity(intent);
         });
+        Button useTemplate = dialog.findViewById(R.id.useTemplate);
+        useTemplate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listView=new ListView(getApplicationContext());
+                getAllTemplates();
+                AlertDialog.Builder builder=new
+                        AlertDialog.Builder(ShoppingListsActivity.this);
+
+                builder.setCancelable(true);
+
+                builder.setView(listView);
+
+                AlertDialog dialog1=builder.create();
+
+                dialog1.show();
+            }
+        });
         dialog.show();
+    }
+
+    private void getAllTemplates(){
+        ArrayList<String> items = new ArrayList<>();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
+        if (ParseUser.getCurrentUser() != null) {
+            String user = ParseUser.getCurrentUser().getUsername();
+            View hView = navigationView.getHeaderView(0);
+            TextView username = hView.findViewById(R.id.user_pseudonym);
+            username.setText(user);
+            query.whereEqualTo("belongsTo",ParseUser.getCurrentUser());
+            if(!isNetworkAvailable()){
+                query.fromLocalDatastore();
+            }
+        }else {
+            query.fromLocalDatastore();
+            query.whereEqualTo("belongsTo",null);
+        }
+        query.whereEqualTo("isTemplate",true);
+        setIdForLocal();
+        query.findInBackground((scoreList, exception) -> {
+
+            if (exception == null) {
+                for (ParseObject s : scoreList) {
+                    items.add(s.getString("name"));
+                }
+                ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,
+                        R.layout.string_list_item, R.id.txtitem,items);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener((adapterView, view, position, id) -> {
+                    finish();
+                    CreateListFromTemplate(scoreList , position);
+                });
+
+                Log.d("score", "Retrieved " + scoreList.size() + " scores");
+            } else {
+                Log.d("score", "Error: " + exception.getMessage());
+            }
+        });
+    }
+
+    private void CreateListFromTemplate(List<ParseObject> scoreList, int position) {
+        Intent intent = new Intent(getApplicationContext(),AddShoppingList.class);
+        intent.putExtra("LIST_TEMPLATE",scoreList.get(position));
+        intent.putExtra("LOCAL_LIST_ID", id);
+        finish();
+        startActivity(intent);
     }
 
     private void displayListsAndSetActions() {
@@ -103,6 +171,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
             }
         }else {
             query.fromLocalDatastore();
+            query.whereEqualTo("belongsTo",null);
         }
         setIdForLocal();
         query.findInBackground((scoreList, exception) -> {
@@ -190,7 +259,15 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
                 query.findInBackground((scoreList, exception) -> {
                     if (exception == null) {
                         for (ParseObject s : scoreList) {
-                            s.unpinInBackground();
+                            s.unpinInBackground(e -> {
+                                if(e==null){
+                                    actionMode.finish();
+                                    finish();
+                                    overridePendingTransition( 0, 0);
+                                    startActivity(getIntent());
+                                    overridePendingTransition( 0, 0);
+                                }
+                            });
                             s.deleteEventually();
                         }
                     } else {
@@ -199,15 +276,19 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
                 });
             }else {
                 selecteditems.get(i).deleteEventually();
-                selecteditems.get(i).unpinInBackground();
+                selecteditems.get(i).unpinInBackground(e -> {
+                    if(e==null){
+                        actionMode.finish();
+                        finish();
+                        overridePendingTransition( 0, 0);
+                        startActivity(getIntent());
+                        overridePendingTransition( 0, 0);
+                    }
+                });
             }
 
         }
-        actionMode.finish();
-        finish();
-        overridePendingTransition( 0, 0);
-        startActivity(getIntent());
-        overridePendingTransition( 0, 0);
+
     }
 
     private void goToListDetails(List<ParseObject> scoreList, int position) {

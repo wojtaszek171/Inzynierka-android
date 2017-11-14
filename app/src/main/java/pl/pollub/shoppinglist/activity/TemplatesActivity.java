@@ -93,6 +93,7 @@ public class TemplatesActivity extends AppCompatActivity implements NavigationVi
                 query.fromLocalDatastore();
             }
         }else {
+            query.whereEqualTo("belongsTo",null);
             query.fromLocalDatastore();
         }
         query.whereEqualTo("isTemplate",true);
