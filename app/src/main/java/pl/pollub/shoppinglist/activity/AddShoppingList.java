@@ -31,6 +31,7 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
     private static int id;
     private ActionBarDrawerToggle drawerToggle;
     private Button textDate;
+    private boolean template;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,12 +39,19 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(R.string.addList);
         id = getIntent().getIntExtra("LOCAL_LIST_ID", 1);
+        template = getIntent().getBooleanExtra("TEMPLATE", false);
+        textDate = findViewById(R.id.listDeadline);
+        if(template==true){
+            setTitle(R.string.addTemplate);
+            textDate.setVisibility(View.GONE);
+        }
+        else {
+            setTitle(R.string.addList);
+        }
         Button saveNewList = findViewById(R.id.saveNewList);
         TextView setDeadline = findViewById(R.id.listDeadline);
         ImageButton setListImage = findViewById(R.id.setListImage);
-        textDate = findViewById(R.id.listDeadline);
 
         saveNewList.setOnClickListener(view -> {
             createShoppingList();
@@ -52,7 +60,6 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
         setListImage.setOnClickListener(view -> {
 
         });
-        
         setDeadline.setOnClickListener(view -> {
             datePickerDialog();
         });
@@ -79,6 +86,8 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
         list.put("name", listNameString);
         list.put("status", "0");
         list.put("deadline", textDate.getText().toString());
+        list.put("isTemplate", template);
+
 
         if (ParseUser.getCurrentUser() != null) {
             String user = ParseUser.getCurrentUser().getUsername();

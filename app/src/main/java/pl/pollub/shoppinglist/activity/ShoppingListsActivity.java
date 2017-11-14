@@ -91,6 +91,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
 
     private void displayListsAndSetActions() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
+        query.whereEqualTo("isTemplate",false);
         if (ParseUser.getCurrentUser() != null) {
             String user = ParseUser.getCurrentUser().getUsername();
             View hView = navigationView.getHeaderView(0);
@@ -112,7 +113,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
                     dates.add(s.getString("deadline"));
                 }
                 ShoppingListsAdapter listAdapter = new
-                        ShoppingListsAdapter(ShoppingListsActivity.this, names, dates);
+                        ShoppingListsAdapter(ShoppingListsActivity.this, names, dates, false);
                 list = findViewById(R.id.list);
                 list.setAdapter(listAdapter);
                 list.setOnItemClickListener((adapterView, view, position, id) -> {

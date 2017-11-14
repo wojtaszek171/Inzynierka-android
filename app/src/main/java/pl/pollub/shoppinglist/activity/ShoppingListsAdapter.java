@@ -19,15 +19,17 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
     private final ArrayList<String> name;
     private final ArrayList<String> date;
     private SparseBooleanArray mSelectedItemsIds;
+    private boolean template;
 
     public ShoppingListsAdapter(Activity context,
-                                ArrayList<String> name, ArrayList<String> date) {
+                                ArrayList<String> name, ArrayList<String> date, Boolean template) {
         super(context, R.layout.lists_list_item, name);
 
         mSelectedItemsIds = new SparseBooleanArray();
         this.context = context;
         this.name = name;
         this.date = date;
+        this.template = template;
     }
 
     @Override
@@ -38,6 +40,8 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
         listName.setText(name.get(position));
         TextView listDeadline = rowView.findViewById(R.id.listDeadline);
         listDeadline.setText(date.get(position));
+        if(template==true)
+            listDeadline.setVisibility(View.GONE);
 
         return rowView;
     }

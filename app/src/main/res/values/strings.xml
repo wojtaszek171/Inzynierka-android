@@ -43,6 +43,7 @@
     <string name="customUserProducts">PRODUKTY UŻYTKOWNIKA</string>
     <string name="save">Zapisz</string>
     <string name="cancel">Anuluj</string>
+    <string name="addTemplate">Dodaj szablon</string>
 
     <!--CATEGORIES:-->
     <string-array name="product_categories">
