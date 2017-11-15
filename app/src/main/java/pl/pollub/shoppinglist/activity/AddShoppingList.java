@@ -30,6 +30,7 @@ import com.parse.SaveCallback;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import bolts.Task;
 import pl.pollub.shoppinglist.R;
 
 public class AddShoppingList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -108,7 +109,7 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
             list.saveEventually();
 
         }else {
-            list.setObjectId(Integer.toString(id));
+            list.put("localId",Integer.toString(id));
         }
         list.pinInBackground(e -> {if (e == null) {
             if(listTemplate!=null){
@@ -135,9 +136,8 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
             if (exception == null) {
                 for (ParseObject s : scoreList) {
                     id = s.getInt("id");
-                    s.put("id", id + 1);
+                    s.increment("id");
                     s.pinInBackground();
-
                 }
                 Log.d("score", "Retrieved " + scoreList.size() + " scores");
                 if (scoreList.size() == 0) {
@@ -153,22 +153,20 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
     }
     private void recoveryTempalte(ParseObject listTemplate, Object localIdd) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
-        if (ParseUser.getCurrentUser() != null) {
-            String user = ParseUser.getCurrentUser().getUsername();
-            if(!isNetworkAvailable()){
-                query.fromLocalDatastore();
-            }
-            query.whereEqualTo("belongsTo", listTemplate.get("localId"));
-        }else {
+        if(ParseUser.getCurrentUser()==null){
+            query.fromLocalDatastore();
+        }else
+        if(!isNetworkAvailable()){
             query.fromLocalDatastore();
         }
+        query.whereEqualTo("belongsTo", listTemplate.getString("localId"));
 
-        setIdForLocal();
         query.findInBackground((scoreList, exception) -> {
             if (exception == null) {
                 ArrayList<ParseObject> products = new ArrayList<>();
                 ArrayList<String> names = new ArrayList<>();
                 for (ParseObject s : scoreList) {
+                    id++;
                     ParseObject product = new ParseObject("ProductOfList");
                     product.put("name", s.get("name"));
                     product.put("status", "0"); //status wykupienia produktu
@@ -177,17 +175,27 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
                     product.put("description", s.get("description"));
                     product.put("measure", s.get("measure"));
                     product.put("icon", s.get("icon"));
-
                     if (ParseUser.getCurrentUser() != null) {
                         String user = ParseUser.getCurrentUser().getUsername();
                         product.put("localId",user + id);
                         product.put("belongsTo", localIdd);
                         product.saveEventually();
                     }else {
-                        product.put("belongsTo", list);
-                        product.setObjectId(localIdd.toString());
+                        product.put("belongsTo", localIdd);
+                        product.put("localId",id);
                     }
                     product.pinInBackground();
+
+                    ParseQuery<ParseObject> queryy = ParseQuery.getQuery("localId");
+                    queryy.fromLocalDatastore();
+                    queryy.findInBackground((scoreListt, e) -> {
+                        if (e == null) {
+                            for (ParseObject item : scoreListt) {
+                                item.put("id",id);
+                                item.pinInBackground();
+                            }
+                        }
+                    });
                 }
                 finish();
                 Intent intent = new Intent(getApplicationContext(), ShoppingListDetailsActivity.class);
@@ -254,4 +262,5 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
         getMenuInflater().inflate(R.menu.menulists, menu);
         return true;
     }
+
 }

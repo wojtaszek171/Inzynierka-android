@@ -113,8 +113,8 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
                 product.put("belongsTo", list.getString("localId"));
                 product.saveEventually();
             }else {
-                product.put("belongsTo", list);
-                product.setObjectId(localId);
+                product.put("belongsTo", list.getString("localId"));
+                product.put("localId",localId);
             }
             product.pinInBackground(e -> {if (e == null) {
                 finish();
@@ -133,10 +133,9 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
         fillInTheForm(productObject);
 
         saveProductB.setOnClickListener(view -> {
-            if (ParseUser.getCurrentUser() != null) {
                 //String user = ParseUser.getCurrentUser().getUsername();
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
-                query.whereEqualTo("localId", productId);
+                query.whereEqualTo("localId", productObject.get("localId"));
                 query.fromLocalDatastore();
                 query.findInBackground(new FindCallback<ParseObject>() {
                     public void done(List<ParseObject> scoreList,
@@ -164,25 +163,6 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
                         }
                     }
                 });
-            }else {
-                productObject.put("name", productName.getText().toString());
-                productObject.put("amount", productAmount.getText().toString());
-                productObject.put("category", productCategory.getSelectedItem().toString());
-                productObject.put("description", productDescription.getText().toString());
-                productObject.put("measure", productMeasure.getSelectedItem().toString());
-                productObject.put("icon", productIcon.getText().toString());
-                productObject.pinInBackground(e -> {if (e == null) {
-                    finish();
-                    Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
-                    intent.putExtra("LIST_OBJECT", list);
-                    startActivity(intent);
-                } else {
-                }});
-            }
-            finish();
-            Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
-            intent.putExtra("LIST_OBJECT", list);
-            startActivity(intent);
         });
     }
 

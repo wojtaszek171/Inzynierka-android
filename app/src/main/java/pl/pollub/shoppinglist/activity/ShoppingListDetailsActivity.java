@@ -94,7 +94,7 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
             }
         }else {
             query.fromLocalDatastore();
-            query.whereEqualTo("belongsTo", list);
+            query.whereEqualTo("belongsTo", list.getString("localId"));
         }
 
         setIdForLocal();
