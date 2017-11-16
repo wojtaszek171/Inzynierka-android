@@ -9,7 +9,7 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class NamedEntity extends BaseEntity {
+public abstract class NamedEntity extends BaseEntity {
     public static final String KEY_NAME = "name";
     public static final String KEY_DESCRIPTION = "description";
 
@@ -17,15 +17,7 @@ public class NamedEntity extends BaseEntity {
         return getString(KEY_NAME);
     }
 
-    public String getDescription() {
-        return getString(KEY_DESCRIPTION);
-    }
-
     public void setName(String name) {
         put(KEY_NAME, name);
-    }
-
-    public void setDescription(String description) {
-        put(KEY_DESCRIPTION, description);
     }
 }

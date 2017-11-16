@@ -28,6 +28,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 
@@ -40,6 +41,7 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
     private ListView product;
     private int id;
     public int selectedItemPos;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,20 +60,28 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+        createListOfProducts();
 
-        drawerLayout.addDrawerListener(drawerToggle);
-        drawerToggle.syncState();
+        FloatingActionButton addProductB = findViewById(R.id.addProductButton);
+        addProductB.setOnClickListener(view -> {
+            addNewProduct();
+        });
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
+    private void addNewProduct() {
+        Intent intent = new Intent(getBaseContext(), AddProductToList.class);
+        intent.putExtra("LIST_NAME", listName);
+        intent.putExtra("LIST_OBJECT", list);
+        intent.putExtra("LOCAL_ID", id);
+        startActivity(intent);
+    }
 
-
-
+    private void createListOfProducts() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
         if (ParseUser.getCurrentUser() != null) {
             String user = ParseUser.getCurrentUser().getUsername();
@@ -86,6 +96,7 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
             query.fromLocalDatastore();
             query.whereEqualTo("belongsTo", list);
         }
+
         setIdForLocal();
         query.findInBackground((scoreList, exception) -> {
             if (exception == null) {
@@ -112,91 +123,92 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
 
                     startActivity(intent);
                 });
-                product.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-                product.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-                    @Override
-                    public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
-                        final int checkedCount = product.getCheckedItemCount();
-                        actionMode.setTitle(checkedCount + " Zaznaczono");
-                        selectedItemPos = i;
-                        productAdapter.toggleSelection(i);
-                    }
-
-                    @Override
-                    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-
-                        actionMode.getMenuInflater().inflate(R.menu.main, menu);
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-                        switch (menuItem.getItemId()){
-                            case R.id.delete:
-                                ArrayList<ParseObject> selecteditems = new ArrayList<ParseObject>();
-                                SparseBooleanArray selected = productAdapter.getSelectedIds();
-                                for(int i = (selected.size() - 1); i>=0; i--){
-                                    if (selected.valueAt(i)){
-                                        selecteditems.add(scoreList.get(selected.keyAt(i)));
-                                    }
-                                }
-                                for(int i=0; i< selecteditems.size();i++){
-                                    if(selecteditems.get(i).getObjectId()==null){
-                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
-                                        query.fromLocalDatastore();
-                                        query.whereEqualTo("localId",selecteditems.get(i).get("localId"));
-                                        query.findInBackground((scoreList, exception) -> {
-                                            if (exception == null) {
-                                                for (ParseObject s : scoreList) {
-                                                    s.unpinInBackground();
-                                                    s.deleteEventually();
-                                                }
-                                            } else {
-
-                                            }
-                                        });
-                                    }else {
-                                        selecteditems.get(i).deleteInBackground();
-                                        selecteditems.get(i).unpinInBackground();
-                                    }
-                                }
-                                actionMode.finish();
-                                finish();
-                                overridePendingTransition( 0, 0);
-                                startActivity(getIntent());
-                                overridePendingTransition( 0, 0);
-                                return true;
-                            default:
-                                return false;
-                        }
-                    }
-
-                    @Override
-                    public void onDestroyActionMode(ActionMode actionMode) {
-                        productAdapter.removeSelection();
-                    }
-                });
+                multiChoiceForDelete(product, productAdapter, scoreList);
                 Log.d("score", "Retrieved " + scoreList.size() + " scores");
             } else {
                 Log.d("score", "Error: " + exception.getMessage());
             }
         });
+    }
 
-        FloatingActionButton addProductB = findViewById(R.id.addProductButton);
-        addProductB.setOnClickListener(view -> {
-            Intent intent = new Intent(getBaseContext(), AddProductToList.class);
-            intent.putExtra("LIST_NAME", listName);
-            intent.putExtra("LIST_OBJECT", list);
-            intent.putExtra("LOCAL_ID", id);
-            startActivity(intent);
+    private void multiChoiceForDelete(ListView list, ShoppingListDetailsAdapter productAdapter, List<ParseObject> scoreList) {
+        product.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        product.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+                final int checkedCount = product.getCheckedItemCount();
+                actionMode.setTitle(checkedCount + " Zaznaczono");
+                selectedItemPos = i;
+                productAdapter.toggleSelection(i);
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+
+                actionMode.getMenuInflater().inflate(R.menu.main, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.delete:
+                        ArrayList<ParseObject> selecteditems = new ArrayList<ParseObject>();
+                        changeSelectedIdsToObjects(productAdapter, selecteditems, scoreList);
+                        deleteListAction(productAdapter, selecteditems, actionMode);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode actionMode) {
+                productAdapter.removeSelection();
+            }
         });
+    }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    private void deleteListAction(ShoppingListDetailsAdapter productAdapter, ArrayList<ParseObject> selecteditems, ActionMode actionMode) {
+        for(int i=0; i< selecteditems.size();i++){
+            if(selecteditems.get(i).getObjectId()==null){
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
+                query.fromLocalDatastore();
+                query.whereEqualTo("localId",selecteditems.get(i).get("localId"));
+                query.findInBackground((scoreList, exception) -> {
+                    if (exception == null) {
+                        for (ParseObject s : scoreList) {
+                            s.unpinInBackground();
+                            s.deleteEventually();
+                        }
+                    } else {
+
+                    }
+                });
+            }else {
+                selecteditems.get(i).deleteInBackground();
+                selecteditems.get(i).unpinInBackground();
+            }
+        }
+        actionMode.finish();
+        finish();
+        overridePendingTransition( 0, 0);
+        startActivity(getIntent());
+        overridePendingTransition( 0, 0);
+    }
+
+    private void changeSelectedIdsToObjects(ShoppingListDetailsAdapter productAdapter, ArrayList<ParseObject> selecteditems, List<ParseObject> scoreList) {
+        SparseBooleanArray selected = productAdapter.getSelectedIds();
+        for(int i = (selected.size() - 1); i>=0; i--){
+            if (selected.valueAt(i)){
+                selecteditems.add(scoreList.get(selected.keyAt(i)));
+            }
+        }
     }
 
     @Override

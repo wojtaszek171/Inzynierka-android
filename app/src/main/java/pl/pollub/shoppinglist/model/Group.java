@@ -1,13 +1,10 @@
 package pl.pollub.shoppinglist.model;
 
 import com.parse.ParseClassName;
-import com.parse.ParseRelation;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import pl.pollub.shoppinglist.util.Icon;
-
-import static pl.pollub.shoppinglist.util.Icon.Converter.*;
+import pl.pollub.shoppinglist.model.complextype.Icon;
 
 /**
  * @author Adrian
@@ -16,17 +13,17 @@ import static pl.pollub.shoppinglist.util.Icon.Converter.*;
 @EqualsAndHashCode(callSuper = true)
 @ToString
 @ParseClassName(Group.CLASS_NAME)
-public class Group extends NamedEntity {
+public class Group extends DescribedEntity {
     public static final String CLASS_NAME = "Group";
 
     public static final String KEY_ICON = "icon";
 
     public Icon getIcon() {
         String icon = getString(KEY_ICON);
-        return stringToIcon(icon);
+        return Icon.fromString(icon);
     }
 
     public void setIcon(Icon icon) {
-        put(KEY_ICON, iconToString(icon));
+        put(KEY_ICON, icon.toString());
     }
 }
