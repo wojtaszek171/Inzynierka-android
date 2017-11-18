@@ -84,6 +84,7 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
     private void createListOfProducts() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
         if (ParseUser.getCurrentUser() != null) {
+            ParseUser userr = ParseUser.getCurrentUser();
             String user = ParseUser.getCurrentUser().getUsername();
             View hView = navigationView.getHeaderView(0);
             TextView username = hView.findViewById(R.id.user_pseudonym);
@@ -277,7 +278,8 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
                 break;
             }
             case R.id.nav_logout: {
-                ParseUser.logOut();
+                ParseUser.logOutInBackground();
+               // ParseUser.logOut();
                 Toast.makeText(getApplicationContext(), "Wylogowano", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

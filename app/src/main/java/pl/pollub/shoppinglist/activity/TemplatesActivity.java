@@ -88,7 +88,7 @@ public class TemplatesActivity extends AppCompatActivity implements NavigationVi
             View hView = navigationView.getHeaderView(0);
             TextView username = hView.findViewById(R.id.user_pseudonym);
             username.setText(user);
-            query.whereEqualTo("belongsTo",ParseUser.getCurrentUser());
+            query.whereEqualTo("belongsTo",ParseUser.getCurrentUser().getUsername());
             if(!isNetworkAvailable()){
                 query.fromLocalDatastore();
             }

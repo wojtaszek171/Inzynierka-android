@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.ParseException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -104,9 +105,20 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
 
         if (ParseUser.getCurrentUser() != null) {
             String user = ParseUser.getCurrentUser().getUsername();
-            list.put("belongsTo", ParseUser.getCurrentUser());
+            list.put("belongsTo", ParseUser.getCurrentUser().getUsername());
             list.put("localId",user+Integer.toString(id));
-            list.saveEventually();
+            list.saveEventually(new SaveCallback() {
+                @Override
+                public void done(com.parse.ParseException e) {
+                    if (e == null) {
+                        // No error, the object was saved
+                        Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_LONG).show();
+                    } else {
+                        // Error saving object, print the logs
+                        e.printStackTrace();
+                    }
+                }
+            });
 
         }else {
             list.put("localId",Integer.toString(id));
@@ -120,8 +132,7 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
                 intent.putExtra("LIST_OBJECT", list);
                 startActivity(intent);
             }
-        } else {
-        }});
+        } });
     }
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager

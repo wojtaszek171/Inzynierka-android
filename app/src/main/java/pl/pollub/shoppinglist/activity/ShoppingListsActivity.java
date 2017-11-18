@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.Parse;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -118,7 +119,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
             View hView = navigationView.getHeaderView(0);
             TextView username = hView.findViewById(R.id.user_pseudonym);
             username.setText(user);
-            query.whereEqualTo("belongsTo",ParseUser.getCurrentUser());
+            query.whereEqualTo("belongsTo",ParseUser.getCurrentUser().getUsername());
             if(!isNetworkAvailable()){
                 query.fromLocalDatastore();
             }
@@ -165,7 +166,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
             View hView = navigationView.getHeaderView(0);
             TextView username = hView.findViewById(R.id.user_pseudonym);
             username.setText(user);
-            query.whereEqualTo("belongsTo",ParseUser.getCurrentUser());
+            query.whereEqualTo("belongsTo",ParseUser.getCurrentUser().getUsername());
             if(!isNetworkAvailable()){
                 query.fromLocalDatastore();
             }
@@ -251,7 +252,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
 
     private void deleteListAction(ShoppingListsAdapter listAdapter, ArrayList<ParseObject> selecteditems, ActionMode actionMode) {
         for(int i=0; i< selecteditems.size();i++){
-            if(selecteditems.get(i).getObjectId()==null){
+            if(ParseUser.getCurrentUser() == null){
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
                 query.fromLocalDatastore();
                 String ident = selecteditems.get(i).getString("localId");
