@@ -179,7 +179,7 @@ public class CustomProductAppenderActivity extends AppCompatActivity
 
 
         //TODO: UŻYĆ MODELU ADRIANA
-        ParseObject newCustomProduct = new ParseObject("CustomProduct");
+        ParseObject newCustomProduct = ParseObject.create("CustomProduct");
         newCustomProduct.put("localId", productModel.getLocalId());
         newCustomProduct.put("name", productModel.getName());
         newCustomProduct.put("description", productModel.getDescription());
