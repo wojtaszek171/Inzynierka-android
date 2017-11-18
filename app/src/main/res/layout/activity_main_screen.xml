@@ -16,7 +16,7 @@
 
     <RelativeLayout
         android:id="@+id/mainscreen_logo_relative_layout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/mainscreen_buttons_linear_layout"
         android:layout_below="@+id/toolbar"
@@ -24,17 +24,17 @@
 
         <ImageView
             android:id="@+id/mainscreen_logo"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:adjustViewBounds="true"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="false"
             android:cropToPadding="true"
             android:paddingBottom="40sp"
-            android:paddingHorizontal="40sp"
+            android:paddingHorizontal="0dp"
             android:paddingTop="25sp"
             android:scaleType="fitCenter"
             android:visibility="visible"
-            app:srcCompat="@drawable/ikona_ls" />
+            app:srcCompat="@drawable/ikona_ls_okrag" />
     </RelativeLayout>
 
     <LinearLayout
