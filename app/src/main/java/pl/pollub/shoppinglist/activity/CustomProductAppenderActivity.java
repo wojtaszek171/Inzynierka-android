@@ -28,6 +28,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.satsuware.usefulviews.LabelledSpinner;
 
 import java.util.Arrays;
@@ -192,24 +193,20 @@ public class CustomProductAppenderActivity extends AppCompatActivity
         ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomProduct");
         query.fromLocalDatastore();
         query.whereEqualTo("name", productNameField.getText().toString());
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> resultList, ParseException e) {
-                Context context = getApplicationContext();
-                int duration = Toast.LENGTH_SHORT;
-                CharSequence text = "";
+        query.findInBackground((resultList, e) -> {
+            Context context = getApplicationContext();
+            int duration = Toast.LENGTH_SHORT;
+            CharSequence text = "";
 
-                if (e == null) {
-                    text = "Retrieved " + resultList.size() + " scores";
-                    Log.d("score", "Retrieved " + resultList.size() + " scores");
-                    goToCustomProductsList();
+            if (e == null) {
+                text = "Retrieved " + resultList.size() + " products.";
+                goToCustomProductsList();
 
-                } else {
-                    Log.d("score", "Error: " + e.getMessage());
-                    text = e.getMessage();
-                }
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+            } else {
+                text = e.getMessage();
             }
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
         });
     }
 
@@ -247,6 +244,8 @@ public class CustomProductAppenderActivity extends AppCompatActivity
                 break;
             }
             case R.id.nav_logout: {
+                ParseUser.logOut();
+                Toast.makeText(getApplicationContext(), "Wylogowano", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(CustomProductAppenderActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

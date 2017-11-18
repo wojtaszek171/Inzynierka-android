@@ -1,8 +1,9 @@
 package pl.pollub.shoppinglist.model.complextype;
 
-import lombok.AccessLevel;
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 /**
  * @author Adrian
@@ -17,9 +18,9 @@ public enum Category {
     ALCOHOLS(null, Icon.DEFAULT), // alkohole
     PRESERVE(null, Icon.DEFAULT), // konserwy itd.
     DAIRY(null, Icon.DEFAULT), // nabiał
-    MEAT(null, Icon.DEFAULT), // mieso, kielbachy, itd.
-    FRESH_PRODUCE(null, Icon.DEFAULT), //swieze warzywa i owoce
-    FROZEN_FOOD(null, Icon.DEFAULT), // mrozonki
+    MEAT(null, Icon.DEFAULT), // mięso, kiełbachy, itd.
+    FRESH_PRODUCE(null, Icon.DEFAULT), //świeże warzywa i owoce
+    FROZEN_FOOD(null, Icon.DEFAULT), // mrożonki
     NEWSPAPER(null, Icon.DEFAULT), // gazety itd.
     PERSONAL_CARE(null, Icon.DEFAULT), // szampony, mydła itd.
     COSMETIC(null, Icon.DEFAULT), // kosmetyki
@@ -31,6 +32,7 @@ public enum Category {
     ELECTRONICS(null, Icon.DEFAULT), // elektronika
     OTHER(null, Icon.DEFAULT), // inne
 
+    // TODO: DO WE SUPPORT NESTED CATEGORIES OR THE TOP LEVEL ONES ARE ENOUGH?
     // 1st subcategory level
     BREAD(BAKERY, Icon.DEFAULT),
     BAGUETTE(BAKERY, Icon.DEFAULT),
@@ -53,18 +55,13 @@ public enum Category {
         this.icon = icon;
     }
 
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static final class Converter {
-        public static Category stringToCategory(String value) {
-            try {
-                return valueOf(value.toUpperCase());
-            } catch (Exception e) {
-                return OTHER;
-            }
-        }
-
-        public static String categoryToString(Category category) {
-            return category == null ? null : category.name();
+    public static Category fromString(@NonNull String value) {
+        try {
+            return valueOf(value.toUpperCase());
+        } catch (Exception e) {
+            Log.d("ComplexType", Category.class.getSimpleName()
+                    + ": " + value + " not found.");
+            return OTHER;
         }
     }
 }

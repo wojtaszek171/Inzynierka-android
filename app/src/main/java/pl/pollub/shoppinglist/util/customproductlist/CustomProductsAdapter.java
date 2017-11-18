@@ -1,6 +1,7 @@
 package pl.pollub.shoppinglist.util.customproductlist;
 
 import android.content.Context;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,40 +18,26 @@ import pl.pollub.shoppinglist.R;
 
 public class CustomProductsAdapter extends ArrayAdapter implements View.OnClickListener {
     private ArrayList<CustomProductDataModel> dataSet;
-    Context mContext;
+    private SparseBooleanArray selectedItemsIds;
+
+    Context context;
 
     // View lookup cache
     private static class ViewHolder {
         TextView nameField;
         TextView categoryField;
-        TextView descriptionField;
     }
 
     public CustomProductsAdapter(ArrayList<CustomProductDataModel> data, Context context) {
         super(context, R.layout.custom_products_list_item, data);
         this.dataSet = data;
-        this.mContext=context;
-
+        this.context=context;
+        this.selectedItemsIds = new SparseBooleanArray();
     }
 
     @Override
-    public void onClick(View v) {
-
-//        int position=(Integer) v.getTag();
-//        Object object= getItem(position);
-//        CustomProductDataModel CustomProductDataModel=(CustomProductDataModel)object;
-//
-//        switch (v.getId())
-//        {
-//            case R.id.item_info:
-//                Snackbar.make(v, "Release date " +CustomProductDataModel.getFeature(), Snackbar.LENGTH_LONG)
-//                        .setAction("No action", null).show();
-//                break;
-//        }
-    }
-
-    private int lastPosition = -1;
-
+    public void onClick(View v) {}
+    
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
@@ -58,37 +45,51 @@ public class CustomProductsAdapter extends ArrayAdapter implements View.OnClickL
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; // view lookup cache stored in tag
 
-        final View result;
 
         if (convertView == null) {
 
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.custom_products_list_item, parent, false);
-            viewHolder.nameField = (TextView) convertView.findViewById(R.id.custom_product_item_name);
-            viewHolder.categoryField = (TextView) convertView.findViewById(R.id.custom_product_item_category);
-//            viewHolder.descriptionField = (TextView) convertView.findViewById(R.id.desc);
-//            viewHolder.info = (ImageView) convertView.findViewById(R.id.item_info);
+            viewHolder.nameField =  convertView.findViewById(R.id.custom_product_item_name);
+            viewHolder.categoryField = convertView.findViewById(R.id.custom_product_item_category);
 
-            result=convertView;
 
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
-            result=convertView;
         }
-
-//        Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
-//        result.startAnimation(animation);
-//        lastPosition = position;
 
         viewHolder.nameField.setText(dataModel.getName());
         viewHolder.categoryField.setText(dataModel.getCategory());
-//        viewHolder.txtVersion.setText(dataModel.getVersion_number());
-//        viewHolder.info.setOnClickListener(this);
-//        viewHolder.info.setTag(position);
-
         // Return the completed view to render on screen
         return convertView;
+    }
+
+
+    //////////////////////////////////////////////////////////////////////////////////
+
+
+    public void toggleSelection(int position) {
+        selectView(position, !selectedItemsIds.get(position));
+
+    }
+
+    public void removeSelection() {
+        selectedItemsIds = new SparseBooleanArray();
+        notifyDataSetChanged();
+    }
+
+    private void selectView(int position, boolean value) {
+        if(value) {
+            selectedItemsIds.put(position, value);
+        } else {
+            selectedItemsIds.delete(position);
+        }
+        notifyDataSetChanged();
+    }
+    
+    public SparseBooleanArray getSelectedIds() {
+        return selectedItemsIds;
     }
 }

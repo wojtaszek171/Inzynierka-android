@@ -22,7 +22,7 @@ public class UserGroup extends BaseEntity {
     public static final String KEY_USER_NICKNAME_WITHIN_GROUP = "userNicknameWithinGroup";
     public static final String KEY_USER_ADMINISTRATING_GROUP = "userAdministratingGroup";
 
-    public ParseUser getUser() {
+    public User getUser() {
         return getEntity(KEY_USER_POINTER);
     }
 
@@ -38,7 +38,7 @@ public class UserGroup extends BaseEntity {
         return getBoolean(KEY_USER_ADMINISTRATING_GROUP);
     }
 
-    public void setUser(ParseUser user) {
+    public void setUser(User user) {
         put(KEY_USER_POINTER, user);
     }
 

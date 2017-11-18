@@ -9,9 +9,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -41,6 +44,8 @@ public class CustomProductsListActivity extends AppCompatActivity implements Nav
     
     private List<ParseObject> allCustomProducts = null;
     private ArrayList<CustomProductDataModel> dataModels;
+
+    private int selectedItemPos;
 
 
     @Override
@@ -85,6 +90,8 @@ public class CustomProductsListActivity extends AppCompatActivity implements Nav
                 dataModels = convertAllParseObjects(resultList);
                 adapter = new CustomProductsAdapter( dataModels, CustomProductsListActivity.this );
                 list.setAdapter(adapter);
+
+
                 list.setOnItemClickListener((adapterView, view, position, id) -> {
                     ParseObject productToEdit = allCustomProducts.get(position);
 
@@ -93,11 +100,89 @@ public class CustomProductsListActivity extends AppCompatActivity implements Nav
                     editProductIntent.putExtra("PRODUCT_TO_EDIT", productToEdit);
                     startActivity(editProductIntent);
                 });
+                //TODO do dodania multiListener:
+                list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+                list.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                    @Override
+                    public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+                        final int checkedCount = list.getCheckedItemCount();
+                        actionMode.setTitle(checkedCount + " Zaznaczono");
+                        selectedItemPos = i;
+                        adapter.toggleSelection(i);
+                    }
+
+                    @Override
+                    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                        actionMode.getMenuInflater().inflate(R.menu.main, menu);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                        switch (menuItem.getItemId()){
+                            case R.id.delete:
+                                ArrayList<ParseObject> selecteditems = new ArrayList<>();
+                                SparseBooleanArray selected = adapter.getSelectedIds();
+                                for(int i = (selected.size() - 1); i>=0; i--){
+                                    if (selected.valueAt(i)){
+                                        selecteditems.add(allCustomProducts.get(selected.keyAt(i)));
+                                    }
+                                }
+                                for(int i=0; i< selecteditems.size();i++){
+                                    if(selecteditems.get(i).getObjectId()==null){
+                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomProduct");
+                                        query.fromLocalDatastore();
+                                        query.whereEqualTo("localId", selecteditems.get(i).get("localId"));
+                                        query.findInBackground((resultList, exception) -> {
+                                            if (exception == null) {
+                                                for (ParseObject result : resultList) {
+                                                    result.unpinInBackground();
+                                                    result.deleteEventually();
+                                                }
+                                            } else {
+                                                //TODO: exception handling
+                                            }
+                                        });
+                                    }else {
+                                        selecteditems.get(i).deleteEventually();
+                                        selecteditems.get(i).unpinInBackground();
+                                    }
+
+                                }
+                                actionMode.finish();
+                                finish();
+                                overridePendingTransition( 0, 0);
+                                startActivity(getIntent());
+                                overridePendingTransition( 0, 0);
+
+                                refreshListView();
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+
+                    @Override
+                    public void onDestroyActionMode(ActionMode actionMode) {
+                        adapter.removeSelection();
+                    }
+                });
+
             } else {
                 Log.d("score", "Error: " + e.getMessage());
             }
         });
 
+    }
+
+    private void refreshListView(){
+        adapter.notifyDataSetChanged();
+        list.setAdapter(adapter);
     }
 
     public void goToCustomProductCreation(View view){

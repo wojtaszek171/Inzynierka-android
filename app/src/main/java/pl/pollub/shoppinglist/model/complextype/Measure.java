@@ -1,6 +1,7 @@
 package pl.pollub.shoppinglist.model.complextype;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -18,18 +19,13 @@ public enum Measure {
 
     public static final Measure DEFAULT = PIECE;
 
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static final class Converter {
-        public static Measure stringToMeasure(@NonNull String value) {
-            try {
-                return valueOf(value.toUpperCase());
-            } catch (Exception e) {
-                return DEFAULT;
-            }
-        }
-
-        public static String measureToString(Measure measure) {
-            return measure == null ? null : measure.name();
+    public static Measure fromString(@NonNull String value) {
+        try {
+            return valueOf(value.toUpperCase());
+        } catch (Exception e) {
+            Log.d("ComplexType", Measure.class.getSimpleName()
+                    + ": " + value + " not found.");
+            return DEFAULT;
         }
     }
 }
