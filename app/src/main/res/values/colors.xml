@@ -8,4 +8,5 @@
     <color name="red">#ff0000</color>
     <color name="SelectedColor">#46539c</color>
     <color name="DefaultColor">#ffffff</color>
+    <color name="ActiveText">@android:color/holo_blue_bright</color>
 </resources>

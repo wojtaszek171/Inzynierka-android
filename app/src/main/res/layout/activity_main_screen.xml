@@ -30,7 +30,6 @@
             android:adjustViewBounds="false"
             android:cropToPadding="true"
             android:paddingBottom="40sp"
-            android:paddingHorizontal="0dp"
             android:paddingTop="25sp"
             android:scaleType="fitCenter"
             android:visibility="visible"
