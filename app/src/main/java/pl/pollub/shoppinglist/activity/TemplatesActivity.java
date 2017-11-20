@@ -1,6 +1,5 @@
 package pl.pollub.shoppinglist.activity;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -20,9 +19,7 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +44,7 @@ public class TemplatesActivity extends AppCompatActivity implements NavigationVi
     private static int id;
     private NavigationView navigationView;
     public int selectedItemPos;
+    private ArrayList<ParseObject> listsItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +104,7 @@ public class TemplatesActivity extends AppCompatActivity implements NavigationVi
                     dates.add(s.getString("deadline"));
                 }
                 ShoppingListsAdapter listAdapter = new
-                        ShoppingListsAdapter(TemplatesActivity.this, names, dates, true);
+                        ShoppingListsAdapter(TemplatesActivity.this, names, dates, listsItems, true);
                 list = findViewById(R.id.list);
                 list.setAdapter(listAdapter);
                 list.setOnItemClickListener((adapterView, view, position, id) -> {

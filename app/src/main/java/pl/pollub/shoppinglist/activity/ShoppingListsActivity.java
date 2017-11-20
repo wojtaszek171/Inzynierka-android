@@ -51,6 +51,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
     private ListView list;
     private ArrayList<String> names = new ArrayList<>();
     private ArrayList<String> dates = new ArrayList<>();
+    private ArrayList<ParseObject> listsItems = new ArrayList<>();
     private static int id;
     ListView listView=null;
     private NavigationView navigationView;
@@ -192,9 +193,10 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
                 for (ParseObject s : scoreList) {
                     names.add(s.getString("name"));
                     dates.add(s.getString("deadline"));
+                    listsItems.add(s);
                 }
                 ShoppingListsAdapter listAdapter = new
-                        ShoppingListsAdapter(ShoppingListsActivity.this, names, dates, false);
+                        ShoppingListsAdapter(ShoppingListsActivity.this, names, dates, listsItems, false);
                 list = findViewById(R.id.list);
                 list.setAdapter(listAdapter);
                 list.setOnItemClickListener((adapterView, view, position, id) -> {

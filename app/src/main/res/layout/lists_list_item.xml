@@ -1,70 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
-    >
+    android:orientation="vertical"
+    android:background="@drawable/shape_item">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1"
-        android:id="@+id/linearLayout"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
-
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/relativ4"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:button="@drawable/checkbox_selector"
-            android:checked="false" />
+            android:layout_below="@+id/relativeLayout3"
+            android:background="@drawable/rounded_item_white">
 
-        <ImageView
-            android:id="@+id/listImage"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:minWidth="40dp" />
+                <RelativeLayout
+                    android:id="@+id/relativ2"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_alignParentStart="true">
 
-        <TextView
-            android:id="@+id/listNameItem"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.45"
-            android:gravity="center_vertical"
-            android:hint="Name" />
+                        <TextView
+                            android:id="@+id/list_progress"
+                            android:layout_width="45dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="0/0"
+                            android:textColor="@android:color/holo_green_dark"
+                            android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_margin="15dp"
-            app:srcCompat="@drawable/callendar" />
+                        <TextView
+                            android:id="@+id/textView4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/list_progress"
+                            android:gravity="center_vertical"
+                            android:text="Opis : "
+                            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/listDeadline"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="Date" />
+                        <TextView
+                            android:id="@+id/item_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/textView4"
+                            android:gravity="center_vertical" />
 
-    </LinearLayout>
+                </RelativeLayout>
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="10dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/linearLayout"
-        android:background="@android:color/transparent"
-        android:cropToPadding="false"
-        app:srcCompat="@android:drawable/ic_menu_more" />
+                <RelativeLayout
+                    android:id="@+id/collaborators_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_below="@+id/relativ2">
+
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:text="Udostępniono dla :"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/collaborators"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/textView"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/textView"
+                            android:gravity="center_vertical"
+                            android:hint="znajomi"
+                            android:paddingLeft="5dp"
+                            android:textStyle="italic" />
+
+                </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/transparent">
+
+                <CheckBox
+                    android:id="@+id/checkBox"
+                    style="?android:attr/checkboxStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/listNameItem"
+                    android:layout_alignBottom="@+id/listNameItem"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="6dp"
+                    android:buttonTint="@android:color/white"
+                    android:checked="false"
+                    android:textColorLink="@color/DefaultColor" />
+
+                <ImageView
+                    android:id="@+id/listImage"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="6dp"
+                    android:layout_toEndOf="@+id/checkBox"
+                    android:background="@mipmap/ls_icon"
+                    android:foregroundGravity="center_vertical"
+                    android:minWidth="40dp" />
+
+                <TextView
+                    android:id="@+id/listNameItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_toEndOf="@+id/listImage"
+                    android:layout_toStartOf="@+id/imageView4"
+                    android:layout_weight="0.45"
+                    android:gravity="center_vertical"
+                    android:hint="Name"
+                    android:paddingLeft="5dp" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_toStartOf="@+id/listDeadline"
+                    app:srcCompat="@android:drawable/ic_menu_recent_history" />
+
+                <TextView
+                    android:id="@+id/listDeadline"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="Date" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_below="@+id/relativ4"
+            android:background="@android:color/transparent">
+
+        </RelativeLayout>
 
 </RelativeLayout>
