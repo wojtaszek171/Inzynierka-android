@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.NavigationMenu;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -39,6 +40,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.yavski.fabspeeddial.FabSpeedDial;
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.model.ShoppingList;
 
@@ -73,42 +75,51 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
 
         displayListsAndSetActions();
 
-        addNew.setOnClickListener(view -> {
-            addNewShoppingListDialog();
-        });
+        addNewShoppingListDialog();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void addNewShoppingListDialog() {
-        final Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.add_list_dialog);
-        Button addList = dialog.findViewById(R.id.addList);
-        addList.setOnClickListener(view1 -> {
-            Intent intent = new Intent(ShoppingListsActivity.this, AddShoppingList.class);
-            intent.putExtra("LOCAL_LIST_ID", id);
-            startActivity(intent);
-        });
-        Button useTemplate = dialog.findViewById(R.id.useTemplate);
-        useTemplate.setOnClickListener(new View.OnClickListener() {
+        FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.fabSpeedDial);
+        fabSpeedDial.setMenuListener(new FabSpeedDial.MenuListener() {
             @Override
-            public void onClick(View v) {
-                listView=new ListView(getApplicationContext());
-                getAllTemplates();
-                AlertDialog.Builder builder=new
-                        AlertDialog.Builder(ShoppingListsActivity.this);
+            public boolean onPrepareMenu(NavigationMenu navigationMenu) {
+                return true;
+            }
 
-                builder.setCancelable(true);
+            @Override
+            public boolean onMenuItemSelected(MenuItem menuItem) {
+                Toast.makeText(context, menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                switch (menuItem.getItemId()){
+                    case R.id.addList:
+                        Intent intent = new Intent(ShoppingListsActivity.this, AddShoppingList.class);
+                        intent.putExtra("LOCAL_LIST_ID", id);
+                        startActivity(intent);
+                        break;
+                    case R.id.useTemplate:
+                        listView=new ListView(getApplicationContext());
+                        getAllTemplates();
+                        AlertDialog.Builder builder=new
+                                AlertDialog.Builder(ShoppingListsActivity.this);
 
-                builder.setView(listView);
+                        builder.setCancelable(true);
 
-                AlertDialog dialog1=builder.create();
+                        builder.setView(listView);
 
-                dialog1.show();
+                        AlertDialog dialog1=builder.create();
+
+                        dialog1.show();
+                }
+
+                return false;
+            }
+
+            @Override
+            public void onMenuClosed() {
+
             }
         });
-        dialog.show();
     }
 
     private void getAllTemplates(){

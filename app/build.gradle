@@ -32,6 +32,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     // Google's libs
+    //noinspection GradleCompatible
     implementation "com.android.support:appcompat-v7:26.1.+"
     implementation "com.android.support.constraint:constraint-layout:1.+"
     implementation "com.android.support:design:26.1.+"
@@ -56,4 +57,5 @@ dependencies {
         exclude group: "com.android.support", module: "support-annotations"
     })
     testImplementation "junit:junit:4.12"
+    compile 'io.github.yavski:fab-speed-dial:1.0.6'
 }

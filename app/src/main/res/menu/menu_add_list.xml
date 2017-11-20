@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/addList"
+        android:icon="@drawable/ic_add_black_48dp_00"
+        android:title="NowaLista"/>
+    <item
+        android:id="@+id/useTemplate"
+        android:icon="@mipmap/ic_content_copy_black_24dp"
+        android:title="Użyj szablonu"/>
+</menu>
