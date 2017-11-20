@@ -102,6 +102,7 @@ public class TemplatesActivity extends AppCompatActivity implements NavigationVi
                 for (ParseObject s : scoreList) {
                     names.add(s.getString("name"));
                     dates.add(s.getString("deadline"));
+                    listsItems.add(s);
                 }
                 ShoppingListsAdapter listAdapter = new
                         ShoppingListsAdapter(TemplatesActivity.this, names, dates, listsItems, true);
