@@ -7,34 +7,44 @@
     android:layout_height="match_parent"
     tools:context="pl.pollub.shoppinglist.activity.ShoppingListsActivity">
 
+    <include layout="@layout/menu_burger" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <include
                 android:id="@+id/toolbar"
-                layout="@layout/toolbar" />
+                layout="@layout/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <ListView
                 android:id="@+id/list"
-                android:layout_width="wrap_content"
-                android:layout_height="443dp" >
-                android:layout_height="754dp"></ListView>
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/addListButton"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="end"
-                android:layout_margin="10dp"
-                android:clickable="true"
-                app:backgroundTint="@color/colorPrimary"
-                app:fabSize="mini"
-                app:srcCompat="@android:drawable/ic_menu_add" />
-
+                android:layout_height="match_parent"></ListView>
         </LinearLayout>
 
-        <include layout="@layout/menu_burger" />
+        <io.github.yavski.fabspeeddial.FabSpeedDial
+            android:id="@+id/fabSpeedDial"
+            style="@style/AlertDialog.AppCompat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            app:fabGravity="bottom_end"
+            app:fabMenu="@menu/menu_add_list"
+            app:fabBackgroundTint="@color/colorPrimaryDark"
+            app:miniFabBackgroundTint="@android:color/white"
+            app:miniFabDrawableTint="@color/colorPrimaryDark"
+            app:miniFabTitleTextColor="@color/colorPrimaryDark" />
+
+    </FrameLayout>
 
 
-    </android.support.v4.widget.DrawerLayout>
+</android.support.v4.widget.DrawerLayout>
