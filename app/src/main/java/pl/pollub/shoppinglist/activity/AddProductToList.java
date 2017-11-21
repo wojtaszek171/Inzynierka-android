@@ -24,7 +24,9 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import bolts.Task;
 import pl.pollub.shoppinglist.R;
@@ -51,18 +53,9 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product_to_list);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        saveProductB = findViewById(R.id.saveProductButton);
-        productName = findViewById(R.id.product_name);
-        productAmount = findViewById(R.id.product_amount);
-        productCategory = findViewById(R.id.product_categories_spinner);
-        productDescription = findViewById(R.id.product_description);
-        productMeasure = findViewById(R.id.product_measure_spinner);
-        productIcon = findViewById(R.id.product_icon);
 
+        initLayoutElements();
         getExtras();
-
         fillSpinnersByData();
 
         if (productObject != null) {//editing product
@@ -71,6 +64,18 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
             createNewProduct();
         }
 
+    }
+
+    private void initLayoutElements() {
+        saveProductB = findViewById(R.id.saveProductButton);
+        productName = findViewById(R.id.product_name);
+        productAmount = findViewById(R.id.product_amount);
+        productCategory = findViewById(R.id.product_categories_spinner);
+        productDescription = findViewById(R.id.product_description);
+        productMeasure = findViewById(R.id.product_measure_spinner);
+        productIcon = findViewById(R.id.product_icon);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     private void fillSpinnersByData() {
@@ -98,7 +103,7 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         saveProductB.setOnClickListener(view -> {
-            ParseObject product = new ParseObject("ProductOfList");
+            Map product = new HashMap();
             product.put("name", productName.getText().toString());
             product.put("status", "0"); //status wykupienia produktu
             product.put("amount", productAmount.getText().toString());
@@ -109,20 +114,26 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
 
             if (ParseUser.getCurrentUser() != null) {
                 String user = ParseUser.getCurrentUser().getUsername();
-                product.put("localId",user + localId);
                 product.put("belongsTo", list.getString("localId"));
-                product.saveEventually();
-            }else {
-                product.put("belongsTo", list.getString("localId"));
-                product.put("localId",localId);
-            }
-            product.pinInBackground(e -> {if (e == null) {
-                finish();
-                Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
-                intent.putExtra("LIST_OBJECT", list);
-                startActivity(intent);
+                product.put("localId", user + localId);
+
+                list.add("nestedProducts", product);
+                list.saveEventually();
             } else {
-            }});
+                product.put("belongsTo", list.getString("localId"));
+                product.put("localId", localId);
+                list.add("nestedProducts", product);
+
+            }
+            list.pinInBackground(e -> {
+                if (e == null) {
+                    finish();
+                    Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
+                    intent.putExtra("LIST_OBJECT", list);
+                    startActivity(intent);
+                } else {
+                }
+            });
         });
     }
 
@@ -133,36 +144,38 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
         fillInTheForm(productObject);
 
         saveProductB.setOnClickListener(view -> {
-                //String user = ParseUser.getCurrentUser().getUsername();
-                ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
-                query.whereEqualTo("localId", productObject.get("localId"));
-                query.fromLocalDatastore();
-                query.findInBackground(new FindCallback<ParseObject>() {
-                    public void done(List<ParseObject> scoreList,
-                                     ParseException e) {
-                        if (e == null) {
-                            for (ParseObject s : scoreList) {
-                                s.put("name", productName.getText().toString());
-                                s.put("amount", productAmount.getText().toString());
-                                s.put("category", productCategory.getSelectedItem().toString());
-                                s.put("description", productDescription.getText().toString());
-                                s.put("measure", productMeasure.getSelectedItem().toString());
-                                s.put("icon", productIcon.getText().toString());
-                                s.pinInBackground(ex -> {if (ex == null) {
+            //String user = ParseUser.getCurrentUser().getUsername();
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
+            query.whereEqualTo("localId", productObject.get("localId"));
+            query.fromLocalDatastore();
+            query.findInBackground(new FindCallback<ParseObject>() {
+                public void done(List<ParseObject> scoreList,
+                                 ParseException e) {
+                    if (e == null) {
+                        for (ParseObject s : scoreList) {
+                            s.put("name", productName.getText().toString());
+                            s.put("amount", productAmount.getText().toString());
+                            s.put("category", productCategory.getSelectedItem().toString());
+                            s.put("description", productDescription.getText().toString());
+                            s.put("measure", productMeasure.getSelectedItem().toString());
+                            s.put("icon", productIcon.getText().toString());
+                            s.pinInBackground(ex -> {
+                                if (ex == null) {
                                     finish();
                                     Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
                                     intent.putExtra("LIST_OBJECT", list);
                                     startActivity(intent);
                                 } else {
-                                }});
-                                s.saveEventually();
-                            }
-                            Log.d("score", "Retrieved " + scoreList.size());
-                        } else {
-                            Log.d("score", "Error: " + e.getMessage());
+                                }
+                            });
+                            s.saveEventually();
                         }
+                        Log.d("score", "Retrieved " + scoreList.size());
+                    } else {
+                        Log.d("score", "Error: " + e.getMessage());
                     }
-                });
+                }
+            });
         });
     }
 

@@ -12,16 +12,21 @@ import android.widget.TextView;
 import com.parse.ParseObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+import lombok.Data;
 import pl.pollub.shoppinglist.R;
 
+@Data
 public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
     private final Activity context;
-    private ArrayList<ParseObject> products;
+    private ArrayList<HashMap> products;
     private SparseBooleanArray mSelectedItemsIds;
 
+
     public ShoppingListDetailsAdapter(Activity context,
-                                      ArrayList<String> name, ArrayList<ParseObject> products) {
+                                      ArrayList<String> name, ArrayList<HashMap> products) {
         super(context, R.layout.lists_list_item, name);
         mSelectedItemsIds = new SparseBooleanArray();
         this.context = context;
@@ -32,14 +37,14 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        ParseObject product = products.get(position);
+        HashMap product = products.get(position);
         View rowView = inflater.inflate(R.layout.lists_items_item, null, true);
         TextView productName = rowView.findViewById(R.id.itemName);
-        productName.setText(product.getString("name"));
+        productName.setText(product.get("name").toString());
         TextView productAmount = rowView.findViewById(R.id.item_amount);
-        productAmount.setText(product.getString("amount"));
+        productAmount.setText(product.get("amount").toString());
         TextView productMeasure = rowView.findViewById(R.id.item_measure);
-        productMeasure.setText(product.getString("measure"));
+        productMeasure.setText(product.get("measure").toString());
 
         return rowView;
     }
@@ -51,6 +56,11 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
 
     public void removeSelection() {
         mSelectedItemsIds = new SparseBooleanArray();
+        notifyDataSetChanged();
+    }
+
+    public void swapItems(ArrayList<HashMap> newProducts) {
+        this.products = newProducts;
         notifyDataSetChanged();
     }
 
