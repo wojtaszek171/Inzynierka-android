@@ -21,6 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
 
     private String login, password;
+    private StringBuilder feedbackMessage = new StringBuilder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,19 +62,18 @@ public class LoginActivity extends AppCompatActivity {
     private void attemptUserLogin() {
         ParseUser.logInInBackground(login, password, (user, exception) -> {
             Context context = getApplicationContext();
-            String text;
+            feedbackMessage.setLength(0);
 
-            if (user != null) {
-                // Hooray! The user is logged in.
-                text = login + " - pomyślnie zalogowano!";
+            if (user != null && exception == null) {
+                feedbackMessage.append(login).append(" - pomyślnie zalogowano!");
                 Intent intent = new Intent(LoginActivity.this, ShoppingListsActivity.class);
                 startActivity(intent);
+            } else if (user == null) {
+                feedbackMessage.append("Nieprawidłowy login i/lub hasło!");
             } else {
-                // Signup failed. Look at the ParseException to see what happened.
-                text = exception.getMessage();
+                feedbackMessage.append(exception.getMessage());
             }
-            Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-            toast.show();
+            Toast.makeText(context, feedbackMessage, Toast.LENGTH_SHORT).show();
         });
     }
 

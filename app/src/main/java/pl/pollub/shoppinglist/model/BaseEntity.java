@@ -1,16 +1,13 @@
 package pl.pollub.shoppinglist.model;
 
 import java.util.Date;
-import java.util.Objects;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.threeten.bp.LocalDateTime;
-import com.parse.ParseObject;
 
-import pl.pollub.shoppinglist.util.DateTimeWrapper;
+import com.parse.ParseObject;
 
 /**
  * @author Adrian
@@ -20,9 +17,6 @@ import pl.pollub.shoppinglist.util.DateTimeWrapper;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseEntity extends ParseObject {
-    /*private DateTimeWrapper createdAt = new DateTimeWrapper();
-    private DateTimeWrapper updatedAt = new DateTimeWrapper();*/
-
     @SuppressWarnings("unchecked")
     public <T extends ParseObject> T getEntity(String key) {
         ParseObject entity = super.getParseObject(key);
@@ -37,46 +31,5 @@ public abstract class BaseEntity extends ParseObject {
         }
 
         return (T) entity;
-    }
-
-    /*public LocalDateTime getUpdatedAtTimestamp() {
-        Date currentUpdatedAt = super.getUpdatedAt();
-
-        return currentUpdatedAt == null ? null : getCurrentTimestamp(updatedAt, currentUpdatedAt);
-    }
-
-    public LocalDateTime getCreatedAtTimestamp() {
-        Date currentCreatedAt = super.getCreatedAt();
-
-        return currentCreatedAt == null ? null : getCurrentTimestamp(createdAt, currentCreatedAt);
-    }
-
-    private static LocalDateTime getCurrentTimestamp(DateTimeWrapper cachedTimestamp, Date currentTimestamp) {
-        if (currentTimestamp != null && cachedTimestamp.getDateTime().equals(currentTimestamp)) {
-            return cachedTimestamp.getLocalDateTime();
-        }
-        // changes the mutable parameter of type DateTimeWrapper!
-        cachedTimestamp.setDateTime(currentTimestamp);
-        return cachedTimestamp.getLocalDateTime();
-    }*/
-
-    /**
-     * @deprecated Deprecated, use {@link #getUpdatedAtTimestamp} instead.
-     * @return Date
-     */
-    @Deprecated
-    @Override
-    public Date getUpdatedAt() {
-        return super.getUpdatedAt();
-    }
-
-    /**
-     * @deprecated Deprecated, use {@link #getCreatedAtTimestamp} instead.
-     * @return Date
-     */
-    @Deprecated
-    @Override
-    public Date getCreatedAt() {
-        return super.getCreatedAt();
     }
 }

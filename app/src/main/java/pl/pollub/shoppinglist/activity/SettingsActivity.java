@@ -55,7 +55,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_friends: {
-                Intent intent = new Intent(SettingsActivity.this, BuddiesActivity.class);
+                Intent intent = new Intent(SettingsActivity.this, FriendsActivity.class);
                 startActivity(intent);
                 break;
             }

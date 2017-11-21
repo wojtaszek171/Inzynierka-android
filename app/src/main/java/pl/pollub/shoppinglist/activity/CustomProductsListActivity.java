@@ -211,7 +211,7 @@ public class CustomProductsListActivity extends AppCompatActivity implements Nav
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_friends: {
-                Intent intent = new Intent(CustomProductsListActivity.this, BuddiesActivity.class);
+                Intent intent = new Intent(CustomProductsListActivity.this, FriendsActivity.class);
                 startActivity(intent);
                 break;
             }

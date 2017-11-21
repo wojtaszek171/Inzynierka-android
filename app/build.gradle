@@ -36,6 +36,8 @@ dependencies {
     implementation "com.android.support:appcompat-v7:26.1.+"
     implementation "com.android.support.constraint:constraint-layout:1.+"
     implementation "com.android.support:design:26.1.+"
+    implementation 'com.android.support:support-v4:26.1.+'
+    implementation 'com.android.support:recyclerview-v7:26.1.+'
     //implementation "android.arch.persistence.room:runtime:1.+"
     implementation "android.arch.lifecycle:extensions:1.+"
     implementation "android.arch.paging:runtime:1.+"

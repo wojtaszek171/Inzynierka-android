@@ -1,7 +1,6 @@
 package pl.pollub.shoppinglist.activity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -22,11 +21,9 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.List;
 
-import bolts.Task;
 import pl.pollub.shoppinglist.R;
 
 public class AddProductToList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -182,7 +179,7 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_friends: {
-                Intent intent = new Intent(AddProductToList.this, BuddiesActivity.class);
+                Intent intent = new Intent(AddProductToList.this, FriendsActivity.class);
                 startActivity(intent);
                 break;
             }

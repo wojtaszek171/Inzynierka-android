@@ -253,7 +253,7 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_friends: {
-                Intent intent = new Intent(getApplicationContext(), BuddiesActivity.class);
+                Intent intent = new Intent(getApplicationContext(), FriendsActivity.class);
                 startActivity(intent);
                 break;
             }

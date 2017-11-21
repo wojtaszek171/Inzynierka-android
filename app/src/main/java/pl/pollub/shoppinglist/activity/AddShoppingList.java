@@ -22,7 +22,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -229,7 +228,7 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_friends: {
-                Intent intent = new Intent(AddShoppingList.this, BuddiesActivity.class);
+                Intent intent = new Intent(AddShoppingList.this, FriendsActivity.class);
                 startActivity(intent);
                 break;
             }

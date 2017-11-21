@@ -220,7 +220,7 @@ public class CustomProductAppenderActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_friends: {
-                Intent intent = new Intent(CustomProductAppenderActivity.this, BuddiesActivity.class);
+                Intent intent = new Intent(CustomProductAppenderActivity.this, FriendsActivity.class);
                 startActivity(intent);
                 break;
             }

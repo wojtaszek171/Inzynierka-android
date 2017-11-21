@@ -4,10 +4,13 @@ import android.app.Application;
 import android.content.Context;
 
 import com.jakewharton.threetenabp.AndroidThreeTen;
-import com.parse.Parse;
-import com.parse.ParseObject;
 
 import pl.pollub.shoppinglist.model.*;
+
+import static com.parse.Parse.enableLocalDatastore;
+import static com.parse.Parse.initialize;
+import static com.parse.Parse.isLocalDatastoreEnabled;
+import static com.parse.ParseObject.registerSubclass;
 
 /**
  * @author Adrian
@@ -22,16 +25,18 @@ public class App extends Application {
     }
 
     private static void registerParseApi(Context context) {
-        ParseObject.registerSubclass(Group.class);
-        ParseObject.registerSubclass(CustomProduct.class);
-        ParseObject.registerSubclass(ProductShoppingList.class);
-        ParseObject.registerSubclass(ShoppingList.class);
-        ParseObject.registerSubclass(UserGroup.class);
+        registerSubclass(User.class);
+        registerSubclass(UserData.class);
+        registerSubclass(Group.class);
+        registerSubclass(CustomProduct.class);
+        registerSubclass(ProductShoppingList.class);
+        registerSubclass(ShoppingList.class);
+        registerSubclass(UserGroup.class);
 
-        if (!Parse.isLocalDatastoreEnabled()) {
-            Parse.enableLocalDatastore(context);
+        if (!isLocalDatastoreEnabled()) {
+            enableLocalDatastore(context);
         }
 
-        Parse.initialize(context);
+        initialize(context);
     }
 }

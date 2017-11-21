@@ -262,7 +262,7 @@ public class TemplatesActivity extends AppCompatActivity implements NavigationVi
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_friends: {
-                Intent intent = new Intent(TemplatesActivity.this, BuddiesActivity.class);
+                Intent intent = new Intent(TemplatesActivity.this, FriendsActivity.class);
                 startActivity(intent);
                 break;
             }

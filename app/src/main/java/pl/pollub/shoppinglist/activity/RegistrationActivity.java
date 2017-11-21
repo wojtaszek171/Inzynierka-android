@@ -4,14 +4,17 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.ParseUser;
+import com.parse.ParseException;
 
 import pl.pollub.shoppinglist.R;
+import pl.pollub.shoppinglist.model.User;
+import pl.pollub.shoppinglist.model.UserData;
 
 public class RegistrationActivity extends AppCompatActivity {
     private TextView registerEmail;
@@ -31,7 +34,7 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.menuRegister);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -48,30 +51,30 @@ public class RegistrationActivity extends AppCompatActivity {
             //TODO: walidacja danych
 
             if (password.equals(repeatedPassword)) {
-                ParseUser newUser = new ParseUser();
+                User newUser = new User();
                 newUser.setUsername(login);
                 newUser.setPassword(password);
                 newUser.setEmail(email);
 
                 newUser.signUpInBackground(exception -> {
-                    Context context = getApplicationContext();
-                    String text;
-
                     if (exception == null) {
-                        // Hooray! Let them use the app now.
+
+                        try {
+                            UserData newUserData = new UserData();
+                            User.getCurrentUser().setUserData(newUserData);
+                            User.getCurrentUser().save();
+                        } catch (ParseException e) {
+                            Log.e("RegistrationActivity", exception.getMessage());
+                        }
 
                         resetRegistrationForm();
-                        text = "Pomyślnie zarejestrowano!";
+                        String text = "Pomyślnie zarejestrowano!";
+                        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
 
                     } else {
-                        // Sign up didn't succeed. Look at the ParseException
-                        // to figure out what went wrong
                         resetPasswordTextView();
-                        text = exception.getMessage();
-
+                        Log.e("RegistrationActivity", exception.getMessage());
                     }
-                    Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-                    toast.show();
                 });
             }
         });
@@ -97,6 +100,7 @@ public class RegistrationActivity extends AppCompatActivity {
         resetPasswordTextView();
         registerEmail.setText("");
         registerLogin.setText("");
+        registerLogin.clearComposingText();
     }
 
     private void fetchRegisterFormData() {

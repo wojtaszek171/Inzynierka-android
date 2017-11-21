@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenu;
@@ -42,7 +41,6 @@ import java.util.List;
 
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import pl.pollub.shoppinglist.R;
-import pl.pollub.shoppinglist.model.ShoppingList;
 
 public class ShoppingListsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
@@ -344,7 +342,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_friends: {
-                Intent intent = new Intent(getApplicationContext(), BuddiesActivity.class);
+                Intent intent = new Intent(getApplicationContext(), FriendsActivity.class);
                 startActivity(intent);
                 break;
             }
