@@ -45,6 +45,7 @@ public class FriendApproveViewAdapter extends BaseRecyclerViewAdapter<User> {
     @Override
     protected void bindView(User item, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
         if (item == null) {
+            Toast.makeText(getContext(), "FriendApproveAdapter: User is null", Toast.LENGTH_LONG).show();
             Log.w("FriendApproveAdapter", "User is null");
             return;
         }
@@ -68,6 +69,7 @@ public class FriendApproveViewAdapter extends BaseRecyclerViewAdapter<User> {
                     ));
                 }
             } else {
+                Toast.makeText(getContext(), "FriendApproveAdapter " + exception.getMessage(), Toast.LENGTH_LONG).show();
                 Log.w("FriendApproveAdapter", exception.getMessage());
             }
         });
