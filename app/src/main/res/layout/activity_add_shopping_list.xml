@@ -19,45 +19,64 @@
             android:layout_width="wrap_content"
             android:layout_height="500dp">
 
-            <TextView
-                android:id="@+id/textView17"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/list_name_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="18dp"
-                android:gravity="center_horizontal"
-                android:text="Nazwa listy" />
+                android:layout_height="match_parent"
+                android:layout_centerVertical="false"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+
+                <EditText
+                    android:id="@+id/listName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/login_login"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:hint="Nazwa listy" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/list_description_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="false"
+                android:layout_below="@+id/list_name_layout"
+                android:layout_centerHorizontal="false"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+
+                <EditText
+                    android:id="@+id/list_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:hint="Opis"
+                    android:inputType="textPersonName" />
+
+            </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/listDeadline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/listName"
+                android:layout_below="@+id/list_description_layout"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="30dp"
                 android:text="Termin" />
 
             <TextView
                 android:id="@+id/textView20"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="131dp"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/listDeadline"
+                android:layout_marginTop="28dp"
                 android:gravity="center_horizontal"
-                android:text="Ikonka"
-                android:layout_below="@+id/listName"
-                android:layout_alignParentStart="true" />
-
-            <EditText
-                android:id="@+id/listName"
-                android:layout_width="256dp"
-                android:layout_height="45dp"
-                android:layout_below="@+id/textView17"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/edittextstyle"
-                android:inputType="textPersonName"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp" />
+                android:text="Ikonka" />
 
             <ImageButton
                 android:id="@+id/setListImage"
@@ -72,11 +91,11 @@
                 android:id="@+id/saveNewList"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:text="OK"
                 android:layout_below="@+id/setListImage"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp" />
+                android:layout_marginTop="23dp"
+                android:background="@color/colorPrimary"
+                android:text="OK" />
 
         </RelativeLayout>
 

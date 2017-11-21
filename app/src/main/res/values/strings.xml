@@ -48,22 +48,21 @@
     <!--CATEGORIES:-->
     <string-array name="product_categories">
         <item>Inne</item>
-        <item>Alkohol</item>
-        <item>Chemia i kosmetyki</item>
-        <item>Dla zwierząt</item>
-        <item>Kasza i ryż</item>
-        <item>Konserwy</item>
+        <item>Warzywa i owoce</item>
         <item>Mięso</item>
         <item>Mrożonki i lody</item>
-        <item>Nabiał</item>
+        <item>Kawa,Herbate,Kakao</item>
         <item>Napoje</item>
-        <item>Owoce</item>
+        <item>Nabiał</item>
         <item>Pieczywo</item>
         <item>Przekąski</item>
-        <item>Przybory do samochodu</item>
         <item>Przyprawy</item>
+        <item>Alkohole i tytoń</item>
+        <item>Chemia</item>
+        <item>Konserwy</item>
+        <item>Dla zwierząt</item>
+        <item>Akcesoria samochodowe</item>
         <item>Urządzenia elektroniczne</item>
-        <item>Warzywa</item>
         <item>Zabawki</item>
     </string-array>
 
@@ -71,15 +70,11 @@
     <!--MEASURES:-->
     <string-array name="product_measure">
         <item>Inne</item>
-        <item>Butelka</item>
-        <item>Dekagramy</item>
+        <item>Butelki</item>
         <item>Gramy</item>
         <item>Kilogramy</item>
         <item>Litry</item>
-        <item>Mililitry</item>
         <item>Opakowania</item>
-        <item>Pudełko</item>
-        <item>Puszka</item>
         <item>Sztuki</item>
     </string-array>
 
