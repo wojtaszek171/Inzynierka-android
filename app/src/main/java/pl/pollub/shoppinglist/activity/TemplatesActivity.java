@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.pollub.shoppinglist.R;
+import pl.pollub.shoppinglist.adapter.ShoppingListsAdapter;
 
 public class TemplatesActivity extends BaseNavigationActivity {
 

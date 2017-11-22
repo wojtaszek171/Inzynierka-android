@@ -30,6 +30,7 @@ import java.util.List;
 
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import pl.pollub.shoppinglist.R;
+import pl.pollub.shoppinglist.adapter.ShoppingListsAdapter;
 
 public class ShoppingListsActivity extends BaseNavigationActivity {
 

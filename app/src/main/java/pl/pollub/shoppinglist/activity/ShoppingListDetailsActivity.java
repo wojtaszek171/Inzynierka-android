@@ -8,17 +8,14 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseObject;
@@ -29,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.pollub.shoppinglist.R;
+import pl.pollub.shoppinglist.adapter.ShoppingListDetailsAdapter;
 
 public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     private String listId;
