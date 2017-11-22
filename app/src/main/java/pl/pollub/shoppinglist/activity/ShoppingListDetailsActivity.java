@@ -30,6 +30,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.yavski.fabspeeddial.FabSpeedDial;
 import pl.pollub.shoppinglist.R;
 
 public class ShoppingListDetailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {

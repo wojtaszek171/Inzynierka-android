@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.parse.ParseObject;
@@ -19,6 +20,9 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
     private final Activity context;
     private ArrayList<ParseObject> products;
     private SparseBooleanArray mSelectedItemsIds;
+    private String[] arrayIcons;
+    private String[] arrayCategories;
+
 
     public ShoppingListDetailsAdapter(Activity context,
                                       ArrayList<String> name, ArrayList<ParseObject> products) {
@@ -26,7 +30,8 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
         mSelectedItemsIds = new SparseBooleanArray();
         this.context = context;
         this.products = products;
-
+        arrayIcons = context.getResources().getStringArray(R.array.product_icons);
+        arrayCategories = context.getResources().getStringArray(R.array.product_categories);
     }
 
     @Override
@@ -40,6 +45,17 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
         productAmount.setText(product.getString("amount"));
         TextView productMeasure = rowView.findViewById(R.id.item_measure);
         productMeasure.setText(product.getString("measure"));
+        ImageView image = rowView.findViewById(R.id.itemImage);
+        TextView productDescription = rowView.findViewById(R.id.product_description);
+        productDescription.setText(product.getString("description"));
+
+        String nameOfFile = "other";
+        for(int i=0; i < arrayCategories.length; i++)
+            if(arrayCategories[i].contains(product.getString("category")))
+                nameOfFile = arrayIcons[i];
+
+        int idd = context.getResources().getIdentifier(nameOfFile, "drawable", context.getPackageName());
+        image.setBackgroundResource(idd);
 
         return rowView;
     }

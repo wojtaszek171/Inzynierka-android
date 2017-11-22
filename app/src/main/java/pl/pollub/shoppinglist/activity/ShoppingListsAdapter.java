@@ -44,6 +44,8 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
         TextView listDeadline = rowView.findViewById(R.id.listDeadline);
         listDeadline.setText(item.get(position).getString("deadline"));
         TextView listFriends = rowView.findViewById(R.id.collaborators);
+        TextView listDescription = rowView.findViewById(R.id.item_description);
+        listDescription.setText(item.get(position).getString("description"));
         if(template==true)
             listDeadline.setText("-");
 

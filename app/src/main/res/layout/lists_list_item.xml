@@ -72,10 +72,8 @@
                             android:id="@+id/collaborators"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignBottom="@+id/textView"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentTop="true"
-                            android:layout_toEndOf="@+id/textView"
                             android:gravity="center_vertical"
                             android:hint="znajomi"
                             android:paddingLeft="5dp"
@@ -92,19 +90,6 @@
             android:layout_alignParentTop="true"
             android:background="@android:color/transparent">
 
-                <CheckBox
-                    android:id="@+id/checkBox"
-                    style="?android:attr/checkboxStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/listNameItem"
-                    android:layout_alignBottom="@+id/listNameItem"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="6dp"
-                    android:buttonTint="@android:color/white"
-                    android:checked="false"
-                    android:textColorLink="@color/DefaultColor" />
-
                 <ImageView
                     android:id="@+id/listImage"
                     android:layout_width="40dp"
@@ -120,7 +105,6 @@
                     android:id="@+id/listNameItem"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentTop="true"
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="2dp"
                     android:layout_toEndOf="@+id/listImage"
@@ -128,7 +112,10 @@
                     android:layout_weight="0.45"
                     android:gravity="center_vertical"
                     android:hint="Name"
-                    android:paddingLeft="5dp" />
+                    android:paddingLeft="5dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/imageView4"
@@ -146,7 +133,8 @@
                     android:layout_alignParentTop="true"
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
-                    android:text="Date" />
+                    android:text="Date"
+                    android:textColor="@android:color/white" />
 
         </RelativeLayout>
 

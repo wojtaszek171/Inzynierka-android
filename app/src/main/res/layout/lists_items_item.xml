@@ -7,63 +7,124 @@
     android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:orientation="horizontal"
-        android:weightSum="1">
+        android:layout_height="70dp">
 
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:button="@drawable/checkbox_selector"
-            android:checked="false" />
+        <RelativeLayout
+            android:id="@+id/relativeLayout4"
+            android:layout_width="50dp"
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/itemImage"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/itemImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:backgroundTint="@android:color/white"
+                android:maxHeight="50dp"
+                android:minWidth="40dp" />
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:buttonTint="@android:color/white"
+                android:checked="false"
+                android:gravity="top"
+                android:paddingBottom="40dp"
+                android:textAlignment="center" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout2"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:minWidth="40dp" />
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/relativeLayout4"
+            android:background="@drawable/rounded_item_white">
 
-        <TextView
-            android:id="@+id/itemName"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.45"
-            android:gravity="center_vertical"
-            android:hint="Name" />
+            <RelativeLayout
+                android:id="@+id/relativ1"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/relativeLayout">
 
-        <TextView
-            android:id="@+id/item_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:hint="ile" />
+                <TextView
+                    android:id="@+id/item_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="14dp"
+                    android:layout_toStartOf="@+id/textView14"
+                    android:gravity="center_vertical"
+                    android:hint="ile" />
 
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.05"
-            android:gravity="center"
-            android:text="x" />
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="90dp"
+                    android:layout_weight="0.05"
+                    android:gravity="center"
+                    android:text="x" />
 
-        <TextView
-            android:id="@+id/item_measure"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.81"
-            android:gravity="center_vertical"
-            android:hint="np. bochenek" />
+                <TextView
+                    android:id="@+id/itemName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="13dp"
+                    android:layout_weight="0.45"
+                    android:gravity="center_vertical"
+                    android:hint="Name"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/item_measure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center_vertical"
+                    android:hint="np. bochenek" />
 
-    </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/relativ1">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Opis:" />
+
+                <TextView
+                    android:id="@+id/product_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="11dp"
+                    android:layout_toEndOf="@+id/textView3" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

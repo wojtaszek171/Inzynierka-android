@@ -7,45 +7,39 @@
     android:layout_height="match_parent"
     tools:context="pl.pollub.shoppinglist.activity.ShoppingListsActivity">
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar" />
-
-        <ScrollView
-            android:id="@+id/scroll"
-            android:layout_width="match_parent"
-            android:layout_height="446dp"
-            android:layout_below="@+id/toolbar">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <ListView
-                    android:id="@+id/list"
-                    android:layout_width="wrap_content"
-                    android:layout_height="443dp"/>
-            </RelativeLayout>
-        </ScrollView>
+        android:layout_height="match_parent">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/addProductButton"
+            style="@style/MiniFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="15dp"
+            android:src="@drawable/fab_add_clear_selector"
+            app:backgroundTint="@color/colorPrimaryDark"
+            app:fabGravity="bottom_end" />
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="end"
-            android:layout_marginBottom="11dp"
-            android:layout_marginEnd="14dp"
-            app:backgroundTint="@color/colorPrimary"
-            app:fabSize="mini"
-            app:srcCompat="@android:drawable/ic_menu_add" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/toolbar" />
+
+            <ListView
+                android:id="@+id/list"
+                style="@style/AlertDialog.AppCompat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
 
-    </RelativeLayout>
+        </LinearLayout>
+    </FrameLayout>
 
     <include layout="@layout/menu_burger" />
 

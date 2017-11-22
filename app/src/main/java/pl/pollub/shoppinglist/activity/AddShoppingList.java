@@ -93,12 +93,14 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
     private void createShoppingList() {
         EditText listName = findViewById(R.id.listName);
         String listNameString = listName.getText().toString();
-
+        EditText description = findViewById(R.id.list_description);
+        String descriptionString = description.getText().toString();
         list = ParseObject.create("ShoppingList");
 
         list.put("name", listNameString);
         list.put("status", "0");
         list.put("deadline", textDate.getText().toString());
+        list.put("description",descriptionString);
         list.put("isTemplate", template);
 
 

@@ -27,15 +27,16 @@
                 android:layout_height="754dp"></ListView>
 
             </LinearLayout>
+
         <io.github.yavski.fabspeeddial.FabSpeedDial
             android:id="@+id/fabSpeedDial"
             style="@style/AlertDialog.AppCompat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
+            app:fabBackgroundTint="@color/colorPrimaryDark"
             app:fabGravity="bottom_end"
             app:fabMenu="@menu/menu_add_list"
-            app:fabBackgroundTint="@color/colorPrimaryDark"
             app:miniFabBackgroundTint="@android:color/white"
             app:miniFabDrawableTint="@color/colorPrimaryDark"
             app:miniFabTitleTextColor="@color/colorPrimaryDark" />

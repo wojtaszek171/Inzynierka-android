@@ -1,6 +1,8 @@
 package pl.pollub.shoppinglist.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -8,12 +10,18 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -35,15 +43,15 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
     private Spinner productCategory;
     private EditText productDescription;
     private Spinner productMeasure;
-    private Button productIcon;
     private Button saveProductB;
     private ParseObject list;
+    private ImageView icon;
     private String localId;
     private ActionBarDrawerToggle drawerToggle;
     private ArrayAdapter<CharSequence> adapterCategory;
     private ArrayAdapter<CharSequence> adapterMeasure;
     private ParseObject productObject;
-
+    private String[] arrayIcons;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,11 +64,15 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
         productCategory = findViewById(R.id.product_categories_spinner);
         productDescription = findViewById(R.id.product_description);
         productMeasure = findViewById(R.id.product_measure_spinner);
-        productIcon = findViewById(R.id.product_icon);
+        icon = findViewById(R.id.item_icon);
 
         getExtras();
 
         fillSpinnersByData();
+
+        arrayIcons = getResources().getStringArray(R.array.product_icons);
+
+        setIcon();
 
         if (productObject != null) {//editing product
             editProduct();
@@ -68,6 +80,22 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
             createNewProduct();
         }
 
+    }
+
+    private void setIcon() {
+        productCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String name = arrayIcons[position];
+                int idd = getResources().getIdentifier(name, "drawable", getPackageName());
+                icon.setBackgroundResource(idd);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void fillSpinnersByData() {
@@ -102,7 +130,7 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
             product.put("category", productCategory.getSelectedItem().toString());
             product.put("description", productDescription.getText().toString());
             product.put("measure", productMeasure.getSelectedItem().toString());
-            product.put("icon", productIcon.getText().toString());
+
 
             if (ParseUser.getCurrentUser() != null) {
                 String user = ParseUser.getCurrentUser().getUsername();
@@ -144,7 +172,6 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
                                 s.put("category", productCategory.getSelectedItem().toString());
                                 s.put("description", productDescription.getText().toString());
                                 s.put("measure", productMeasure.getSelectedItem().toString());
-                                s.put("icon", productIcon.getText().toString());
                                 s.pinInBackground(ex -> {if (ex == null) {
                                     finish();
                                     Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
@@ -171,7 +198,7 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
         productDescription.setText(productObject.getString("description"));
         int spinnerPositionMeasure = adapterMeasure.getPosition(productObject.getString("measure"));
         productMeasure.setSelection(spinnerPositionMeasure);
-        productIcon.setText(productObject.getString("icon"));
+
     }
 
     @Override
@@ -227,4 +254,7 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
         getMenuInflater().inflate(R.menu.menulists, menu);
         return true;
     }
+
+
 }
+

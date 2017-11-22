@@ -51,7 +51,7 @@
         <item>Warzywa i owoce</item>
         <item>Mięso</item>
         <item>Mrożonki i lody</item>
-        <item>Kawa,Herbate,Kakao</item>
+        <item>Kawa,Herbata,Kakao</item>
         <item>Napoje</item>
         <item>Nabiał</item>
         <item>Pieczywo</item>
@@ -66,6 +66,25 @@
         <item>Zabawki</item>
     </string-array>
 
+    <string-array name="product_icons">
+        <item>other</item>
+        <item>vegetables</item>
+        <item>meat</item>
+        <item>frozen</item>
+        <item>tea</item>
+        <item>beverages</item>
+        <item>dairy</item>
+        <item>bread</item>
+        <item>snack</item>
+        <item>spices</item>
+        <item>alcohols</item>
+        <item>chemical</item>
+        <item>foodincan</item>
+        <item>pet</item>
+        <item>carparts</item>
+        <item>electricity</item>
+        <item>toys</item>
+    </string-array>
 
     <!--MEASURES:-->
     <string-array name="product_measure">

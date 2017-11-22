@@ -89,12 +89,14 @@
 
             <Button
                 android:id="@+id/saveNewList"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/setListImage"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="23dp"
                 android:background="@color/colorPrimary"
+                android:backgroundTint="@color/colorPrimaryDark"
                 android:text="OK" />
 
         </RelativeLayout>
