@@ -21,7 +21,9 @@
                 android:id="@+id/friend_fragment_container" />
         </LinearLayout>
 
-        <include layout="@layout/menu_burger" />
+        <include
+            android:id="@+id/nav_view_layout"
+            layout="@layout/menu_burger" />
 
     </android.support.v4.widget.DrawerLayout>
 </layout>

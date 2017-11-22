@@ -3,16 +3,10 @@ package pl.pollub.shoppinglist.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -24,11 +18,8 @@ import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Length;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.satsuware.usefulviews.LabelledSpinner;
 
 import java.util.Arrays;
@@ -41,12 +32,9 @@ import pl.pollub.shoppinglist.util.customproductlist.CustomProductDataModel;
  * Created by jrwoj on 24.10.2017.
  */
 
-public class CustomProductAppenderActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        Validator.ValidationListener, LabelledSpinner.OnItemChosenListener{
-
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle actionBarToggle;
+public class CustomProductAppenderActivity extends BaseNavigationActivity implements
+        Validator.ValidationListener,
+        LabelledSpinner.OnItemChosenListener {
 
     @NotEmpty(message = "Nazwa nie może być pusta.")
     private TextView productNameField;
@@ -78,14 +66,6 @@ public class CustomProductAppenderActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         setTitle(getResources().getString(R.string.customUserProducts));
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        drawerLayout = findViewById(R.id.custom_products_appender_drawer_layout);
-        actionBarToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-
-        drawerLayout.addDrawerListener(actionBarToggle);
-        actionBarToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initFormInputComponents();
@@ -95,22 +75,22 @@ public class CustomProductAppenderActivity extends AppCompatActivity
         Bundle editProductBundle = getIntent().getExtras();
         editModeEnabled = editProductBundle != null && editProductBundle.getBoolean("EDIT_MODE_ENABLED");
 
-        if(editModeEnabled){
+        if (editModeEnabled) {
             productToEdit = (ParseObject) editProductBundle.get("PRODUCT_TO_EDIT");
             initFormInEditMode();
-        }else{
+        } else {
             initFormInAddMode();
         }
     }
 
     //////////////////////////////////////////
 
-    private void cancelProductEditing(){
+    private void cancelProductEditing() {
         Intent cancelEditIntent = new Intent(CustomProductAppenderActivity.this, CustomProductsListActivity.class);
         startActivity(cancelEditIntent);
     }
 
-    private void initFormInEditMode(){
+    private void initFormInEditMode() {
         int productCategoryIdx = categoriesList.indexOf(productToEdit.get("category"));
 
         clearCancelBtn.setText(R.string.cancel);
@@ -123,15 +103,15 @@ public class CustomProductAppenderActivity extends AppCompatActivity
         productCategoryField.setSelection(productCategoryIdx);
     }
 
-    private void updateProduct(){
+    private void updateProduct() {
 
         ParseQuery<ParseObject> productToUpdateQuery = ParseQuery.getQuery("CustomProduct");
         productToUpdateQuery.fromLocalDatastore();
         productToUpdateQuery.whereEqualTo("localId", productToEdit.get("localId"));
         productToUpdateQuery.findInBackground((resultList, e) -> {
             if (e == null) {
-                for(ParseObject objectToUpdate : resultList){
-                    if(objectToUpdate != null){
+                for (ParseObject objectToUpdate : resultList) {
+                    if (objectToUpdate != null) {
                         objectToUpdate.put("name", productNameField.getText().toString());
                         objectToUpdate.put("description", productDescriptionField.getText().toString());
                         objectToUpdate.put("category", productCategoryValue);
@@ -144,11 +124,11 @@ public class CustomProductAppenderActivity extends AppCompatActivity
         });
     }
 
-    private void initFormInAddMode(){
+    private void initFormInAddMode() {
         clearCancelBtn.setText(R.string.clear);
     }
 
-    private void initFormInputComponents(){
+    private void initFormInputComponents() {
         productNameField = findViewById(R.id.custom_products_name);
         productDescriptionField = findViewById(R.id.custom_products_description);
         productCategoryField = findViewById(R.id.custom_products_category);
@@ -160,7 +140,7 @@ public class CustomProductAppenderActivity extends AppCompatActivity
         productCategoryField.setOnItemChosenListener(this);
     }
 
-    public void resetFormValues(View view){
+    public void resetFormValues(View view) {
         productNameField.setText(null);
         productDescriptionField.setText(null);
         productCategoryField.setSelection(0);
@@ -170,7 +150,7 @@ public class CustomProductAppenderActivity extends AppCompatActivity
         validator.validate();
     }
 
-    public void commitCustomProduct(){
+    public void commitCustomProduct() {
         CustomProductDataModel productModel = new CustomProductDataModel(
                 productNameField.getText().toString(),
                 productCategoryValue,
@@ -178,7 +158,8 @@ public class CustomProductAppenderActivity extends AppCompatActivity
         );
 
 
-        //TODO: UŻYĆ MODELU ADRIANA
+        // TODO: UŻYĆ MODELU ADRIANA
+        // ADRIAN: MÓJ MODEL NIE JEST ZGODNY NA TEN MOMENT Z TWOIM PROJEKTEM
         ParseObject newCustomProduct = ParseObject.create("CustomProduct");
         newCustomProduct.put("localId", productModel.getLocalId());
         newCustomProduct.put("name", productModel.getName());
@@ -189,7 +170,7 @@ public class CustomProductAppenderActivity extends AppCompatActivity
         testQuery();
     }
 
-    public void testQuery(){
+    public void testQuery() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomProduct");
         query.fromLocalDatastore();
         query.whereEqualTo("name", productNameField.getText().toString());
@@ -210,60 +191,19 @@ public class CustomProductAppenderActivity extends AppCompatActivity
         });
     }
 
-    public void goToCustomProductsList(){
+    public void goToCustomProductsList() {
         Intent intent = new Intent(CustomProductAppenderActivity.this, CustomProductsListActivity.class);
         startActivity(intent);
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        switch (item.getItemId()) {
-            case R.id.nav_friends: {
-                Intent intent = new Intent(CustomProductAppenderActivity.this, FriendsActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_lists: {
-                drawerLayout.closeDrawer(GravityCompat.START);
-                break;
-            }
-            case R.id.nav_templates: {
-                Intent intent = new Intent(CustomProductAppenderActivity.this, TemplatesActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_custom_user_products: {
-                Intent intent = new Intent(CustomProductAppenderActivity.this, CustomProductsListActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_settings: {
-                Intent intent = new Intent(CustomProductAppenderActivity.this, SettingsActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_logout: {
-                ParseUser.logOut();
-                Toast.makeText(getApplicationContext(), "Wylogowano", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(CustomProductAppenderActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                break;
-            }
-        }
-        //close navigation drawer
-        //drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
+    protected DrawerLayout getDrawerLayout() {
+        return findViewById(R.id.custom_products_appender_drawer_layout);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (actionBarToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    protected NavigationView getNavigationView() {
+        return findViewById(R.id.nav_view);
     }
 
     @Override
@@ -275,9 +215,9 @@ public class CustomProductAppenderActivity extends AppCompatActivity
 
     @Override
     public void onValidationSucceeded() {
-        if(editModeEnabled){
+        if (editModeEnabled) {
             updateProduct();
-        }else{
+        } else {
             commitCustomProduct();
         }
     }
