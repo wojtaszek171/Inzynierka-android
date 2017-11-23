@@ -39,7 +39,7 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
     }
 
     @Override
-    protected void bindView(User item, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
+    protected void bindView(User item, int position, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
         if (item == null) {
             Toast.makeText(getContext(), "FriendSearchAdapter: User is null", Toast.LENGTH_LONG).show();
             Log.w("FriendSearchAdapter", "User is null");

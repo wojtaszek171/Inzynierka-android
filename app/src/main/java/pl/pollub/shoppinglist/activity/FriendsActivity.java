@@ -100,7 +100,8 @@ public class FriendsActivity extends BaseNavigationActivity implements
         } else {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             FriendSearchFragment fragment = new FriendSearchFragment();
-            transaction.setCustomAnimations(R.anim.grow_from_middle, R.anim.shrink_to_middle)
+            transaction
+                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.friend_fragment_container, fragment)
                     .addToBackStack(null).commit();
         }
@@ -112,7 +113,8 @@ public class FriendsActivity extends BaseNavigationActivity implements
         } else {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             FriendApproveFragment fragment = new FriendApproveFragment();
-            transaction.setCustomAnimations(R.anim.grow_from_middle, R.anim.shrink_to_middle)
+            transaction
+                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.friend_fragment_container, fragment)
                     .addToBackStack(null).commit();
         }

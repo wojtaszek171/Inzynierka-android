@@ -25,7 +25,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
 
     protected abstract View createView(Context context, ViewGroup viewGroup, int viewType);
 
-    protected abstract void bindView(T item, BaseRecyclerViewAdapter.ViewHolder viewHolder);
+    protected abstract void bindView(T item, int position, BaseRecyclerViewAdapter.ViewHolder viewHolder);
 
     public BaseRecyclerViewAdapter(Context context) {
         this(context, null);
@@ -45,7 +45,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
 
     @Override
     public void onBindViewHolder(BaseRecyclerViewAdapter.ViewHolder holder, int position) {
-        bindView(getItem(position), holder);
+        bindView(getItem(position), position, holder);
     }
 
     @Override
