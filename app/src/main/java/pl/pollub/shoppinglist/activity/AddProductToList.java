@@ -128,6 +128,7 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
             product.put("status", "0"); //status wykupienia produktu
             product.put("amount", productAmount.getText().toString());
             product.put("category", productCategory.getSelectedItem().toString());
+            product.put("image", arrayIcons[productCategory.getSelectedItemPosition()]);
             product.put("description", productDescription.getText().toString());
             product.put("measure", productMeasure.getSelectedItem().toString());
 
@@ -170,6 +171,7 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
                                 s.put("name", productName.getText().toString());
                                 s.put("amount", productAmount.getText().toString());
                                 s.put("category", productCategory.getSelectedItem().toString());
+                                s.put("image", arrayIcons[productCategory.getSelectedItemPosition()]);
                                 s.put("description", productDescription.getText().toString());
                                 s.put("measure", productMeasure.getSelectedItem().toString());
                                 s.pinInBackground(ex -> {if (ex == null) {

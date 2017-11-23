@@ -49,12 +49,13 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
         TextView productDescription = rowView.findViewById(R.id.product_description);
         productDescription.setText(product.getString("description"));
 
-        String nameOfFile = "other";
-        for(int i=0; i < arrayCategories.length; i++)
-            if(arrayCategories[i].contains(product.getString("category")))
-                nameOfFile = arrayIcons[i];
-
+        String nameOfFile;
+        nameOfFile = product.getString("image");
+        if(nameOfFile==null){
+            nameOfFile = "other";
+        }
         int idd = context.getResources().getIdentifier(nameOfFile, "drawable", context.getPackageName());
+
         image.setBackgroundResource(idd);
 
         return rowView;
