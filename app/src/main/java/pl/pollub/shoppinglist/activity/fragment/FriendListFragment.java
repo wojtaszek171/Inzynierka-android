@@ -89,7 +89,7 @@ public class FriendListFragment extends Fragment {
     private void findAndBindFriends() {
         User.getCurrentUser()
                 .getUserData()
-                .fetchIfNeededInBackground((userData, exception) -> {
+                .fetchInBackground((userData, exception) -> {
                     binding.progressBar.setVisibility(View.GONE);
                     if (exception == null) {
                         List<User> friends = ((UserData) userData).getFriends();

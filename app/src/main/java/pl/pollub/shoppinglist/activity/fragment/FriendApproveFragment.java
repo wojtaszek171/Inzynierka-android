@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.parse.ParseException;
+
 import java.util.List;
 
 import pl.pollub.shoppinglist.R;
@@ -75,25 +77,27 @@ public class FriendApproveFragment extends Fragment {
     private void findAndBindInviters() {
         User.getCurrentUser()
                 .getUserData()
-                .fetchIfNeededInBackground((userData, exception) -> {
-                    binding.progressBar.setVisibility(View.GONE);
-                    if (exception == null) {
-                        List<User> inviters = ((UserData) userData).getInviters();
+                .fetchIfNeededInBackground(this::onUserDataFetchDone);
+    }
 
-                        if (inviters != null && inviters.size() > 0) {
-                            binding.approvalList.setVisibility(View.VISIBLE);
-                            recyclerViewAdapter.setList(inviters);
-                            recyclerViewAdapter.notifyDataSetChanged();
-                        }
-                    } else {
-                        Toast.makeText(
-                                getContext(),
-                                "Nie udało się załadować zaproszeń!",
-                                Toast.LENGTH_SHORT
-                        ).show();
-                        Log.w("FriendApproveFrag", exception);
-                    }
-                });
+    private void onUserDataFetchDone(UserData userData, ParseException exception) {
+        binding.progressBar.setVisibility(View.GONE);
+        if (exception == null) {
+            List<User> inviters = userData.getInviters();
+
+            if (inviters != null && inviters.size() > 0) {
+                binding.approvalList.setVisibility(View.VISIBLE);
+                recyclerViewAdapter.setList(inviters);
+                recyclerViewAdapter.notifyDataSetChanged();
+            }
+        } else {
+            Toast.makeText(
+                    getContext(),
+                    "Nie udało się załadować zaproszeń!",
+                    Toast.LENGTH_SHORT
+            ).show();
+            Log.w("FriendApproveFrag", exception);
+        }
     }
 
     /**
