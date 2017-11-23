@@ -2,8 +2,7 @@ package pl.pollub.shoppinglist.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -18,7 +17,7 @@ import com.parse.ParseUser;
 
 import pl.pollub.shoppinglist.R;
 
-public class AddProductToList extends BaseNavigationActivity {
+public class AddProductToList extends AppCompatActivity {
     private String listId;
     private String listName;
     private String productId;
@@ -164,18 +163,6 @@ public class AddProductToList extends BaseNavigationActivity {
         int spinnerPositionMeasure = adapterMeasure.getPosition(productObject.getString("measure"));
         productMeasure.setSelection(spinnerPositionMeasure);
         productIcon.setText(productObject.getString("icon"));
-    }
-
-    @Override
-    protected DrawerLayout getDrawerLayout() {
-        // return drawerlayout here
-        return null;
-    }
-
-    @Override
-    protected NavigationView getNavigationView() {
-        // return nav view here
-        return null;
     }
 
     @Override
