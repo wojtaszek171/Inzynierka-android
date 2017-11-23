@@ -1,4 +1,4 @@
-package pl.pollub.shoppinglist.activity;
+package pl.pollub.shoppinglist.adapter;
 
 
 import android.app.Activity;
@@ -19,7 +19,8 @@ import pl.pollub.shoppinglist.R;
 public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
     private final Activity context;
     private ArrayList<ParseObject> products;
-    private SparseBooleanArray mSelectedItemsIds;
+
+    private SparseBooleanArray selectedItemIds;
     private String[] arrayIcons;
     private String[] arrayCategories;
 
@@ -27,7 +28,7 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
     public ShoppingListDetailsAdapter(Activity context,
                                       ArrayList<String> name, ArrayList<ParseObject> products) {
         super(context, R.layout.lists_list_item, name);
-        mSelectedItemsIds = new SparseBooleanArray();
+        selectedItemIds = new SparseBooleanArray();
         this.context = context;
         this.products = products;
         arrayIcons = context.getResources().getStringArray(R.array.product_icons);
@@ -62,25 +63,25 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
     }
 
     public void toggleSelection(int position) {
-        selectView(position, !mSelectedItemsIds.get(position));
+        selectView(position, !selectedItemIds.get(position));
 
     }
 
     public void removeSelection() {
-        mSelectedItemsIds = new SparseBooleanArray();
+        selectedItemIds = new SparseBooleanArray();
         notifyDataSetChanged();
     }
 
     public void selectView(int position, boolean value) {
         if(value) {
-            mSelectedItemsIds.put(position, value);
+            selectedItemIds.put(position, value);
         } else {
-            mSelectedItemsIds.delete(position);
+            selectedItemIds.delete(position);
         }
         notifyDataSetChanged();
     }
     public SparseBooleanArray getSelectedIds() {
-        return mSelectedItemsIds;
+        return selectedItemIds;
     }
 
 }

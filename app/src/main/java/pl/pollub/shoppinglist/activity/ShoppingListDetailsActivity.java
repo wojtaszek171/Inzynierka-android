@@ -5,22 +5,17 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseObject;
@@ -32,17 +27,15 @@ import java.util.List;
 
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import pl.pollub.shoppinglist.R;
+import pl.pollub.shoppinglist.adapter.ShoppingListDetailsAdapter;
 
-public class ShoppingListDetailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
+public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     private String listId;
     private String listName;
     private ParseObject list;
     private ListView product;
     private int id;
     public int selectedItemPos;
-    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +48,6 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
         //   listId = getIntent().getStringExtra("LIST_ID");
         setTitle(listName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        drawerLayout = findViewById(R.id.drawer_layout);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(drawerToggle);
-        drawerToggle.syncState();
-
-        navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
         createListOfProducts();
 
@@ -85,16 +70,11 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
     private void createListOfProducts() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
         if (ParseUser.getCurrentUser() != null) {
-            ParseUser userr = ParseUser.getCurrentUser();
-            String user = ParseUser.getCurrentUser().getUsername();
-            View hView = navigationView.getHeaderView(0);
-            TextView username = hView.findViewById(R.id.user_pseudonym);
-            username.setText(user);
             query.whereEqualTo("belongsTo", list.getString("localId"));
-            if(!isNetworkAvailable()){
+            if (!isNetworkAvailable()) {
                 query.fromLocalDatastore();
             }
-        }else {
+        } else {
             query.fromLocalDatastore();
             query.whereEqualTo("belongsTo", list.getString("localId"));
         }
@@ -158,7 +138,7 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
 
             @Override
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.delete:
                         ArrayList<ParseObject> selecteditems = new ArrayList<ParseObject>();
                         changeSelectedIdsToObjects(productAdapter, selecteditems, scoreList);
@@ -177,11 +157,11 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
     }
 
     private void deleteListAction(ShoppingListDetailsAdapter productAdapter, ArrayList<ParseObject> selecteditems, ActionMode actionMode) {
-        for(int i=0; i< selecteditems.size();i++){
-            if(selecteditems.get(i).getObjectId()==null){
+        for (int i = 0; i < selecteditems.size(); i++) {
+            if (selecteditems.get(i).getObjectId() == null) {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
                 query.fromLocalDatastore();
-                query.whereEqualTo("localId",selecteditems.get(i).get("localId"));
+                query.whereEqualTo("localId", selecteditems.get(i).get("localId"));
                 query.findInBackground((scoreList, exception) -> {
                     if (exception == null) {
                         for (ParseObject s : scoreList) {
@@ -192,30 +172,25 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
 
                     }
                 });
-            }else {
+            } else {
                 selecteditems.get(i).deleteInBackground();
                 selecteditems.get(i).unpinInBackground();
             }
         }
         actionMode.finish();
         finish();
-        overridePendingTransition( 0, 0);
+        overridePendingTransition(0, 0);
         startActivity(getIntent());
-        overridePendingTransition( 0, 0);
+        overridePendingTransition(0, 0);
     }
 
     private void changeSelectedIdsToObjects(ShoppingListDetailsAdapter productAdapter, ArrayList<ParseObject> selecteditems, List<ParseObject> scoreList) {
         SparseBooleanArray selected = productAdapter.getSelectedIds();
-        for(int i = (selected.size() - 1); i>=0; i--){
-            if (selected.valueAt(i)){
+        for (int i = (selected.size() - 1); i >= 0; i--) {
+            if (selected.valueAt(i)) {
                 selecteditems.add(scoreList.get(selected.keyAt(i)));
             }
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -250,49 +225,15 @@ public class ShoppingListDetailsActivity extends AppCompatActivity implements Na
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        switch (item.getItemId()) {
-            case R.id.nav_friends: {
-                Intent intent = new Intent(getApplicationContext(), FriendsActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_lists: {
-                Intent intent = new Intent(getApplicationContext(), ShoppingListsActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_templates: {
-                Intent intent = new Intent(getApplicationContext(), TemplatesActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_custom_user_products: {
-                Intent intent = new Intent(getApplicationContext(), CustomProductsListActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_settings: {
-                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_logout: {
-                ParseUser.logOutInBackground();
-               // ParseUser.logOut();
-                Toast.makeText(getApplicationContext(), "Wylogowano", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-
-                break;
-            }
-        }
-        //close navigation drawer
-        //drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
+    protected DrawerLayout getDrawerLayout() {
+        return findViewById(R.id.drawer_layout);
     }
+
+    @Override
+    protected NavigationView getNavigationView() {
+        return findViewById(R.id.nav_view);
+    }
+
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

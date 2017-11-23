@@ -1,37 +1,26 @@
 package pl.pollub.shoppinglist.activity;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenu;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.Parse;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -41,11 +30,10 @@ import java.util.List;
 
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import pl.pollub.shoppinglist.R;
+import pl.pollub.shoppinglist.adapter.ShoppingListsAdapter;
 
-public class ShoppingListsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ShoppingListsActivity extends BaseNavigationActivity {
 
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
     private final Context context = this;
 
     private ListView list;
@@ -53,8 +41,6 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
     private ArrayList<String> dates = new ArrayList<>();
     private ArrayList<ParseObject> listsItems = new ArrayList<>();
     private ListView listView = null;
-    private NavigationView navigationView;
-    private View hView;
 
     private FloatingActionButton addNew;
     private Toolbar toolbar;
@@ -77,17 +63,9 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void initLayoutElements(){
+    private void initLayoutElements() {
         addNew = findViewById(R.id.addListButton);
         toolbar = findViewById(R.id.toolbar);
-
-        navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        drawerLayout = findViewById(R.id.drawer_layout);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(drawerToggle);
-        drawerToggle.syncState();
     }
 
     private void addNewShoppingListDialog() {
@@ -101,23 +79,23 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
             @Override
             public boolean onMenuItemSelected(MenuItem menuItem) {
                 Toast.makeText(context, menuItem.getTitle(), Toast.LENGTH_SHORT).show();
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.addList:
                         Intent intent = new Intent(ShoppingListsActivity.this, AddShoppingList.class);
                         intent.putExtra("LOCAL_LIST_ID", id);
                         startActivity(intent);
                         break;
                     case R.id.useTemplate:
-                        listView=new ListView(getApplicationContext());
+                        listView = new ListView(getApplicationContext());
                         getAllTemplates();
-                        AlertDialog.Builder builder=new
+                        AlertDialog.Builder builder = new
                                 AlertDialog.Builder(ShoppingListsActivity.this);
 
                         builder.setCancelable(true);
 
                         builder.setView(listView);
 
-                        AlertDialog dialog1=builder.create();
+                        AlertDialog dialog1 = builder.create();
 
                         dialog1.show();
                 }
@@ -132,20 +110,19 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         });
     }
 
-    private void getAllTemplates(){
+    private void getAllTemplates() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
 
         if (ParseUser.getCurrentUser() != null) {
-            displayUsernameOnBurgerTop();
-            query.whereEqualTo("belongsTo",ParseUser.getCurrentUser().getUsername());
-            if(!isNetworkAvailable()){
+            query.whereEqualTo("belongsTo", ParseUser.getCurrentUser().getUsername());
+            if (!isNetworkAvailable()) {
                 query.fromLocalDatastore();
             }
-        }else {
+        } else {
             query.fromLocalDatastore();
-            query.whereEqualTo("belongsTo",null);
+            query.whereEqualTo("belongsTo", null);
         }
-        query.whereEqualTo("isTemplate",true);
+        query.whereEqualTo("isTemplate", true);
         setIdForLocal();
         query.findInBackground((resultList, exception) -> {
 
@@ -158,24 +135,24 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         });
     }
 
-    private void prepareTemplatesAdapterFromQueryResult(List<ParseObject> resultList){
+    private void prepareTemplatesAdapterFromQueryResult(List<ParseObject> resultList) {
         ArrayList<String> items = new ArrayList<>();
 
         for (ParseObject s : resultList) {
             items.add(s.getString("name"));
         }
-        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,
-                R.layout.string_list_item, R.id.txtitem,items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                R.layout.string_list_item, R.id.txtitem, items);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((adapterView, view, position, id) -> {
             finish();
-            CreateListFromTemplate(resultList , position);
+            CreateListFromTemplate(resultList, position);
         });
     }
 
     private void CreateListFromTemplate(List<ParseObject> scoreList, int position) {
-        Intent intent = new Intent(getApplicationContext(),AddShoppingList.class);
-        intent.putExtra("LIST_TEMPLATE",scoreList.get(position));
+        Intent intent = new Intent(getApplicationContext(), AddShoppingList.class);
+        intent.putExtra("LIST_TEMPLATE", scoreList.get(position));
         intent.putExtra("LOCAL_LIST_ID", id);
         finish();
         startActivity(intent);
@@ -185,18 +162,17 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         ParseUser currentlyLoggedUser = ParseUser.getCurrentUser();
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
-        query.whereEqualTo("isTemplate",false);
+        query.whereEqualTo("isTemplate", false);
 
         if (currentlyLoggedUser != null) {
-            displayUsernameOnBurgerTop();
-            query.whereEqualTo("belongsTo",currentlyLoggedUser.getUsername());
+            query.whereEqualTo("belongsTo", currentlyLoggedUser.getUsername());
 
-            if(!isNetworkAvailable()){
+            if (!isNetworkAvailable()) {
                 query.fromLocalDatastore();
             }
-        }else {
+        } else {
             query.fromLocalDatastore();
-            query.whereEqualTo("belongsTo",null);
+            query.whereEqualTo("belongsTo", null);
         }
         setIdForLocal();
 
@@ -211,14 +187,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         });
     }
 
-    private void displayUsernameOnBurgerTop(){
-        String user = ParseUser.getCurrentUser().getUsername();
-        hView = navigationView.getHeaderView(0);
-        TextView username = hView.findViewById(R.id.user_pseudonym);
-        username.setText(user);
-    }
-
-    private void prepareShoppingListsAdapterFromQueryResult(List<ParseObject> resultList){
+    private void prepareShoppingListsAdapterFromQueryResult(List<ParseObject> resultList) {
         for (ParseObject s : resultList) {
             names.add(s.getString("name"));
             dates.add(s.getString("deadline"));
@@ -229,7 +198,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         list = findViewById(R.id.list);
         list.setAdapter(listAdapter);
         list.setOnItemClickListener((adapterView, view, position, id) -> {
-            goToListDetails(resultList , position);
+            goToListDetails(resultList, position);
         });
         list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         multiChoiceForDelete(list, listAdapter, resultList);
@@ -259,7 +228,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
 
             @Override
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.delete:
                         ArrayList<ParseObject> selecteditems = new ArrayList<ParseObject>();
                         changeSelectedIdsToObjects(listAdapter, selecteditems, scoreList);
@@ -279,30 +248,30 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
 
     private void changeSelectedIdsToObjects(ShoppingListsAdapter listAdapter, ArrayList<ParseObject> selecteditems, List<ParseObject> scoreList) {
         SparseBooleanArray selected = listAdapter.getSelectedIds();
-        for(int i = (selected.size() - 1); i>=0; i--){
-            if (selected.valueAt(i)){
+        for (int i = (selected.size() - 1); i >= 0; i--) {
+            if (selected.valueAt(i)) {
                 selecteditems.add(scoreList.get(selected.keyAt(i)));
             }
         }
     }
 
     private void deleteListAction(ShoppingListsAdapter listAdapter, ArrayList<ParseObject> selecteditems, ActionMode actionMode) {
-        for(int i=0; i< selecteditems.size();i++){
-            if(ParseUser.getCurrentUser() == null){
+        for (int i = 0; i < selecteditems.size(); i++) {
+            if (ParseUser.getCurrentUser() == null) {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
                 query.fromLocalDatastore();
                 String ident = selecteditems.get(i).getString("localId");
-                query.whereEqualTo("localId",selecteditems.get(i).get("localId"));
+                query.whereEqualTo("localId", selecteditems.get(i).get("localId"));
                 query.findInBackground((scoreList, exception) -> {
                     if (exception == null) {
                         for (ParseObject s : scoreList) {
                             s.unpinInBackground(e -> {
-                                if(e==null){
+                                if (e == null) {
                                     actionMode.finish();
                                     finish();
-                                    overridePendingTransition( 0, 0);
+                                    overridePendingTransition(0, 0);
                                     startActivity(getIntent());
-                                    overridePendingTransition( 0, 0);
+                                    overridePendingTransition(0, 0);
                                 }
                             });
                             s.deleteEventually();
@@ -311,15 +280,15 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
 
                     }
                 });
-            }else {
+            } else {
                 selecteditems.get(i).deleteEventually();
                 selecteditems.get(i).unpinInBackground(e -> {
-                    if(e==null){
+                    if (e == null) {
                         actionMode.finish();
                         finish();
-                        overridePendingTransition( 0, 0);
+                        overridePendingTransition(0, 0);
                         startActivity(getIntent());
-                        overridePendingTransition( 0, 0);
+                        overridePendingTransition(0, 0);
                     }
                 });
             }
@@ -363,50 +332,13 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        switch (item.getItemId()) {
-            case R.id.nav_friends: {
-                Intent intent = new Intent(getApplicationContext(), FriendsActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_lists: {
-                drawerLayout.closeDrawer(GravityCompat.START);
-                break;
-            }
-            case R.id.nav_templates: {
-                Intent intent = new Intent(getApplicationContext(), TemplatesActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_custom_user_products: {
-                Intent intent = new Intent(getApplicationContext(), CustomProductsListActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_settings: {
-                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_logout: {
-                ParseUser.logOut();
-                Toast.makeText(getApplicationContext(), "Wylogowano", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                break;
-            }
-        }
-        //close navigation drawer
-        //drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
+    protected DrawerLayout getDrawerLayout() {
+        return findViewById(R.id.drawer_layout);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    protected NavigationView getNavigationView() {
+        return findViewById(R.id.nav_view);
     }
 
     @Override
@@ -415,6 +347,7 @@ public class ShoppingListsActivity extends AppCompatActivity implements Navigati
         getMenuInflater().inflate(R.menu.menulists, menu);
         return true;
     }
+
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

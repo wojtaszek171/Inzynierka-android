@@ -4,18 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,7 +33,7 @@ import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 
-public class AddProductToList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class AddProductToList extends AppCompatActivity {
     private String listId;
     private String listName;
     private String productId;
@@ -47,7 +46,6 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
     private ParseObject list;
     private ImageView icon;
     private String localId;
-    private ActionBarDrawerToggle drawerToggle;
     private ArrayAdapter<CharSequence> adapterCategory;
     private ArrayAdapter<CharSequence> adapterMeasure;
     private ParseObject productObject;
@@ -135,20 +133,22 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
 
             if (ParseUser.getCurrentUser() != null) {
                 String user = ParseUser.getCurrentUser().getUsername();
-                product.put("localId",user + localId);
+                product.put("localId", user + localId);
                 product.put("belongsTo", list.getString("localId"));
                 product.saveEventually();
-            }else {
-                product.put("belongsTo", list.getString("localId"));
-                product.put("localId",localId);
-            }
-            product.pinInBackground(e -> {if (e == null) {
-                finish();
-                Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
-                intent.putExtra("LIST_OBJECT", list);
-                startActivity(intent);
             } else {
-            }});
+                product.put("belongsTo", list.getString("localId"));
+                product.put("localId", localId);
+            }
+            product.pinInBackground(e -> {
+                if (e == null) {
+                    finish();
+                    Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
+                    intent.putExtra("LIST_OBJECT", list);
+                    startActivity(intent);
+                } else {
+                }
+            });
         });
     }
 
@@ -182,13 +182,12 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
                                 } else {
                                 }});
                                 s.saveEventually();
-                            }
-                            Log.d("score", "Retrieved " + scoreList.size());
-                        } else {
-                            Log.d("score", "Error: " + e.getMessage());
-                        }
                     }
-                });
+                    Log.d("score", "Retrieved " + scoreList.size());
+                } else {
+                    Log.d("score", "Error: " + e.getMessage());
+                }
+            }});
         });
     }
 
@@ -202,53 +201,6 @@ public class AddProductToList extends AppCompatActivity implements NavigationVie
         productMeasure.setSelection(spinnerPositionMeasure);
 
     }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        switch (item.getItemId()) {
-            case R.id.nav_friends: {
-                Intent intent = new Intent(AddProductToList.this, FriendsActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_lists: {
-                Intent intent = new Intent(AddProductToList.this, ShoppingListsActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_templates: {
-                Intent intent = new Intent(AddProductToList.this, TemplatesActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_custom_user_products: {
-                Intent intent = new Intent(AddProductToList.this, CustomProductsListActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_settings: {
-                Intent intent = new Intent(AddProductToList.this, SettingsActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_logout: {
-                ParseUser.logOut();
-                Toast.makeText(getApplicationContext(), "Wylogowano", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(AddProductToList.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                break;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
