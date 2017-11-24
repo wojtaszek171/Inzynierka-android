@@ -83,7 +83,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                     case R.id.addList:
                         Intent intent = new Intent(ShoppingListsActivity.this, AddShoppingList.class);
                         intent.putExtra("LOCAL_LIST_ID", id);
-                        startActivity(intent);
+                        startActivityForResult(intent, 1);
                         break;
                     case R.id.useTemplate:
                         listView = new ListView(getApplicationContext());
@@ -353,5 +353,17 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
     }
 }

@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setTitle(R.string.menuMainScreen);
 
         if (ParseUser.getCurrentUser() != null) {
+            finish();
             Intent intent = new Intent(getApplicationContext(), ShoppingListsActivity.class);
             startActivity(intent);
         }

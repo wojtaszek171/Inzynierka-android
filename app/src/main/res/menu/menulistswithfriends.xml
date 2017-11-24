@@ -8,4 +8,9 @@
         android:icon="@android:drawable/ic_menu_sort_by_size"
         android:title="sort"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_friends"
+        android:icon="@drawable/znajomi"
+        android:title="friends"
+        app:showAsAction="always" />
 </menu>

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.ParseException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -30,7 +29,6 @@ import com.parse.SaveCallback;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import bolts.Task;
 import pl.pollub.shoppinglist.R;
 
 public class AddShoppingList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -87,6 +85,7 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
             String date = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
             textDate.setText(date);
         }, yy, mm, dd);
+        datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePicker.show();
     }
 
@@ -271,7 +270,7 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menulists, menu);
+        getMenuInflater().inflate(R.menu.menulistswithfriends, menu);
         return true;
     }
 

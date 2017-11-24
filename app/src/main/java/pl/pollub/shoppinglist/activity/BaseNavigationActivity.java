@@ -1,14 +1,19 @@
 package pl.pollub.shoppinglist.activity;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
+import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
@@ -52,6 +57,11 @@ public abstract class BaseNavigationActivity extends AppCompatActivity implement
             String username = User.getCurrentUser().getUsername();
             headerBinding = DataBindingUtil.bind(navigationView.getHeaderView(0));
             headerBinding.usernameLabel.setText(username);
+        }else
+        {
+            Menu menu = navigationView.getMenu();
+            MenuItem logoutItem = menu.findItem(R.id.nav_logout);
+            logoutItem.setTitle("Menu główne");
         }
 
         created = true;
@@ -61,21 +71,25 @@ public abstract class BaseNavigationActivity extends AppCompatActivity implement
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         Intent intent = new Intent();
-
         // navigation view item clicks handling
         if (itemId == R.id.nav_friends && !(this instanceof FriendsActivity)) {
+            finish();
             intent.setClass(this, FriendsActivity.class);
         } else if (itemId == R.id.nav_lists && !(this instanceof ShoppingListsActivity)) {
+            finish();
             intent.setClass(this, ShoppingListsActivity.class);
         } else if (itemId == R.id.nav_templates && !(this instanceof TemplatesActivity)) {
+            finish();
             intent.setClass(this, TemplatesActivity.class);
         } else if (itemId == R.id.nav_custom_user_products && !(this instanceof CustomProductsListActivity)) {
+            finish();
             intent.setClass(this, CustomProductsListActivity.class);
         } else if (itemId == R.id.nav_settings && !(this instanceof SettingsActivity)) {
+            finish();
             intent.setClass(this, SettingsActivity.class);
         } else if (itemId == R.id.nav_logout) {
+            finish();
             ParseUser.logOut();
-            Toast.makeText(getApplicationContext(), "Wylogowano", Toast.LENGTH_SHORT).show();
             intent.setClass(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         } else {

@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
@@ -46,6 +48,11 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
         TextView listFriends = rowView.findViewById(R.id.collaborators);
         TextView listDescription = rowView.findViewById(R.id.item_description);
         listDescription.setText(item.get(position).getString("description"));
+        RelativeLayout collaborators;
+        collaborators = (RelativeLayout) rowView.findViewById(R.id.collaborators_layout);
+        if(ParseUser.getCurrentUser() == null){
+            collaborators.setVisibility(View.INVISIBLE);
+        }
         if(template==true)
             listDeadline.setText("-");
 

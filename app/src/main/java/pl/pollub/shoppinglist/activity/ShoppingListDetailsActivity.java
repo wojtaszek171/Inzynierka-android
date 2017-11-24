@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -25,7 +24,6 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.yavski.fabspeeddial.FabSpeedDial;
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.adapter.ShoppingListDetailsAdapter;
 
@@ -64,7 +62,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         intent.putExtra("LIST_NAME", listName);
         intent.putExtra("LIST_OBJECT", list);
         intent.putExtra("LOCAL_ID", id);
-        startActivity(intent);
+        startActivityForResult(intent, 0);
     }
 
     private void createListOfProducts() {
@@ -87,7 +85,6 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
                 for (ParseObject s : scoreList) {
                     products.add(s);
                     names.add(s.getString("name"));
-                    Toast.makeText(ShoppingListDetailsActivity.this, "ilość produktów = " + scoreList.size(), Toast.LENGTH_SHORT).show();
                 }
 
                 ShoppingListDetailsAdapter productAdapter = new
@@ -95,8 +92,6 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
                 product = findViewById(R.id.list);
                 product.setAdapter(productAdapter);
                 product.setOnItemClickListener((adapterView, view, position, id) -> {
-                    //Context context = ShoppingListDetailsActivity.this;
-                    //Toast.makeText(context, "Position: "+String.valueOf(position), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getBaseContext(), AddProductToList.class);
                     intent.putExtra("PRODUCT_OBJECT", scoreList.get(position));
                     intent.putExtra("PRODUCT_OBJECT_ID", scoreList.get(position).getString("localId"));
@@ -196,7 +191,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menulists, menu);
+        getMenuInflater().inflate(R.menu.menulistswithfriends, menu);
         return true;
     }
 
@@ -239,5 +234,13 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data){
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
     }
 }
