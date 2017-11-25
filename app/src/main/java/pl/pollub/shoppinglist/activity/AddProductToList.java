@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,12 +16,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 
@@ -184,18 +186,37 @@ public class AddProductToList extends AppCompatActivity {
             productToUpdate.put("measure", productMeasure.getSelectedItem().toString());
             productToUpdate.put("image", arrayIcons[productCategory.getSelectedItemPosition()]);
 
-            list.put("nestedProducts", nestedProducts);
-
-            list.pinInBackground(ex -> {
-                if (ex == null) {
-                    finish();
-//                    Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
-//                    intent.putExtra("LIST_OBJECT", list);
-//                    startActivity(intent);
-                } else {
-                }
-            });
-            list.saveEventually();
+            if(ParseUser.getCurrentUser() != null){
+                list.put("nestedProducts", nestedProducts);
+                list.saveEventually();
+                list.pinInBackground(ex -> {
+                    if (ex == null) {
+                        finish();
+                    }
+                });
+            } else {
+                ParseQuery offlineListToUpdateQuery = ParseQuery.getQuery("ShoppingList");
+                offlineListToUpdateQuery.whereEqualTo("localId", list.getString("localId"));
+                offlineListToUpdateQuery.fromLocalDatastore();
+                offlineListToUpdateQuery.findInBackground(new FindCallback<ParseObject>() {
+                    public void done(List<ParseObject> resultList, ParseException e) {
+                        if (e == null) {
+                            if(resultList.size() > 0){
+                                ParseObject offlineListToUpdate = (ParseObject) resultList.get(0);
+                                offlineListToUpdate.put("nestedProducts", nestedProducts);
+                                offlineListToUpdate.pinInBackground( ex -> {
+                                    if(ex == null){
+                                        Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
+                                        intent.putExtra("LIST_OBJECT", list);
+                                        finish();
+                                        startActivity(intent);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+            }
         });
     }
 

@@ -10,16 +10,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.parse.ParseObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import pl.pollub.shoppinglist.R;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
     private final Activity context;
     private ArrayList<HashMap> products;
