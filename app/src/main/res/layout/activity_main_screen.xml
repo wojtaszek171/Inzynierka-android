@@ -49,10 +49,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_button"
-            android:backgroundTint="@color/colorPrimaryDark"
+            style="@style/DarkCompatButton"
             android:onClick="Lists"
             android:text="Twórz listy offline"
-            android:textColor="@color/colorText"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <TextView
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:text="lub"
             android:textAlignment="center"
-            android:textColor="@color/DefaultColor"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <Button
@@ -71,10 +71,10 @@
             android:layout_alignBaseline="@+id/textView5"
             android:layout_alignBottom="@+id/textView5"
             android:background="@drawable/rounded_button"
-            android:backgroundTint="@color/colorPrimaryDark"
+            style="@style/DarkCompatButton"
             android:onClick="logInto"
-            android:text="Zaloguj Się"
-            android:textColor="@android:color/white"
+            android:text="Zaloguj się"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -96,7 +96,7 @@
             android:gravity="center_vertical"
             android:text="Nie masz konta?"
             android:textAlignment="viewEnd"
-            android:textColor="@color/DefaultColor"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="visible"
             tools:layout_editor_absoluteX="8sp"

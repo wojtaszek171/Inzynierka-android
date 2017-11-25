@@ -52,8 +52,8 @@
                     android:layout_height="wrap_content"
                     android:hint="Login"
                     android:inputType="textPersonName"
-                    android:textColor="@color/DefaultColor"
-                    android:textColorLink="@color/DefaultColor" />
+                    android:textColor="@color/white"
+                    android:textColorLink="@color/white" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -73,8 +73,8 @@
                     android:layout_alignStart="@+id/login_login"
                     android:hint="Hasło"
                     android:inputType="textPassword"
-                    android:textColor="@color/DefaultColor"
-                    android:textColorLink="@color/DefaultColor" />
+                    android:textColor="@color/white"
+                    android:textColorLink="@color/white" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -85,10 +85,9 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/rounded_button"
-
-                android:backgroundTint="@color/colorPrimaryDark"
+                style="@style/DarkCompatButton"
                 android:text="Zaloguj się"
-                android:textColor="@color/colorText"
+                android:textColor="@color/white"
                 android:textSize="20sp" />
 
             <LinearLayout
@@ -108,7 +107,7 @@
                     android:gravity="center_vertical"
                     android:text="Nie masz konta?"
                     android:textAlignment="viewEnd"
-                    android:textColor="@color/DefaultColor"
+                    android:textColor="@color/white"
                     android:textSize="16sp"
                     android:visibility="visible"
                     tools:layout_editor_absoluteX="8sp"
