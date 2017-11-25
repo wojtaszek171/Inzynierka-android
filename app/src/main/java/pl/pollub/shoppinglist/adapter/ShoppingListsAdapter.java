@@ -14,6 +14,8 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 
@@ -21,7 +23,7 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
     private final Activity context;
     private final ArrayList<String> name;
     private final ArrayList<String> date;
-    private final ArrayList<ParseObject> item;
+    private ArrayList<ParseObject> shoppingLists;
     private SparseBooleanArray selectedItemIds;
     private boolean template;
 
@@ -33,7 +35,7 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
         this.context = context;
         this.name = name;
         this.date = date;
-        this.item = listsItems;
+        this.shoppingLists = listsItems;
         this.template = template;
     }
 
@@ -41,27 +43,32 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.lists_list_item, null, true);
-        TextView listName = rowView.findViewById(R.id.listNameItem);
-        listName.setText(item.get(position).getString("name"));
-        TextView listDeadline = rowView.findViewById(R.id.listDeadline);
-        listDeadline.setText(item.get(position).getString("deadline"));
-        TextView listFriends = rowView.findViewById(R.id.collaborators);
-        TextView listDescription = rowView.findViewById(R.id.item_description);
-        listDescription.setText(item.get(position).getString("description"));
-        RelativeLayout collaborators;
-        collaborators = (RelativeLayout) rowView.findViewById(R.id.collaborators_layout);
-        if(ParseUser.getCurrentUser() == null){
-            collaborators.setVisibility(View.INVISIBLE);
-        }
-        if(template==true)
-            listDeadline.setText("-");
 
+        if( position < shoppingLists.size() ){
+            TextView listName = rowView.findViewById(R.id.listNameItem);
+            listName.setText(shoppingLists.get(position).getString("name"));
+            TextView listDeadline = rowView.findViewById(R.id.listDeadline);
+            listDeadline.setText(shoppingLists.get(position).getString("deadline"));
+            TextView listFriends = rowView.findViewById(R.id.collaborators);
+            TextView listDescription = rowView.findViewById(R.id.item_description);
+            listDescription.setText(shoppingLists.get(position).getString("description"));
+            RelativeLayout collaborators;
+            collaborators = rowView.findViewById(R.id.collaborators_layout);
+            if(ParseUser.getCurrentUser() == null){
+                collaborators.setVisibility(View.INVISIBLE);
+            }
+            if(template==true)
+                listDeadline.setText("-");
+
+
+        }
         return rowView;
     }
 
-
-
-
+    public void swapItems(ArrayList<ParseObject> newShoppingLists) {
+        this.shoppingLists = newShoppingLists;
+        notifyDataSetChanged();
+    }
 
     public void toggleSelection(int position) {
         selectView(position, !selectedItemIds.get(position));

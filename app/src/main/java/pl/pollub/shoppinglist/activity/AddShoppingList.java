@@ -24,7 +24,6 @@ import android.widget.Toast;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -107,16 +106,15 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
             String user = ParseUser.getCurrentUser().getUsername();
             list.put("belongsTo", ParseUser.getCurrentUser().getUsername());
             list.put("localId",user+Integer.toString(id));
-            list.saveEventually(new SaveCallback() {
-                @Override
-                public void done(com.parse.ParseException e) {
-                    if (e == null) {
-                        // No error, the object was saved
-                        Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_LONG).show();
-                    } else {
-                        // Error saving object, print the logs
-                        e.printStackTrace();
-                    }
+            list.put("description", "opis");
+            list.add("sharedAmong", ParseUser.getCurrentUser().getUsername());
+            list.saveEventually(e -> {
+                if (e == null) {
+                    // No error, the object was saved
+                    Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_LONG).show();
+                } else {
+                    // Error saving object, print the logs
+                    e.printStackTrace();
                 }
             });
 
@@ -124,7 +122,7 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
             list.put("localId",Integer.toString(id));
         }
         list.pinInBackground(e -> {if (e == null) {
-            if(listTemplate!=null){
+            if(listTemplate != null){
                 recoveryTempalte(listTemplate,list.get("localId"));
             }else {
                 finish();

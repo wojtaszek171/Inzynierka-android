@@ -21,9 +21,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SubscriptionHandling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
     private ArrayList<String> names = new ArrayList<>();
     private ArrayList<String> dates = new ArrayList<>();
     private ArrayList<ParseObject> listsItems = new ArrayList<>();
+    private ShoppingListsAdapter listAdapter;
     private ListView listView = null;
 
     private FloatingActionButton addNew;
@@ -48,12 +51,17 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
     private static int id;
     public int selectedItemPos;
 
+    private ParseLiveQueryClient parseLiveQueryClient;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_lists);
 
         initLayoutElements();
+
+        subscribeToShoppingListsQuery();
 
         setTitle(R.string.menuLists);
         setSupportActionBar(toolbar);
@@ -165,7 +173,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
         query.whereEqualTo("isTemplate", false);
 
         if (currentlyLoggedUser != null) {
-            query.whereEqualTo("belongsTo", currentlyLoggedUser.getUsername());
+            query.whereEqualTo("sharedAmong", currentlyLoggedUser.getUsername());
 
             if (!isNetworkAvailable()) {
                 query.fromLocalDatastore();
@@ -187,13 +195,51 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
         });
     }
 
+    private void updateShoppingListsAdapterWithQueryResult(ArrayList<ParseObject> resultList){
+        runOnUiThread(() -> listAdapter.swapItems(resultList));
+    }
+
+    private ParseQuery getMyShoppingListsQuery(){
+        ParseUser currentlyLoggedUser = ParseUser.getCurrentUser();
+
+        ParseQuery<ParseObject> updateShoppingListsQuery = ParseQuery.getQuery("ShoppingList");
+        updateShoppingListsQuery.whereEqualTo("isTemplate",false);
+
+        if (currentlyLoggedUser != null) {
+            updateShoppingListsQuery.whereEqualTo("sharedAmong",currentlyLoggedUser.getUsername());
+        }
+        setIdForLocal();
+        return updateShoppingListsQuery;
+    }
+
+
+    private void subscribeToShoppingListsQuery(){
+
+        parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+        ParseQuery updateShoppingListsQuery = getMyShoppingListsQuery();
+
+        SubscriptionHandling<ParseObject> certainListQuerysubscriptionHandling
+                = parseLiveQueryClient.subscribe(updateShoppingListsQuery);
+        certainListQuerysubscriptionHandling.handleEvents((query, event, object) -> {
+            query.findInBackground((resultList, e) -> {
+                if (e == null) {
+                    updateShoppingListsAdapterWithQueryResult((ArrayList)resultList);
+                    Log.d("syncListsSuccess", "Retrieved " + resultList.size() + " lists.");
+                } else {
+                    Log.d("syncListsError", "Error: " + e.getMessage());
+                }
+            });
+        });
+
+    }
+
     private void prepareShoppingListsAdapterFromQueryResult(List<ParseObject> resultList) {
         for (ParseObject s : resultList) {
             names.add(s.getString("name"));
             dates.add(s.getString("deadline"));
             listsItems.add(s);
         }
-        ShoppingListsAdapter listAdapter = new
+        listAdapter = new
                 ShoppingListsAdapter(ShoppingListsActivity.this, names, dates, listsItems, false);
         list = findViewById(R.id.list);
         list.setAdapter(listAdapter);
