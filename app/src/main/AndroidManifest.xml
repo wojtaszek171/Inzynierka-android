@@ -10,9 +10,9 @@
         android:name=".App"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:largeHeap="true"
         android:icon="@mipmap/ls_icon"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -26,24 +26,22 @@
             android:value="@string/parse_app_id" />
 
         <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.FriendsActivity"/>
+        <activity android:name=".activity.FriendsActivity" />
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.RegistrationActivity" />
         <activity android:name=".activity.ShoppingListDetailsActivity" />
-        <activity android:name=".activity.BuddyManagerActivity" />
-        <activity android:name=".activity.ShoppingListsActivity" ></activity>
-        <activity android:name=".activity.CustomProductAppenderActivity"/>
-        <activity android:name=".activity.CustomProductsListActivity"/>
+        <activity android:name=".activity.ShoppingListsActivity" />
+        <activity android:name=".activity.CustomProductAppenderActivity" />
+        <activity android:name=".activity.CustomProductsListActivity" />
         <activity android:name=".activity.AddShoppingList" />
-        <activity android:name=".activity.TemplatesActivity"/>
-        <activity android:name=".activity.SettingsActivity"/>
+        <activity android:name=".activity.TemplatesActivity" />
+        <activity android:name=".activity.SettingsActivity" />
+        <activity android:name=".activity.AddProductToList" />
         <activity android:name=".activity.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.AddProductToList" />
     </application>
 </manifest>

@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_screen);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(R.string.menuMainScreen);
+        getSupportActionBar().hide();
 
         if (ParseUser.getCurrentUser() != null) {
             finish();
@@ -28,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logInto(View view) {
-//        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//        startActivity(intent);
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
     }
