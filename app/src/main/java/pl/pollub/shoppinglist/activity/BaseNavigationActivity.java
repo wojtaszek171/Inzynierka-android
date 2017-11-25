@@ -1,10 +1,8 @@
 package pl.pollub.shoppinglist.activity;
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
-import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,9 +10,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.ParseUser;
 
@@ -35,6 +30,11 @@ public abstract class BaseNavigationActivity extends AppCompatActivity implement
     private NavigationView navigationView;
     private NavigationHeaderBinding headerBinding;
 
+    /**
+     * Subclasses must implement these 2 methods
+     * #getDrawerLayout returns the DrawerLayout assigned to subclass activity
+     * getNavigationView returns the NavigationView assigned to subclass activity
+     */
     protected abstract DrawerLayout getDrawerLayout();
 
     protected abstract NavigationView getNavigationView();
@@ -51,17 +51,21 @@ public abstract class BaseNavigationActivity extends AppCompatActivity implement
         drawerToggle.syncState();
         navigationView = getNavigationView();
         navigationView.setNavigationItemSelectedListener(this);
+        Menu navMenu = navigationView.getMenu();
 
         // show current user's name
         if (User.getCurrentUser() != null) {
             String username = User.getCurrentUser().getUsername();
             headerBinding = DataBindingUtil.bind(navigationView.getHeaderView(0));
             headerBinding.usernameLabel.setText(username);
-        }else
-        {
-            Menu menu = navigationView.getMenu();
-            MenuItem logoutItem = menu.findItem(R.id.nav_logout);
-            logoutItem.setTitle("Menu główne");
+
+            navMenu.findItem(R.id.nav_logout).setVisible(true);
+            navMenu.findItem(R.id.nav_login).setVisible(false);
+            navMenu.findItem(R.id.nav_register).setVisible(false);
+        } else {
+            navMenu.findItem(R.id.nav_logout).setVisible(false);
+            navMenu.findItem(R.id.nav_login).setVisible(true);
+            navMenu.findItem(R.id.nav_register).setVisible(true);
         }
 
         created = true;
@@ -90,8 +94,12 @@ public abstract class BaseNavigationActivity extends AppCompatActivity implement
         } else if (itemId == R.id.nav_logout) {
             finish();
             ParseUser.logOut();
-            intent.setClass(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setClass(this, MainActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        } else if (itemId == R.id.nav_login) {
+            finish();
+            intent.setClass(this, MainActivity.class)
+                    .putExtra(MainActivity.GO_TO_LOGIN_KEY, true);
         } else {
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;

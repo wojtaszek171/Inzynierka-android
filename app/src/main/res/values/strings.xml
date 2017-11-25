@@ -10,7 +10,7 @@
     <string name="lists">Listy</string>
     <string name="templates">Szablony</string>
     <string name="options">Ustawienia</string>
-    <string name="logout">Wyloguj</string>
+    <string name="logout">Wyloguj się</string>
     <string name="friendNick">Pseudonim</string>
     <string name="addFriend">Dodaj znajomego</string>
     <string name="editFriend">Edytuj znajomego</string>
@@ -96,5 +96,8 @@
         <item>Opakowania</item>
         <item>Sztuki</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

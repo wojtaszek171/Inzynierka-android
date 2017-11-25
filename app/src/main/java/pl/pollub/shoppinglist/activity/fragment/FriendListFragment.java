@@ -47,12 +47,12 @@ public class FriendListFragment extends Fragment {
         binding.friendList.setVisibility(View.GONE);
         recyclerViewAdapter = new FriendListViewAdapter(getContext());
         binding.friendList.setAdapter(recyclerViewAdapter);
-        binding.addFriendsButton.setOnClickListener(v -> {
+        binding.addFriendsButton.setOnClickListener(view -> {
             if (interactionListener != null) {
                 interactionListener.onSearchClick(null);
             }
         });
-        binding.approveFriendsButton.setOnClickListener(v -> {
+        binding.approveFriendsButton.setOnClickListener(view -> {
             if (interactionListener != null) {
                 interactionListener.onApproveClick(null);
             }
