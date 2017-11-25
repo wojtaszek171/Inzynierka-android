@@ -13,20 +13,25 @@ import android.widget.TextView;
 import com.parse.ParseObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+import lombok.Data;
 import pl.pollub.shoppinglist.R;
 
+@Data
 public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
     private final Activity context;
-    private ArrayList<ParseObject> products;
+    private ArrayList<HashMap> products;
 
     private SparseBooleanArray selectedItemIds;
     private String[] arrayIcons;
     private String[] arrayCategories;
 
 
+
     public ShoppingListDetailsAdapter(Activity context,
-                                      ArrayList<String> name, ArrayList<ParseObject> products) {
+                                      ArrayList<String> name, ArrayList<HashMap> products) {
         super(context, R.layout.lists_list_item, name);
         selectedItemIds = new SparseBooleanArray();
         this.context = context;
@@ -38,26 +43,25 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        ParseObject product = products.get(position);
         View rowView = inflater.inflate(R.layout.lists_items_item, null, true);
-        TextView productName = rowView.findViewById(R.id.itemName);
-        productName.setText(product.getString("name"));
-        TextView productAmount = rowView.findViewById(R.id.item_amount);
-        productAmount.setText(product.getString("amount"));
-        TextView productMeasure = rowView.findViewById(R.id.item_measure);
-        productMeasure.setText(product.getString("measure"));
-        ImageView image = rowView.findViewById(R.id.itemImage);
-        TextView productDescription = rowView.findViewById(R.id.product_description);
-        productDescription.setText(product.getString("description"));
 
-        String nameOfFile;
-        nameOfFile = product.getString("image");
-        if(nameOfFile==null){
-            nameOfFile = "other";
+        if(position < products.size()){
+            HashMap product = products.get(position);
+            TextView productName = rowView.findViewById(R.id.itemName);
+            productName.setText(product.get("name").toString());
+            TextView productAmount = rowView.findViewById(R.id.item_amount);
+            productAmount.setText(product.get("amount").toString());
+            TextView productMeasure = rowView.findViewById(R.id.item_measure);
+            productMeasure.setText(product.get("measure").toString());
+            ImageView image = rowView.findViewById(R.id.itemImage);
+            TextView productDescription = rowView.findViewById(R.id.product_description);
+            productDescription.setText(product.get("description").toString());
+
+            String nameOfFile = (product.get("image") != null) ? product.get("image").toString() : "other";
+            int idd = context.getResources().getIdentifier(nameOfFile, "drawable", context.getPackageName());
+
+            image.setBackgroundResource(idd);
         }
-        int idd = context.getResources().getIdentifier(nameOfFile, "drawable", context.getPackageName());
-
-        image.setBackgroundResource(idd);
 
         return rowView;
     }
@@ -69,6 +73,11 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
 
     public void removeSelection() {
         selectedItemIds = new SparseBooleanArray();
+        notifyDataSetChanged();
+    }
+
+    public void swapItems(ArrayList<HashMap> newProducts) {
+        this.products = newProducts;
         notifyDataSetChanged();
     }
 

@@ -107,6 +107,8 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
             String user = ParseUser.getCurrentUser().getUsername();
             list.put("belongsTo", ParseUser.getCurrentUser().getUsername());
             list.put("localId",user+Integer.toString(id));
+            list.put("description", "opis");
+            list.add("sharedAmong", ParseUser.getCurrentUser().getUsername());
             list.saveEventually(new SaveCallback() {
                 @Override
                 public void done(com.parse.ParseException e) {
