@@ -109,16 +109,13 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
             list.put("localId",user+Integer.toString(id));
             list.put("description", "opis");
             list.add("sharedAmong", ParseUser.getCurrentUser().getUsername());
-            list.saveEventually(new SaveCallback() {
-                @Override
-                public void done(com.parse.ParseException e) {
-                    if (e == null) {
-                        // No error, the object was saved
-                        Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_LONG).show();
-                    } else {
-                        // Error saving object, print the logs
-                        e.printStackTrace();
-                    }
+            list.saveEventually(e -> {
+                if (e == null) {
+                    // No error, the object was saved
+                    Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_LONG).show();
+                } else {
+                    // Error saving object, print the logs
+                    e.printStackTrace();
                 }
             });
 
@@ -126,7 +123,7 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
             list.put("localId",Integer.toString(id));
         }
         list.pinInBackground(e -> {if (e == null) {
-            if(listTemplate!=null){
+            if(listTemplate != null){
                 recoveryTempalte(listTemplate,list.get("localId"));
             }else {
                 finish();
