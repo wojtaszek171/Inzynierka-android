@@ -116,60 +116,54 @@ public class AddProductToList extends AppCompatActivity {
         setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if(!isNetworkAvailable() && ParseUser.getCurrentUser() != null){
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
-            query.whereEqualTo("objectId", list.getString("objectId"));
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
+        query.whereEqualTo("localId", list.getString("localId"));
+
+        if(ParseUser.getCurrentUser() == null || !isNetworkAvailable()){
             query.fromLocalDatastore();
-            query.findInBackground((resultList, e) -> {
-                if (e == null) {
-                    list = resultList.get(0);
-                } else {
-                }
-            });
-        } else if(ParseUser.getCurrentUser() == null){
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
-            query.whereEqualTo("localId", list.getString("localId"));
-            query.fromLocalDatastore();
-            query.findInBackground((resultList, e) -> {
-                if (e == null) {
-                    list = resultList.get(0);
-                } else {
-                }
-            });
         }
-        saveProductB.setOnClickListener(view -> {
-            HashMap product = new HashMap();
-            product.put("name", productName.getText().toString());
-            product.put("status", "0"); //status wykupienia produktu
-            product.put("amount", productAmount.getText().toString());
-            product.put("category", productCategory.getSelectedItem().toString());
-            product.put("image", arrayIcons[productCategory.getSelectedItemPosition()]);
-            product.put("description", productDescription.getText().toString());
-            product.put("measure", productMeasure.getSelectedItem().toString());
+
+        query.findInBackground((resultList, e) -> {
+            if (e == null && resultList.size() > 0) {
+                list = resultList.get(0);
+                saveProductB.setOnClickListener(view -> {
+                    HashMap product = new HashMap();
+                    product.put("name", productName.getText().toString());
+                    product.put("status", "0"); //status wykupienia produktu
+                    product.put("amount", productAmount.getText().toString());
+                    product.put("category", productCategory.getSelectedItem().toString());
+                    product.put("image", arrayIcons[productCategory.getSelectedItemPosition()]);
+                    product.put("description", productDescription.getText().toString());
+                    product.put("measure", productMeasure.getSelectedItem().toString());
 
 
-            if (ParseUser.getCurrentUser() != null) {
-                String user = ParseUser.getCurrentUser().getUsername();
-                product.put("belongsTo", list.getString("localId"));
-                product.put("localId", user + localId);
+                    if (ParseUser.getCurrentUser() != null) {
+                        String user = ParseUser.getCurrentUser().getUsername();
+                        product.put("belongsTo", list.getString("localId"));
+                        product.put("localId", user + localId);
 
-                list.add("nestedProducts", product);
-                list.saveEventually();
+                        list.add("nestedProducts", product);
+                        list.saveEventually();
+                    } else {
+                        product.put("belongsTo", list.getString("localId"));
+                        product.put("localId", localId);
+                        list.add("nestedProducts", product);
+                    }
+                    list.pinInBackground(innerE -> {
+                        if (e == null) {
+                            finish();
+                            Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
+                            intent.putExtra("LIST_OBJECT", list);
+                            startActivity(intent);
+                        } else {
+                        }
+                    });
+                });
+
             } else {
-                product.put("belongsTo", list.getString("localId"));
-                product.put("localId", localId);
-                list.add("nestedProducts", product);
             }
-            list.pinInBackground(e -> {
-                if (e == null) {
-                    finish();
-                    Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
-                    intent.putExtra("LIST_OBJECT", list);
-                    startActivity(intent);
-                } else {
-                }
-            });
         });
+
     }
 
     private void editProduct() {

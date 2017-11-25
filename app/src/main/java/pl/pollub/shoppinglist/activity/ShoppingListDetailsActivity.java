@@ -23,6 +23,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -212,31 +214,25 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
             }
         }
 
-        list.put("nestedProducts", products);
-        list.pinInBackground();
-        list.saveEventually();
-//        for (int i = 0; i < selecteditems.size(); i++) {
-//            if (selecteditems.get(i).get("objectId") == null) {
-//                ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
-//                query.fromLocalDatastore();
-//                query.whereEqualTo("localId", selecteditems.get(i).get("localId"));
-//                query.findInBackground((scoreList, exception) -> {
-//                    if (exception == null) {
-//                        for (ParseObject s : scoreList) {
-//                            s.unpinInBackground();
-//                            s.deleteEventually();
-//                        }
-//                    } else {
-//
-//                    }
-//                });
-//            } else {
-//                selecteditems.get(i).deleteInBackground();
-//                selecteditems.get(i).unpinInBackground();
-//            }
-//            //Todo: weź z listy produkt i go kurwa usuń:
+        if(ParseUser.getCurrentUser() == null){
+            ParseQuery<ParseObject> offlineListToUpdateQuery = ParseQuery.getQuery("ShoppingList");
+            offlineListToUpdateQuery.whereEqualTo("localId", list.get("localId").toString());
+            offlineListToUpdateQuery.fromLocalDatastore();
+            offlineListToUpdateQuery.findInBackground((resultList, e) -> {
+                if (e == null) {
+                    ParseObject offlineListToUpdate = resultList.get(0);
+                    offlineListToUpdate.put("nestedProducts", products);
+                    offlineListToUpdate.pinInBackground();
+                } else {
+                    Log.d("deleteOfflineProductErr", "Error: " + e.getMessage());
+                }
+            });
+        }else{
+            list.put("nestedProducts", products);
+            list.pinInBackground();
+            list.saveEventually();
+        }
 
-//        }
         actionMode.finish();
         finish();
         overridePendingTransition(0, 0);
