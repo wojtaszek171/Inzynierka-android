@@ -6,70 +6,75 @@
     <android.support.v7.widget.GridLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/left_right_margin"
         android:layout_marginEnd="@dimen/left_right_margin"
+        android:layout_marginStart="@dimen/left_right_margin"
         android:background="@color/colorPrimary"
-        app:columnCount="2"
-        app:rowCount="6">
+        app:columnCount="3"
+        app:rowCount="5">
 
         <ImageView
             android:id="@+id/mainscreen_logo"
-            android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:layout_marginTop="30dp"
+            android:layout_width="220dp"
+            android:layout_marginStart="20dp"
             android:adjustViewBounds="false"
             android:cropToPadding="false"
-            app:layout_columnSpan="2"
+            app:layout_gravity="center"
+            app:layout_rowSpan="5"
             app:srcCompat="@drawable/logo_big" />
 
         <TextView
             android:id="@+id/title_label"
-            android:layout_width="match_parent"
             android:layout_marginBottom="30dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="30dp"
             android:text="Twoja lista zakupów"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="30sp"
             android:textStyle="italic"
-            app:layout_columnSpan="2" />
+            app:layout_columnSpan="2"
+            app:layout_gravity="center_horizontal" />
 
         <Button
             android:id="@+id/create_lists_button"
             style="@style/DarkCompatButton"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:background="@drawable/rounded_button"
             android:foreground="?attr/selectableItemBackground"
+            android:paddingEnd="0dp"
+            android:paddingStart="0dp"
             android:text="Twórz listy offline"
             android:textColor="@color/white"
             android:textSize="16sp"
-            app:layout_columnSpan="2" />
+            app:layout_columnSpan="2"
+            app:layout_gravity="center_horizontal" />
 
         <TextView
             android:id="@+id/or_label"
-            android:layout_width="match_parent"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
             android:text="lub"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="16sp"
-            app:layout_columnSpan="2" />
+            app:layout_columnSpan="2"
+            app:layout_gravity="center_horizontal" />
 
         <Button
             android:id="@+id/login_button"
             style="@style/DarkCompatButton"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:background="@drawable/rounded_button"
             android:foreground="?attr/selectableItemBackground"
             android:text="Zaloguj się"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_columnSpan="2" />
+            app:layout_columnSpan="2"
+            app:layout_gravity="center_horizontal" />
 
         <TextView
             android:id="@+id/prompt_label"
+            android:layout_width="150dp"
             android:layout_marginBottom="16dp"
             android:layout_marginTop="16dp"
             android:gravity="center"
@@ -79,19 +84,22 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_columnWeight="1"
+            app:layout_gravity="end"
             tools:layout_editor_absoluteX="8sp"
             tools:layout_editor_absoluteY="838sp" />
 
         <Button
             android:id="@+id/register_button"
             style="?attr/borderlessButtonStyle"
+            android:layout_width="150dp"
             android:layout_height="48sp"
             android:layout_marginBottom="16dp"
             android:layout_marginTop="16dp"
             android:text="Zarejestruj się!"
             android:textColor="@android:color/holo_blue_bright"
             android:textSize="14sp"
-            app:layout_columnWeight="1" />
+            app:layout_columnWeight="1"
+            app:layout_gravity="start" />
 
     </android.support.v7.widget.GridLayout>
 </layout>
