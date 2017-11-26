@@ -83,8 +83,10 @@ public class LoginFragment extends Fragment {
 
         if (exception == null && user != null) {
             feedbackMessage.append("Zalogowano jako ").append(user.getUsername());
-            // passing application context as argument so the application will exit on 'back' button press
-            Intent intent = new Intent(getActivity().getApplicationContext(), ShoppingListsActivity.class);
+            Intent intent = new Intent(getActivity(), ShoppingListsActivity.class);
+            // passing flag to clear activity stack so that the application will exit on 'back' button press
+            // https://stackoverflow.com/a/16388608
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         } else if (user == null) {
             feedbackMessage.append("Nieprawidłowy login i/lub hasło!");

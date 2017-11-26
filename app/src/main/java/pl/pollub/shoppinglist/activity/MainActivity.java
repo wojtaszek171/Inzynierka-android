@@ -30,14 +30,12 @@ public class MainActivity extends AppCompatActivity implements
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_screen);
         setSupportActionBar(binding.toolbar.toolbar);
 
-        if (savedInstanceState != null && savedInstanceState.getBoolean(GO_TO_LOGIN_KEY)) {
-            attachLoginFragment();
-        } else if (savedInstanceState != null && savedInstanceState.getBoolean(GO_TO_REGISTRATION_KEY)) {
-            attachRegistrationFragment();
-        }
-
-        if (ParseUser.getCurrentUser() != null) {
-            openShoppingListsActivity();
+        if (isKeySet(GO_TO_LOGIN_KEY)) {
+            attachLoginFragment(false);
+        } else if (isKeySet(GO_TO_REGISTRATION_KEY)) {
+            attachRegistrationFragment(false);
+        } else if (ParseUser.getCurrentUser() != null) {
+            openShoppingListsActivity(true);
         } else {
             attachWelcomeFragment();
         }
@@ -57,22 +55,27 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onLoginClick(View view) {
-        attachLoginFragment();
+        attachLoginFragment(true);
     }
 
     @Override
     public void onRegisterClick(View view) {
-        attachRegistrationFragment();
+        attachRegistrationFragment(true);
     }
 
     @Override
     public void onCreateListsClick(View view) {
-        openShoppingListsActivity();
+        openShoppingListsActivity(false);
     }
 
-    protected void openShoppingListsActivity() {
-        finish();
+    protected void openShoppingListsActivity(boolean clearActivityStack) {
         Intent intent = new Intent(this, ShoppingListsActivity.class);
+
+        if (clearActivityStack) {
+            // passing flag to clear activity stack so that the application will exit on 'back' button press
+            // https://stackoverflow.com/a/16388608
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        }
         startActivity(intent);
     }
 
@@ -83,21 +86,35 @@ public class MainActivity extends AppCompatActivity implements
                 .commit();
     }
 
-    protected void attachLoginFragment() {
+    protected void attachLoginFragment(boolean addToBackStack) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         LoginFragment fragment = new LoginFragment();
         transaction
                 .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-                .replace(R.id.main_fragment_container, fragment)
-                .addToBackStack(null).commit();
+                .replace(R.id.main_fragment_container, fragment);
+
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+
+        transaction.commit();
     }
 
-    protected void attachRegistrationFragment() {
+    protected void attachRegistrationFragment(boolean addToBackStack) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         RegistrationFragment fragment = new RegistrationFragment();
         transaction
                 .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-                .replace(R.id.main_fragment_container, fragment)
-                .addToBackStack(null).commit();
+                .replace(R.id.main_fragment_container, fragment);
+
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+
+        transaction.commit();
+    }
+
+    private boolean isKeySet(String key) {
+        return getIntent().getBooleanExtra(key, false);
     }
 }

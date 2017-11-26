@@ -60,5 +60,6 @@ dependencies {
         exclude group: "com.android.support", module: "support-annotations"
     })
     testImplementation "junit:junit:4.12"
+    // 1.0.7 is broken, don't upgrade: https://github.com/yavski/fab-speed-dial/issues/58
     implementation "io.github.yavski:fab-speed-dial:1.0.6"
 }

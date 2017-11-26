@@ -78,9 +78,7 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="16sp"
-            app:layout_columnWeight="1"
-            tools:layout_editor_absoluteX="8sp"
-            tools:layout_editor_absoluteY="838sp" />
+            app:layout_columnWeight="1" />
 
         <Button
             android:id="@+id/register_button"

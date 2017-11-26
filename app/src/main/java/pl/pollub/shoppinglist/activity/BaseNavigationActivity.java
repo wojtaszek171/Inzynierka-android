@@ -77,29 +77,27 @@ public abstract class BaseNavigationActivity extends AppCompatActivity implement
         Intent intent = new Intent();
         // navigation view item clicks handling
         if (itemId == R.id.nav_friends && !(this instanceof FriendsActivity)) {
-            finish();
             intent.setClass(this, FriendsActivity.class);
         } else if (itemId == R.id.nav_lists && !(this instanceof ShoppingListsActivity)) {
-            finish();
             intent.setClass(this, ShoppingListsActivity.class);
         } else if (itemId == R.id.nav_templates && !(this instanceof TemplatesActivity)) {
-            finish();
             intent.setClass(this, TemplatesActivity.class);
         } else if (itemId == R.id.nav_custom_user_products && !(this instanceof CustomProductsListActivity)) {
-            finish();
             intent.setClass(this, CustomProductsListActivity.class);
         } else if (itemId == R.id.nav_settings && !(this instanceof SettingsActivity)) {
-            finish();
             intent.setClass(this, SettingsActivity.class);
         } else if (itemId == R.id.nav_logout) {
-            finish();
             ParseUser.logOut();
+            // passing flag to clear activity stack so that the application will exit on 'back' button press
+            // https://stackoverflow.com/a/16388608
             intent.setClass(this, MainActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         } else if (itemId == R.id.nav_login) {
-            finish();
             intent.setClass(this, MainActivity.class)
                     .putExtra(MainActivity.GO_TO_LOGIN_KEY, true);
+        } else if (itemId == R.id.nav_register) {
+            intent.setClass(this, MainActivity.class)
+                    .putExtra(MainActivity.GO_TO_REGISTRATION_KEY, true);
         } else {
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
