@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -30,14 +27,14 @@ import java.util.Calendar;
 
 import pl.pollub.shoppinglist.R;
 
-public class AddShoppingList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class AddShoppingList extends AppCompatActivity {
     private int isLogged = 0;
     private static int id;
-    private ActionBarDrawerToggle drawerToggle;
     private Button textDate;
     private boolean template;
     private ParseObject listTemplate;
     private ParseObject list;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,18 +42,19 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         id = getIntent().getIntExtra("LOCAL_LIST_ID", 1);
         template = getIntent().getBooleanExtra("TEMPLATE", false);
         listTemplate = getIntent().getParcelableExtra("LIST_TEMPLATE");
 
         textDate = findViewById(R.id.listDeadline);
-        if(template==true){
+        if (template) {
             setTitle(R.string.addTemplate);
             textDate.setVisibility(View.GONE);
-        }else if(listTemplate!=null) {
+        } else if (listTemplate != null) {
             setTitle("Podaj szczegóły listy");
-        }
-        else {
+        } else {
             setTitle(R.string.addList);
         }
         Button saveNewList = findViewById(R.id.saveNewList);
@@ -98,14 +96,14 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
         list.put("name", listNameString);
         list.put("status", "0");
         list.put("deadline", textDate.getText().toString());
-        list.put("description",descriptionString);
+        list.put("description", descriptionString);
         list.put("isTemplate", template);
 
 
         if (ParseUser.getCurrentUser() != null) {
             String user = ParseUser.getCurrentUser().getUsername();
             list.put("belongsTo", ParseUser.getCurrentUser().getUsername());
-            list.put("localId",user+Integer.toString(id));
+            list.put("localId", user + Integer.toString(id));
             list.put("description", "opis");
             list.add("sharedAmong", ParseUser.getCurrentUser().getUsername());
             list.saveEventually(e -> {
@@ -118,26 +116,30 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
                 }
             });
 
-        }else {
-            list.put("localId",Integer.toString(id));
+        } else {
+            list.put("localId", Integer.toString(id));
         }
-        list.pinInBackground(e -> {if (e == null) {
-            if(listTemplate != null){
-                recoveryTempalte(listTemplate,list.get("localId"));
-            }else {
-                finish();
-                Intent intent = new Intent(AddShoppingList.this, ShoppingListDetailsActivity.class);
-                intent.putExtra("LIST_OBJECT", list);
-                startActivity(intent);
+        list.pinInBackground(e -> {
+            if (e == null) {
+                if (listTemplate != null) {
+                    recoveryTempalte(listTemplate, list.get("localId"));
+                } else {
+                    Intent intent = new Intent(AddShoppingList.this, ShoppingListDetailsActivity.class);
+                    intent.putExtra("LIST_OBJECT", list);
+                    startActivity(intent);
+                    finish();
+                }
             }
-        } });
+        });
     }
+
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
     public void setIdForLocal() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("localId");
         query.fromLocalDatastore();
@@ -160,12 +162,12 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
             }
         });
     }
+
     private void recoveryTempalte(ParseObject listTemplate, Object localIdd) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
-        if(ParseUser.getCurrentUser()==null){
+        if (ParseUser.getCurrentUser() == null) {
             query.fromLocalDatastore();
-        }else
-        if(!isNetworkAvailable()){
+        } else if (!isNetworkAvailable()) {
             query.fromLocalDatastore();
         }
         query.whereEqualTo("belongsTo", listTemplate.getString("localId"));
@@ -186,12 +188,12 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
                     product.put("icon", s.get("icon"));
                     if (ParseUser.getCurrentUser() != null) {
                         String user = ParseUser.getCurrentUser().getUsername();
-                        product.put("localId",user + id);
+                        product.put("localId", user + id);
                         product.put("belongsTo", localIdd);
                         product.saveEventually();
-                    }else {
+                    } else {
                         product.put("belongsTo", localIdd);
-                        product.put("localId",id);
+                        product.put("localId", id);
                     }
                     product.pinInBackground();
 
@@ -200,17 +202,17 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
                     queryy.findInBackground((scoreListt, e) -> {
                         if (e == null) {
                             for (ParseObject item : scoreListt) {
-                                item.put("id",id);
+                                item.put("id", id);
                                 item.pinInBackground();
                             }
                         }
                     });
                 }
-                finish();
                 Intent intent = new Intent(getApplicationContext(), ShoppingListDetailsActivity.class);
                 intent.putExtra("LIST_OBJECT", list);
                 startActivity(intent);
                 Log.d("score", "Retrieved " + scoreList.size() + " scores");
+                finish();
             } else {
                 Log.d("score", "Error: " + exception.getMessage());
             }
@@ -219,50 +221,14 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
         switch (item.getItemId()) {
-            case R.id.nav_friends: {
-                Intent intent = new Intent(AddShoppingList.this, FriendsActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_lists: {
-                Intent intent = new Intent(AddShoppingList.this, ShoppingListsActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_templates: {
-                Intent intent = new Intent(AddShoppingList.this, TemplatesActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_custom_user_products: {
-                Intent intent = new Intent(AddShoppingList.this, CustomProductsListActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_settings: {
-                Intent intent = new Intent(AddShoppingList.this, SettingsActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.nav_logout: {
-                ParseUser.logOut();
-                Toast.makeText(getApplicationContext(), "Wylogowano", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(AddShoppingList.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                break;
-            }
+            case android.R.id.home:
+                finish();
+
+                return true;
         }
-        //close navigation drawer
-        //mDrawerLayout.closeDrawer(GravityCompat.START);
-        return true;
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -271,5 +237,4 @@ public class AddShoppingList extends AppCompatActivity implements NavigationView
         getMenuInflater().inflate(R.menu.menu_actionbar, menu);
         return true;
     }
-
 }

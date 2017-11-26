@@ -14,7 +14,7 @@ import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.activity.fragment.LoginFragment;
 import pl.pollub.shoppinglist.activity.fragment.RegistrationFragment;
 import pl.pollub.shoppinglist.activity.fragment.WelcomeFragment;
-import pl.pollub.shoppinglist.databinding.ActivityMainScreenBinding;
+import pl.pollub.shoppinglist.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements
         WelcomeFragment.OnWelcomeInteractionListener,
@@ -22,12 +22,13 @@ public class MainActivity extends AppCompatActivity implements
 
     public static final String GO_TO_LOGIN_KEY = "goToLogin";
     public static final String GO_TO_REGISTRATION_KEY = "goToRegistration";
-    private ActivityMainScreenBinding binding;
+
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main_screen);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSupportActionBar(binding.toolbar.toolbar);
 
         if (isKeySet(GO_TO_LOGIN_KEY)) {
