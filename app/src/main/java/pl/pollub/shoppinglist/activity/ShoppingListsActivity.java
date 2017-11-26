@@ -53,7 +53,6 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
 
     private ParseLiveQueryClient parseLiveQueryClient;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +107,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                         dialog1.show();
                 }
 
-                return false;
+                return true;
             }
 
             @Override
