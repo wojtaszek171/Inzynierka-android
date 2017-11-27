@@ -63,6 +63,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         createListOfProducts();
 
         FloatingActionButton addProductB = findViewById(R.id.addProductButton);
+        addProductB.bringToFront();
         addProductB.setOnClickListener(view -> {
             addNewProduct();
         });
