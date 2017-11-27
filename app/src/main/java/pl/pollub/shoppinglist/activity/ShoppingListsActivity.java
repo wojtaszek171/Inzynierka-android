@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -258,7 +259,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 AlertDialog.Builder builder = new
-                        AlertDialog.Builder(ShoppingListsActivity.this);
+                        AlertDialog.Builder(new ContextThemeWrapper(ShoppingListsActivity.this, R.style.NewDialog));
                 LayoutInflater inflater =(LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
                 builder.setCancelable(true);
 
@@ -266,7 +267,6 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
 
                 Dialog dialog1 = builder.create();
                 dialog1.show();
-                dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 TextView selectMany = dialog1.findViewById(R.id.select_many);
                 selectMany.setOnClickListener(v -> {
                     list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
