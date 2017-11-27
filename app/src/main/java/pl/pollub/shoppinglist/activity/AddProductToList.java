@@ -186,7 +186,7 @@ public class AddProductToList extends AppCompatActivity {
             productToUpdate.put("measure", productMeasure.getSelectedItem().toString());
             productToUpdate.put("image", arrayIcons[productCategory.getSelectedItemPosition()]);
 
-            if(ParseUser.getCurrentUser() != null){
+            if(isNetworkAvailable()){
                 list.put("nestedProducts", nestedProducts);
                 list.saveEventually();
                 list.pinInBackground(ex -> {

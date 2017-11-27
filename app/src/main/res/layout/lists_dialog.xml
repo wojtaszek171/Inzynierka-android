@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:icon="@drawable/ic_action_add_dark"
+        android:text="Usuń listę" />
+
+    <Button
+        android:id="@+id/select_many"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/edit_list"
+        android:layout_marginTop="15dp"
+        android:icon="@mipmap/ic_content_copy_black_24dp"
+        android:text="Usuń wiele" />
+
+    <Button
+        android:id="@+id/edit_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/delete"
+        android:layout_marginTop="15dp"
+        android:text="Edytuj listę" />
+</RelativeLayout>

@@ -18,12 +18,16 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 
@@ -34,7 +38,11 @@ public class AddShoppingList extends AppCompatActivity {
     private boolean template;
     private ParseObject listTemplate;
     private ParseObject list;
-
+    private ParseObject listObject;
+    private EditText listName;
+    private String listNameString;
+    private EditText description;
+    private String descriptionString;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +55,9 @@ public class AddShoppingList extends AppCompatActivity {
         id = getIntent().getIntExtra("LOCAL_LIST_ID", 1);
         template = getIntent().getBooleanExtra("TEMPLATE", false);
         listTemplate = getIntent().getParcelableExtra("LIST_TEMPLATE");
+        listObject = getIntent().getParcelableExtra("LIST_OBJECT");
+        listName = findViewById(R.id.listName);
+        description = findViewById(R.id.list_description);
 
         textDate = findViewById(R.id.listDeadline);
         if (template) {
@@ -54,15 +65,29 @@ public class AddShoppingList extends AppCompatActivity {
             textDate.setVisibility(View.GONE);
         } else if (listTemplate != null) {
             setTitle("Podaj szczegóły listy");
-        } else {
+        } else if (listObject != null){
+            setTitle("Edytuj listę");
+        }else {
             setTitle(R.string.addList);
         }
         Button saveNewList = findViewById(R.id.saveNewList);
         TextView setDeadline = findViewById(R.id.listDeadline);
         ImageButton setListImage = findViewById(R.id.setListImage);
 
+        if(listObject != null){
+            listName.setText(listObject.getString("name"));
+            description.setText(listObject.getString("description"));
+            textDate.setText(listObject.getString("deadline"));
+        }
+
         saveNewList.setOnClickListener(view -> {
-            createShoppingList();
+            listNameString = listName.getText().toString();
+            descriptionString = description.getText().toString();
+            if(listObject!=null){
+                updateShoppingList();
+            }else {
+                createShoppingList();
+            }
         });
 
         setListImage.setOnClickListener(view -> {
@@ -71,6 +96,38 @@ public class AddShoppingList extends AppCompatActivity {
         setDeadline.setOnClickListener(view -> {
             datePickerDialog();
         });
+    }
+
+    private void updateShoppingList() {
+        if(isNetworkAvailable()){
+            listObject.put("name", listNameString);
+            listObject.put("status", "0");
+            listObject.put("deadline", textDate.getText().toString());
+            listObject.put("description", descriptionString);
+            listObject.put("isTemplate", template);
+            listObject.saveEventually();
+            listObject.pinInBackground(ex -> {
+                if (ex == null) {
+                    finish();
+                }
+            });
+        } else {
+            ParseQuery offlineListToUpdateQuery = ParseQuery.getQuery("ShoppingList");
+            offlineListToUpdateQuery.whereEqualTo("localId", listObject.getString("localId"));
+            offlineListToUpdateQuery.fromLocalDatastore();
+            offlineListToUpdateQuery.findInBackground(new FindCallback<ParseObject>() {
+                public void done(List<ParseObject> resultList, ParseException e) {
+                    if (e == null) {
+                        ParseObject listToUpdate = resultList.get(0);
+                        listObject.put("name", listNameString);
+                        listObject.put("status", "0");
+                        listObject.put("deadline", textDate.getText().toString());
+                        listObject.put("description", descriptionString);
+                        listObject.put("isTemplate", template);
+                    }
+                }
+            });
+        }
     }
 
     private void datePickerDialog() {
@@ -87,10 +144,6 @@ public class AddShoppingList extends AppCompatActivity {
     }
 
     private void createShoppingList() {
-        EditText listName = findViewById(R.id.listName);
-        String listNameString = listName.getText().toString();
-        EditText description = findViewById(R.id.list_description);
-        String descriptionString = description.getText().toString();
         list = ParseObject.create("ShoppingList");
 
         list.put("name", listNameString);
@@ -98,7 +151,6 @@ public class AddShoppingList extends AppCompatActivity {
         list.put("deadline", textDate.getText().toString());
         list.put("description", descriptionString);
         list.put("isTemplate", template);
-
 
         if (ParseUser.getCurrentUser() != null) {
             String user = ParseUser.getCurrentUser().getUsername();

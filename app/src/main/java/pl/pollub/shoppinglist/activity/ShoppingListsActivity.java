@@ -1,8 +1,11 @@
 package pl.pollub.shoppinglist.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -14,11 +17,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseLiveQueryClient;
@@ -245,8 +252,44 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
         list.setOnItemClickListener((adapterView, view, position, id) -> {
             goToListDetails(resultList, position);
         });
-        list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        multiChoiceForDelete(list, listAdapter, resultList);
+        list.setLongClickable(true);
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                AlertDialog.Builder builder = new
+                        AlertDialog.Builder(ShoppingListsActivity.this);
+                LayoutInflater inflater =(LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+                builder.setCancelable(true);
+
+                builder.setView(inflater.inflate(R.layout.lists_dialog,null));
+
+                Dialog dialog1 = builder.create();
+                dialog1.show();
+                dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                TextView selectMany = dialog1.findViewById(R.id.select_many);
+                selectMany.setOnClickListener(v -> {
+                    list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+                    multiChoiceForDelete(list, listAdapter, resultList);
+                    list.setItemChecked(position, true);
+                    dialog1.dismiss();
+                });
+                TextView deleteList = dialog1.findViewById(R.id.delete);
+                deleteList.setOnClickListener(v -> {
+                    ArrayList<ParseObject> selItem = new ArrayList<>();
+                    selItem.add(resultList.get(position));
+                    deleteListAction(listAdapter, selItem);
+                });
+                TextView editList = dialog1.findViewById(R.id.edit_list);
+                editList.setOnClickListener(v -> {
+                    dialog1.dismiss();
+                    Intent intent = new Intent(getApplicationContext(),AddShoppingList.class);
+                    intent.putExtra("LIST_OBJECT",resultList.get(position));
+                    startActivity(intent);
+                });
+                return true;
+            }
+        });
     }
 
     private void multiChoiceForDelete(ListView list, ShoppingListsAdapter listAdapter, List<ParseObject> scoreList) {
@@ -277,7 +320,8 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                     case R.id.delete:
                         ArrayList<ParseObject> selecteditems = new ArrayList<ParseObject>();
                         changeSelectedIdsToObjects(listAdapter, selecteditems, scoreList);
-                        deleteListAction(listAdapter, selecteditems, actionMode);
+                        deleteListAction(listAdapter, selecteditems);
+                        actionMode.finish();
                         return true;
                     default:
                         return false;
@@ -287,6 +331,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
             @Override
             public void onDestroyActionMode(ActionMode actionMode) {
                 listAdapter.removeSelection();
+                list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             }
         });
     }
@@ -300,7 +345,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
         }
     }
 
-    private void deleteListAction(ShoppingListsAdapter listAdapter, ArrayList<ParseObject> selecteditems, ActionMode actionMode) {
+    private void deleteListAction(ShoppingListsAdapter listAdapter, ArrayList<ParseObject> selecteditems) {
         for (int i = 0; i < selecteditems.size(); i++) {
             if (ParseUser.getCurrentUser() == null) {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
@@ -312,7 +357,6 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                         for (ParseObject s : scoreList) {
                             s.unpinInBackground(e -> {
                                 if (e == null) {
-                                    actionMode.finish();
                                     finish();
                                     overridePendingTransition(0, 0);
                                     startActivity(getIntent());
@@ -329,7 +373,6 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                 selecteditems.get(i).deleteEventually();
                 selecteditems.get(i).unpinInBackground(e -> {
                     if (e == null) {
-                        actionMode.finish();
                         finish();
                         overridePendingTransition(0, 0);
                         startActivity(getIntent());
