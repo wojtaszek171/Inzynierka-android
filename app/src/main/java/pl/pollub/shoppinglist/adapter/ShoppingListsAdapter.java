@@ -18,6 +18,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import pl.pollub.shoppinglist.R;
@@ -55,6 +56,8 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
             listDeadline.setText(shoppingLists.get(position).getString("deadline"));
             TextView listDescription = rowView.findViewById(R.id.item_description);
             listDescription.setText(shoppingLists.get(position).getString("description"));
+            TextView listProgress = rowView.findViewById(R.id.list_progress);
+            setProgress(position, listProgress, shoppingLists);
             RelativeLayout collaborators;
             collaborators = rowView.findViewById(R.id.collaborators_layout);
             if(ParseUser.getCurrentUser() == null){
@@ -74,6 +77,19 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
 
         }
         return rowView;
+    }
+
+    private void setProgress(int position, TextView listProgress, ArrayList<ParseObject> shoppingLists) {
+        ArrayList<HashMap> nestedProducts = (ArrayList) shoppingLists.get(position).get("nestedProducts");
+        int i=0;
+        if(nestedProducts!=null) {
+            for (int j = 0; j < nestedProducts.size(); j++) {
+                if (nestedProducts.get(j).get("status").toString().equals("1")) {
+                    i++;
+                }
+            }
+            listProgress.setText(i + "/" + nestedProducts.size());
+        }
     }
 
     private void setCollaborators(View rowView, int position){
