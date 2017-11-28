@@ -1,7 +1,6 @@
 package pl.pollub.shoppinglist.model;
 
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -9,7 +8,6 @@ import lombok.ToString;
  * @author Adrian
  * @since 2017-11-12
  */
-@EqualsAndHashCode(callSuper = true)
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class DescribedEntity extends NamedEntity {

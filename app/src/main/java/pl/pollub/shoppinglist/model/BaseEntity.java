@@ -1,19 +1,15 @@
 package pl.pollub.shoppinglist.model;
 
-import java.util.Date;
+import com.parse.ParseObject;
 
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import com.parse.ParseObject;
 
 /**
  * @author Adrian
  * @since 2017-10-26
  */
-@EqualsAndHashCode(callSuper = true)
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseEntity extends ParseObject {
@@ -31,5 +27,13 @@ public abstract class BaseEntity extends ParseObject {
         }
 
         return (T) entity;
+    }
+
+    public boolean equalsEntity(ParseObject obj) {
+        if (!(getClass().isInstance(obj))) {
+            return false;
+        }
+
+        return getObjectId().equals(obj.getObjectId());
     }
 }

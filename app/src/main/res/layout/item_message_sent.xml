@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/s_message_body_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/rounded_message_rectangle_primary"
+            android:maxWidth="240dp"
+            android:padding="8dp"
+            android:text="Tak, tak, kupione."
+            android:textColor="@color/white"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/s_message_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:text="19:40"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@+id/s_message_body_text"
+            app:layout_constraintRight_toLeftOf="@+id/s_message_body_text" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

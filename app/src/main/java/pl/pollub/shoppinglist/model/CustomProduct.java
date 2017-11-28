@@ -12,7 +12,6 @@ import pl.pollub.shoppinglist.model.complextype.Measure;
  * @author Adrian
  * @since 2017-10-26
  */
-@EqualsAndHashCode(callSuper = true)
 @ToString
 @ParseClassName(CustomProduct.CLASS_NAME)
 public class CustomProduct extends NamedEntity implements Product {

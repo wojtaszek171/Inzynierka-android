@@ -6,7 +6,6 @@ import lombok.*;
  * @author Adrian
  * @since 2017-10-26
  */
-@EqualsAndHashCode(callSuper = true)
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class NamedEntity extends BaseEntity {

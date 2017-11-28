@@ -42,7 +42,6 @@ public class FriendSearchFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //View view = inflater.inflate(R.layout.fragment_friend_search, container, false);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_friend_search, container, false);
         onInteracted(null);
         binding.progressBar.setVisibility(View.GONE);
@@ -104,7 +103,7 @@ public class FriendSearchFragment extends Fragment {
         usersTask.onSuccessTask(task -> {
             final List<User> users = task.getResult();
 
-            if (users != null && users.size() == 0) {
+            if (users != null && users.isEmpty()) {
                 return Task.cancelled();
             }
 

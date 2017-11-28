@@ -27,11 +27,10 @@ public class App extends Application {
     private static void registerParseApi(Context context) {
         registerSubclass(User.class);
         registerSubclass(UserData.class);
-        registerSubclass(Group.class);
+        registerSubclass(Conversation.class);
+        registerSubclass(Message.class);
         registerSubclass(CustomProduct.class);
-        registerSubclass(ProductShoppingList.class);
         registerSubclass(ShoppingList.class);
-        registerSubclass(UserGroup.class);
 
         if (!isLocalDatastoreEnabled()) {
             enableLocalDatastore(context);

@@ -3,19 +3,18 @@ package pl.pollub.shoppinglist.model;
 import android.util.Log;
 
 import com.parse.ParseClassName;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.Date;
 
 import bolts.Task;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
  * @author Adrian
  * @since 2017-10-26
  */
-@EqualsAndHashCode(callSuper = true)
 @ToString
 @ParseClassName(User.CLASS_NAME)
 public class User extends ParseUser {
@@ -73,13 +72,22 @@ public class User extends ParseUser {
             }
 
             return user;
-        }).onSuccessTask(task -> task.getResult().saveInBackground())
-                .continueWith(task -> {
-                    if (task.isFaulted() || task.isCancelled()) {
-                        Log.w("User", task.getError());
-                    }
+        }).onSuccessTask(task -> task.getResult().saveInBackground()).continueWith(task -> {
+            if (task.isFaulted() || task.isCancelled()) {
+                Log.w("User", task.getError());
+            }
 
-                    return null;
-                });
+            return null;
+        });
+    }
+
+    public boolean equalsEntity(ParseObject obj) {
+        if (!(obj instanceof ParseUser)) {
+            return false;
+        }
+
+        ParseUser user = (ParseUser) obj;
+
+        return getObjectId().equals(user.getObjectId());
     }
 }

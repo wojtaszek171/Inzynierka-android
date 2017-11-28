@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,25 +63,36 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
         return context;
     }
 
-    public void setList(List<T> list) {
-        items = list;
+    public void setList(List<T> newItems) {
+        items = new ArrayList<>(newItems);
+        notifyDataSetChanged();
     }
 
     public List<T> getList() {
-        return items;
+        return Collections.unmodifiableList(items);
     }
 
     public void setOnClickListener(OnViewHolderClick<T> listener) {
         this.listener = listener;
     }
 
-    public void addAll(List<T> list) {
-        items.addAll(list);
+    public void addAllItems(Collection<T> newItems) {
+        items.addAll(newItems);
         notifyDataSetChanged();
     }
 
-    public void reset() {
+    public void addItem(T item) {
+        items.add(item);
+        notifyDataSetChanged();
+    }
+
+    public void clearItems() {
         items.clear();
+        notifyDataSetChanged();
+    }
+
+    public void removeItem(T item) {
+        items.remove(item);
         notifyDataSetChanged();
     }
 

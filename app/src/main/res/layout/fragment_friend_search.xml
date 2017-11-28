@@ -25,7 +25,7 @@
                     android:id="@+id/searchEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nazwa użytkownika" />
+                    android:hint="@string/username" />
             </android.support.design.widget.TextInputLayout>
 
             <Button
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Brak wyników"
+            android:text="@string/no_results"
             android:textSize="18sp"
             android:visibility="gone" />
 

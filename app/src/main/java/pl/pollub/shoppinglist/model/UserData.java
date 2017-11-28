@@ -1,14 +1,12 @@
 package pl.pollub.shoppinglist.model;
 
-import android.util.Log;
-
 import com.parse.ParseClassName;
+import com.parse.ParseRelation;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
@@ -19,7 +17,6 @@ import lombok.ToString;
  * @author Adrian
  * @since 2017-11-19
  */
-@EqualsAndHashCode(callSuper = true)
 @ToString
 @ParseClassName(UserData.CLASS_NAME)
 public class UserData extends BaseEntity {
@@ -27,6 +24,7 @@ public class UserData extends BaseEntity {
 
     public static final String KEY_INVITERS = "inviters";
     public static final String KEY_FRIENDS = "friends";
+    public static final String KEY_CONVERSATIONS = "conversations";
     public static final String KEY_ASSIGNED = "assigned";
 
     public List<User> getInviters() {
@@ -83,6 +81,10 @@ public class UserData extends BaseEntity {
     public boolean removeFriends(Collection<User> friends) {
         removeAll(KEY_FRIENDS, friends);
         return true;
+    }
+
+    public ParseRelation<Conversation> getConversationsRelation() {
+        return getRelation(KEY_CONVERSATIONS);
     }
 
     public boolean isAssigned() {

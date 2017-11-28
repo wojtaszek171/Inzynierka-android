@@ -1,12 +1,15 @@
 package pl.pollub.shoppinglist.activity;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 
 import pl.pollub.shoppinglist.R;
@@ -36,7 +39,7 @@ public class FriendsActivity extends BaseNavigationActivity implements
         setTitle(R.string.friends);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        attachFriendListFragment();
+        attachFriendFunctionalityFragment(FriendListFragment.class, false);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -59,13 +62,20 @@ public class FriendsActivity extends BaseNavigationActivity implements
     }
 
     @Override
-    public void onSearchClick(Uri uri) {
-        attachFriendSearchFragment();
+    public void onSearchClick(View view) {
+        attachFriendFunctionalityFragment(FriendSearchFragment.class, true);
     }
 
     @Override
-    public void onApproveClick(Uri uri) {
-        attachFriendApproveFragment();
+    public void onApproveClick(View view) {
+        attachFriendFunctionalityFragment(FriendApproveFragment.class, true);
+    }
+
+    @Override
+    public void onOpenMessagesClick(View view, User selectedFriend) {
+        Intent intent = new Intent(this, MessagesActivity.class);
+        intent.putExtra(User.CLASS_NAME, selectedFriend);
+        startActivity(intent);
     }
 
     @Override
@@ -83,40 +93,29 @@ public class FriendsActivity extends BaseNavigationActivity implements
         setTitle("Dodaj znajomych");
     }
 
-    protected void attachFriendListFragment() {
+    protected void attachFriendFunctionalityFragment(Class<? extends Fragment> fragmentClass, boolean addToBackStack) {
         if (User.getCurrentUser() == null) {
             Toast.makeText(this, "You must be logged in to use this functionality!", Toast.LENGTH_LONG).show();
-        } else {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            FriendListFragment fragment = new FriendListFragment();
-            transaction.replace(R.id.friend_fragment_container, fragment)
-                    .commit();
+            return;
         }
-    }
 
-    protected void attachFriendSearchFragment() {
-        if (User.getCurrentUser() == null) {
-            Toast.makeText(this, "You must be logged in to use this functionality!", Toast.LENGTH_LONG).show();
-        } else {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            FriendSearchFragment fragment = new FriendSearchFragment();
-            transaction
-                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-                    .replace(R.id.friend_fragment_container, fragment)
-                    .addToBackStack(null).commit();
-        }
-    }
+        Fragment fragment;
 
-    protected void attachFriendApproveFragment() {
-        if (User.getCurrentUser() == null) {
-            Toast.makeText(this, "You must be logged in to use this functionality!", Toast.LENGTH_LONG).show();
-        } else {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            FriendApproveFragment fragment = new FriendApproveFragment();
-            transaction
-                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-                    .replace(R.id.friend_fragment_container, fragment)
-                    .addToBackStack(null).commit();
+        try {
+            fragment = fragmentClass.getDeclaredConstructor().newInstance();
+        } catch (ReflectiveOperationException exception) {
+            throw new RuntimeException(exception);
         }
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                .replace(R.id.friend_fragment_container, fragment);
+
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+
+        transaction.commit();
     }
 }

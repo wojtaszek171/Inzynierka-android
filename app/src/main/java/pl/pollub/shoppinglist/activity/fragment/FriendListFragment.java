@@ -16,6 +16,7 @@ import com.parse.ParseObject;
 
 import java.util.List;
 
+import lombok.Getter;
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.adapter.FriendListViewAdapter;
 import pl.pollub.shoppinglist.databinding.FragmentFriendListBinding;
@@ -33,29 +34,21 @@ import pl.pollub.shoppinglist.model.UserData;
  */
 public class FriendListFragment extends Fragment {
 
+    @Getter
     private OnFriendListInteractionListener interactionListener;
     private FragmentFriendListBinding binding;
     private FriendListViewAdapter recyclerViewAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //View view = inflater.inflate(R.layout.fragment_friend_approve, container, false);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_friend_list, container, false);
         onInteracted(null);
         binding.progressBar.setVisibility(View.VISIBLE);
         binding.friendList.setVisibility(View.GONE);
-        recyclerViewAdapter = new FriendListViewAdapter(getContext());
+        recyclerViewAdapter = new FriendListViewAdapter(getContext(), this);
         binding.friendList.setAdapter(recyclerViewAdapter);
-        binding.addFriendsButton.setOnClickListener(view -> {
-            if (interactionListener != null) {
-                interactionListener.onSearchClick(null);
-            }
-        });
-        binding.approveFriendsButton.setOnClickListener(view -> {
-            if (interactionListener != null) {
-                interactionListener.onApproveClick(null);
-            }
-        });
+        binding.addFriendsButton.setOnClickListener(interactionListener::onSearchClick);
+        binding.approveFriendsButton.setOnClickListener(interactionListener::onApproveClick);
         findAndBindFriends();
 
         return binding.getRoot();
@@ -135,9 +128,11 @@ public class FriendListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFriendListInteractionListener {
-        void onSearchClick(Uri uri);
+        void onSearchClick(View view);
 
-        void onApproveClick(Uri uri);
+        void onApproveClick(View view);
+
+        void onOpenMessagesClick(View view, User selectedFriend);
 
         void onFriendListInteraction(Uri uri);
     }

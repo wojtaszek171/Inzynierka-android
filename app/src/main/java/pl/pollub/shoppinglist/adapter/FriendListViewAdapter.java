@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageButton;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import pl.pollub.shoppinglist.R;
+import pl.pollub.shoppinglist.activity.fragment.FriendListFragment;
 import pl.pollub.shoppinglist.model.User;
 
 /**
@@ -27,13 +27,16 @@ import pl.pollub.shoppinglist.model.User;
 public class FriendListViewAdapter extends BaseRecyclerViewAdapter<User> {
 
     private User currentUser = User.getCurrentUser();
+    private FriendListFragment fragment;
 
-    public FriendListViewAdapter(Context context) {
+    public FriendListViewAdapter(Context context, FriendListFragment fragment) {
         super(context);
+        this.fragment = fragment;
     }
 
-    public FriendListViewAdapter(Context context, OnViewHolderClick<User> listener) {
+    public FriendListViewAdapter(Context context, FriendListFragment fragment, OnViewHolderClick<User> listener) {
         super(context, listener);
+        this.fragment = fragment;
     }
 
     @Override
@@ -47,7 +50,7 @@ public class FriendListViewAdapter extends BaseRecyclerViewAdapter<User> {
     @Override
     protected void bindView(User item, int position, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
         if (item == null || !item.isDataAvailable()) {
-            throw new NullPointerException("User is null or not fetched");
+            throw new IllegalArgumentException("User is null or not fetched");
         }
 
         final TextView usernameLabel = (TextView) viewHolder.getView(R.id.username_list);
@@ -68,7 +71,9 @@ public class FriendListViewAdapter extends BaseRecyclerViewAdapter<User> {
             ));
         }
 
-        messageButton.setOnClickListener(view -> onMessageButtonClick(view, item));
+        messageButton.setOnClickListener(view -> fragment
+                .getInteractionListener()
+                .onOpenMessagesClick(view, item));
         deleteButton.setOnClickListener(view -> onDeleteButtonClick(view, item, position));
     }
 
@@ -96,8 +101,8 @@ public class FriendListViewAdapter extends BaseRecyclerViewAdapter<User> {
                 currentFriend.getUserData().removeFriend(currentUser);
                 ParseObject.saveAllInBackground(Arrays.asList(currentUser, currentFriend), exception -> {
                     if (exception == null) {
+                        removeItem(currentFriend);
                         Toast.makeText(getContext(), "Pomyślnie usunięto znajomego!", Toast.LENGTH_SHORT).show();
-                        //notifyItemRemoved(friendPosition); TODO: nie działa
                     }
                 });
                 break;

@@ -42,7 +42,6 @@ public class FriendApproveFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //View view = inflater.inflate(R.layout.fragment_friend_approve, container, false);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_friend_approve, container, false);
         onInteracted(null);
         binding.progressBar.setVisibility(View.VISIBLE);

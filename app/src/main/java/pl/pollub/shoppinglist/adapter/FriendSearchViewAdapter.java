@@ -38,7 +38,7 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
     @Override
     protected void bindView(User item, int position, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
         if (item == null || !item.isDataAvailable()) {
-            throw new NullPointerException("User is null or not fetched");
+            throw new IllegalArgumentException("User is null or not fetched");
         }
 
         final TextView usernameLabel = (TextView) viewHolder.getView(R.id.username);
@@ -60,7 +60,7 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
         final UserData itemData = item.getUserData();
 
         if (hasAlreadyBeenInvitedByCurrentUser(item)
-                || item.getObjectId().equals(User.getCurrentUser().getObjectId())
+                || item.equalsEntity(User.getCurrentUser())
                 || isAlreadyFriendOfCurrentUser(item)) {
             markButtonAlreadyInvited(inviteButton);
         } else if (hasAlreadyInvitedCurrentUser(item)) {
@@ -89,7 +89,7 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
         }
 
         for (User inviter : inviters) {
-            if (inviter.getObjectId().equals(User.getCurrentUser().getObjectId())) {
+            if (inviter.equalsEntity(User.getCurrentUser())) {
                 return true;
             }
         }
@@ -99,12 +99,12 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
     private static boolean isAlreadyFriendOfCurrentUser(User user) {
         List<User> friends = User.getCurrentUser().getUserData().getFriends();
 
-        if (friends == null || friends.size() == 0) {
+        if (friends == null || friends.isEmpty()) {
             return false;
         }
 
         for (User friend : friends) {
-            if (friend.getObjectId().equals(user.getObjectId())) {
+            if (friend.equalsEntity(user)) {
                 return true;
             }
         }
@@ -114,12 +114,12 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
     private static boolean hasAlreadyInvitedCurrentUser(User user) {
         List<User> inviters = User.getCurrentUser().getUserData().getInviters();
 
-        if (inviters == null || inviters.size() == 0) {
+        if (inviters == null || inviters.isEmpty()) {
             return false;
         }
 
         for (User inviter : inviters) {
-            if (inviter.getObjectId().equals(user.getObjectId())) {
+            if (inviter.equalsEntity(user)) {
                 return true;
             }
         }

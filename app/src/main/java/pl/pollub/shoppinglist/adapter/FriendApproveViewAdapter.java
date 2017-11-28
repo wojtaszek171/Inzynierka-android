@@ -43,7 +43,7 @@ public class FriendApproveViewAdapter extends BaseRecyclerViewAdapter<User> {
     @Override
     protected void bindView(User item, int position, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
         if (item == null || !item.isDataAvailable()) {
-            throw new NullPointerException("User is null or not fetched");
+            throw new IllegalArgumentException("User is null or not fetched");
         }
 
         final TextView usernameLabel = (TextView) viewHolder.getView(R.id.username_approve);
@@ -103,7 +103,7 @@ public class FriendApproveViewAdapter extends BaseRecyclerViewAdapter<User> {
         }
 
         for (User friend : friends) {
-            if (friend.getObjectId().equals(user.getObjectId())) {
+            if (friend.equalsEntity(user)) {
                 return true;
             }
         }
