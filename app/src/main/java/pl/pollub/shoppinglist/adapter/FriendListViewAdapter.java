@@ -47,9 +47,9 @@ public class FriendListViewAdapter extends BaseRecyclerViewAdapter<User> {
 
     @Override
     protected void bindView(User item, int position, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
-        if (item == null) {
-            Toast.makeText(getContext(), "FriendListAdapter: User is null", Toast.LENGTH_LONG).show();
-            Log.w("FriendListAdapter", "User is null");
+        if (item == null || !item.isDataAvailable()) {
+            Toast.makeText(getContext(), "FriendListAdapter: User is null or not fetched", Toast.LENGTH_LONG).show();
+            Log.w("FriendListAdapter", "User is null or not fetched");
             return;
         }
 
@@ -58,59 +58,49 @@ public class FriendListViewAdapter extends BaseRecyclerViewAdapter<User> {
         final AppCompatImageButton messageButton = (AppCompatImageButton) viewHolder.getView(R.id.actionMessageButton_list);
         final AppCompatImageButton deleteButton = (AppCompatImageButton) viewHolder.getView(R.id.actionDeleteButton_list);
 
-        item.fetchIfNeededInBackground((updatedFriend, exception) ->
-                onFetchDone((User) updatedFriend, exception, position, usernameLabel, lastActiveAtLabel, messageButton, deleteButton));
-    }
+        usernameLabel.setText(item.getUsername());
 
-    // object fields must be initialized before calling this method
-    private void onFetchDone(User updatedFriend, ParseException exception, int currentPosition,
-                             TextView usernameLabel, TextView lastActiveAtLabel,
-                             AppCompatImageButton messageButton, AppCompatImageButton deleteButton) {
-        if (exception == null) {
-            usernameLabel.setText(updatedFriend.getUsername());
+        Date lastActiveAtTime = item.getLastActiveAt();
 
-            Date lastActiveAtTime = updatedFriend.getLastActiveAt();
-
-            if (lastActiveAtTime == null) {
-                lastActiveAtLabel.setText("never");
-            } else {
-                lastActiveAtLabel.setText(DateUtils.getRelativeTimeSpanString(
-                        getContext(),
-                        lastActiveAtTime.getTime()
-                ));
-            }
-
-            messageButton.setOnClickListener(view -> onMessageButtonClick(view, updatedFriend));
-            deleteButton.setOnClickListener(view -> onDeleteButtonClick(view, updatedFriend));
+        if (lastActiveAtTime == null) {
+            lastActiveAtLabel.setText("never");
         } else {
-            Toast.makeText(getContext(), "FriendListAdapter " + exception.getMessage(), Toast.LENGTH_LONG).show();
-            Log.w("FriendListAdapter", exception.getMessage());
+            lastActiveAtLabel.setText(DateUtils.getRelativeTimeSpanString(
+                    getContext(),
+                    lastActiveAtTime.getTime()
+            ));
         }
+
+        messageButton.setOnClickListener(view -> onMessageButtonClick(view, item));
+        deleteButton.setOnClickListener(view -> onDeleteButtonClick(view, item, position));
     }
 
     private void onMessageButtonClick(View view, User currentFriend) {
         Toast.makeText(getContext(), "messageButton: nie zaimplementowano", Toast.LENGTH_SHORT).show();
     }
 
-    private void onDeleteButtonClick(View view, User currentFriend) {
+    private void onDeleteButtonClick(View view, User currentFriend, int positionOnViewport) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder.setIcon(R.drawable.ic_action_delete)
                 .setTitle("Usuń znajomego")
                 .setMessage("Czy na pewno chcesz usunąć znajomego? Tej operacji nie da się odwrócić.")
-                .setPositiveButton(R.string.ok, ((dialog, which) -> onAlertDialogButtonClick(dialog, which, currentFriend)))
-                .setNegativeButton(R.string.cancel, ((dialog, which) -> onAlertDialogButtonClick(dialog, which, currentFriend)))
+                .setPositiveButton(R.string.ok, ((dialog, buttonId) ->
+                        onAlertDialogButtonClick(dialog, buttonId, currentFriend, positionOnViewport)))
+                .setNegativeButton(R.string.cancel, ((dialog, buttonId) ->
+                        onAlertDialogButtonClick(dialog, buttonId, currentFriend, positionOnViewport)))
                 .create()
                 .show();
     }
 
-    private void onAlertDialogButtonClick(DialogInterface dialog, int which, User currentFriend) {
-        switch (which) {
+    private void onAlertDialogButtonClick(DialogInterface dialog, int buttonId, User currentFriend, int friendPosition) {
+        switch (buttonId) {
             case DialogInterface.BUTTON_POSITIVE:
                 currentUser.getUserData().removeFriend(currentFriend);
                 currentFriend.getUserData().removeFriend(currentUser);
                 ParseObject.saveAllInBackground(Arrays.asList(currentUser, currentFriend), exception -> {
                     if (exception == null) {
                         Toast.makeText(getContext(), "Pomyślnie usunięto znajomego!", Toast.LENGTH_SHORT).show();
+                        //notifyItemRemoved(friendPosition); TODO: nie działa
                     }
                 });
                 break;

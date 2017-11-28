@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
@@ -89,25 +90,40 @@ public class FriendListFragment extends Fragment {
     private void findAndBindFriends() {
         User.getCurrentUser()
                 .getUserData()
-                .fetchInBackground((userData, exception) -> {
-                    binding.progressBar.setVisibility(View.GONE);
-                    if (exception == null) {
-                        List<User> friends = ((UserData) userData).getFriends();
+                .fetchInBackground(this::onFetchDone);
+    }
 
-                        if (friends != null && friends.size() > 0) {
-                            binding.friendList.setVisibility(View.VISIBLE);
-                            recyclerViewAdapter.setList(friends);
-                            recyclerViewAdapter.notifyDataSetChanged();
-                        }
-                    } else {
-                        Toast.makeText(
-                                getContext(),
-                                "Nie udało się załadować znajomych!",
-                                Toast.LENGTH_SHORT
-                        ).show();
-                        Log.w("FriendListFrag", exception);
-                    }
-                });
+    private void onFetchDone(UserData updatedUserData, ParseException exception) {
+        if (exception == null) {
+            List<User> friends = updatedUserData.getFriends();
+
+            if (friends != null && friends.size() > 0) {
+                try {
+                    friends = ParseObject.fetchAll(friends);
+
+                    binding.friendList.setVisibility(View.VISIBLE);
+                    recyclerViewAdapter.setList(friends);
+                    recyclerViewAdapter.notifyDataSetChanged();
+                } catch (ParseException e) {
+                    Toast.makeText(
+                            getContext(),
+                            "Nie udało się załadować znajomych!",
+                            Toast.LENGTH_SHORT
+                    ).show();
+
+                    Log.w("FriendListFrag", e);
+                }
+            }
+        } else {
+            Toast.makeText(
+                    getContext(),
+                    "Nie udało się załadować znajomych!",
+                    Toast.LENGTH_SHORT
+            ).show();
+            Log.w("FriendListFrag", exception);
+        }
+
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     /**
