@@ -5,164 +5,120 @@
 
     <ScrollView
         android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
         android:layout_height="match_parent">
 
-        <android.support.constraint.ConstraintLayout
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
+            android:layout_marginTop="20sp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/email_label"
+            <ImageView
+                android:id="@+id/login_logo"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
+                app:srcCompat="@drawable/ls_banner" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/email_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
-                android:text="E-mail"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toTopOf="@+id/email_input"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                android:theme="@style/TextLabel">
 
             <EditText
                 android:id="@+id/email_input"
-                android:layout_width="256dp"
-                android:layout_height="45dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/edittextstyle"
-                android:inputType="textEmailAddress"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                app:layout_constraintBottom_toTopOf="@+id/login_label"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
-
-            <TextView
-                android:id="@+id/login_label"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:text="Login"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toTopOf="@+id/login_input"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
+                android:inputType="textEmailAddress"
+                android:textColor="@color/white"
+                android:textColorLink="@color/white"
+                android:hint="E-mail" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/login_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:theme="@style/TextLabel">
 
             <EditText
                 android:id="@+id/login_input"
-                android:layout_width="256dp"
-                android:layout_height="45dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/edittextstyle"
-                android:inputType="textPersonName"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                app:layout_constraintBottom_toTopOf="@+id/password_label"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
-
-            <TextView
-                android:id="@+id/password_label"
-                android:layout_width="wrap_content"
+                android:hint="Login"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="7dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:text="Hasło"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toTopOf="@+id/password_input"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
+                android:textColor="@color/white"
+                android:textColorLink="@color/white"
+                android:inputType="textPersonName" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/password_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
+                android:textColor="@color/white"
+                android:textColorLink="@color/white"
+                android:layout_marginTop="8dp"
+                android:theme="@style/TextLabel">
 
             <EditText
                 android:id="@+id/password_input"
-                android:layout_width="256dp"
-                android:layout_height="45dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/edittextstyle"
-                android:inputType="textPassword"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                app:layout_constraintBottom_toTopOf="@+id/pwd_repeat_label"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
-
-            <TextView
-                android:id="@+id/pwd_repeat_label"
-                android:layout_width="wrap_content"
+                android:hint="Hasło"
+                android:textColor="@color/white"
+                android:textColorLink="@color/white"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:text="Powtórz hasło"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toTopOf="@+id/pwd_repeat_input"
-                app:layout_constraintHorizontal_bias="0.502"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
+                android:inputType="textPassword" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/repeat_password_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:theme="@style/TextLabel">
 
             <EditText
                 android:id="@+id/pwd_repeat_input"
-                android:layout_width="256dp"
-                android:layout_height="45dp"
-                android:layout_marginBottom="17dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/edittextstyle"
-                android:inputType="textPassword"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                app:layout_constraintBottom_toTopOf="@+id/register_button"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
+                android:hint="Powtórz hasło"
+                android:textColor="@color/white"
+                android:textColorLink="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+
+            </android.support.design.widget.TextInputLayout>
+
 
             <Button
                 android:id="@+id/register_button"
                 style="@style/DarkCompatButton"
-                android:layout_width="230dp"
+                android:layout_marginTop="25sp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="31dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
                 android:background="@drawable/rounded_button"
+                android:elegantTextHeight="false"
                 android:foreground="?attr/selectableItemBackground"
                 android:text="Zarejestruj"
                 android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.502"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
+                android:textSize="14sp" />
 
-        </android.support.constraint.ConstraintLayout>
+        </LinearLayout>
     </ScrollView>
 </layout>
