@@ -77,7 +77,7 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
             {
                 status.setChecked(false);
             }
-            String nameOfFile = (product.get("image") != null) ? product.get("image").toString() : "other";
+            String nameOfFile = (product.get("image") != null) ? product.get("image").toString()+"_white" : "other";
             int idd = context.getResources().getIdentifier(nameOfFile, "drawable", context.getPackageName());
             image.setBackgroundResource(idd);
 
