@@ -14,6 +14,8 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import pl.pollub.shoppinglist.R;
 
 public class ShoppingListsAdapter extends ArrayAdapter<String> {
@@ -46,13 +48,14 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
             listName.setText(shoppingLists.get(position).getString("name"));
             TextView listDeadline = rowView.findViewById(R.id.listDeadline);
             listDeadline.setText(shoppingLists.get(position).getString("deadline"));
-            TextView listFriends = rowView.findViewById(R.id.collaborators);
             TextView listDescription = rowView.findViewById(R.id.item_description);
             listDescription.setText(shoppingLists.get(position).getString("description"));
             RelativeLayout collaborators;
             collaborators = rowView.findViewById(R.id.collaborators_layout);
             if(ParseUser.getCurrentUser() == null){
                 collaborators.setVisibility(View.INVISIBLE);
+            } else {
+                setCollaborators(rowView, position);
             }
             if(template==true)
                 listDeadline.setText("-");
@@ -60,6 +63,22 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
 
         }
         return rowView;
+    }
+
+    private void setCollaborators(View rowView, int position){
+        StringBuilder usernamesBuilder = new StringBuilder();
+        List<String> listCollaboratorsUsernames = shoppingLists.get(position).getList("sharedAmong");
+        listCollaboratorsUsernames.remove(ParseUser.getCurrentUser().getUsername().toString());
+
+        for(int i=0; i<listCollaboratorsUsernames.size(); i++){
+            usernamesBuilder.append(listCollaboratorsUsernames.get(i));
+            if(i != listCollaboratorsUsernames.size()-1){
+                usernamesBuilder.append(", ");
+            }
+        }
+
+        TextView collaboratorsTextView = rowView.findViewById(R.id.collaborators);
+        collaboratorsTextView.setText(usernamesBuilder.toString());
     }
 
     public void swapItems(ArrayList<ParseObject> newShoppingLists) {
