@@ -1,5 +1,6 @@
 package pl.pollub.shoppinglist.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -14,8 +15,10 @@ import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.parse.ParseLiveQueryClient;
@@ -30,9 +33,11 @@ import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.adapter.ShoppingListDetailsAdapter;
+import pl.pollub.shoppinglist.model.User;
+import pl.pollub.shoppinglist.model.UserData;
 
 public class ShoppingListDetailsActivity extends BaseNavigationActivity {
-//    private String listId;
+    //    private String listId;
     private String listName;
     private ParseObject list;
 
@@ -53,7 +58,6 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
 
         list = getIntent().getParcelableExtra("LIST_OBJECT");
         listName = list.getString("name");
-        //   listId = getIntent().getStringExtra("LIST_ID");
 
         setupLiveQueryProductsSubscriptions();
 
@@ -83,7 +87,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         prepareNestedProductsAdapter();
     }
 
-    private void setupLiveQueryProductsSubscriptions(){
+    private void setupLiveQueryProductsSubscriptions() {
         parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         ParseQuery<ParseObject> certainListQuery = ParseQuery.getQuery("ShoppingList");
         certainListQuery.whereEqualTo("localId", list.getString("localId"));
@@ -96,13 +100,13 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         });
     }
 
-    private void updateNestedProductsAdapter(){
-        if(productAdapter != null){
+    private void updateNestedProductsAdapter() {
+        if (productAdapter != null) {
             runOnUiThread(() -> productAdapter.swapItems(getNestedProducts()));
         }
     }
 
-    private void displayLiveQueryUpdateToast(String eventName, String modificationAuthorLogin , HashMap recentData){
+    private void displayLiveQueryUpdateToast(String eventName, String modificationAuthorLogin, HashMap recentData) {
         Context context = getApplicationContext();
         CharSequence text = eventName + ": made by " + modificationAuthorLogin;
         int duration = Toast.LENGTH_SHORT;
@@ -110,12 +114,12 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         runOnUiThread(() -> Toast.makeText(context, text, duration).show());
     }
 
-    private void prepareNestedProductsAdapter(){
+    private void prepareNestedProductsAdapter() {
         ArrayList<HashMap> nestedProducts = getNestedProducts();
         productListView = findViewById(R.id.list);
 
 
-        if(nestedProducts != null && nestedProducts.size() > 0){
+        if (nestedProducts != null && nestedProducts.size() > 0) {
             ArrayList<String> nestedProductsNames = getNestedProductNames();
 
             productAdapter = new
@@ -136,22 +140,22 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
                 startActivity(intent);
             });
             multiChoiceForDelete(productListView, productAdapter, nestedProducts);
-        }else{
+        } else {
             productListView.setAdapter(null);
         }
     }
 
-    private ArrayList<String> getNestedProductNames(){
+    private ArrayList<String> getNestedProductNames() {
         ArrayList<HashMap> nestedProducts = getNestedProducts();
         ArrayList<String> nestedProductsNames = new ArrayList<>();
 
-        for(HashMap nestedProduct : nestedProducts){
-            nestedProductsNames.add( (String)nestedProduct.get("name") );
+        for (HashMap nestedProduct : nestedProducts) {
+            nestedProductsNames.add((String) nestedProduct.get("name"));
         }
         return nestedProductsNames;
     }
 
-    private ArrayList<HashMap> getNestedProducts(){
+    private ArrayList<HashMap> getNestedProducts() {
         return (ArrayList) list.get("nestedProducts");
     }
 
@@ -202,13 +206,13 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     private void deleteListAction(ShoppingListDetailsAdapter productAdapter, ArrayList<HashMap> selecteditems, ActionMode actionMode) {
         ArrayList<HashMap> products = (ArrayList<HashMap>) list.get("nestedProducts");
 
-        for(HashMap selectedItem : selecteditems){
-            if(selectedItem != null){
+        for (HashMap selectedItem : selecteditems) {
+            if (selectedItem != null) {
                 products.remove(products.indexOf(selectedItem));
             }
         }
 
-        if(ParseUser.getCurrentUser() == null){
+        if (ParseUser.getCurrentUser() == null) {
             ParseQuery<ParseObject> offlineListToUpdateQuery = ParseQuery.getQuery("ShoppingList");
             offlineListToUpdateQuery.whereEqualTo("localId", list.get("localId").toString());
             offlineListToUpdateQuery.fromLocalDatastore();
@@ -221,7 +225,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
                     Log.d("deleteOfflineProductErr", "Error: " + e.getMessage());
                 }
             });
-        }else{
+        } else {
             list.put("nestedProducts", products);
             list.pinInBackground();
             list.saveEventually();
@@ -248,6 +252,17 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_actionbar, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share_list:
+                checkIfUserIsAbleToShareList();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void setIdForLocal() {
@@ -292,10 +307,128 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent data){
+                                    Intent data) {
         finish();
         overridePendingTransition(0, 0);
         startActivity(getIntent());
         overridePendingTransition(0, 0);
     }
+
+
+    private void getFriendsUsernamesAndDisplayDialog() {
+        List<String> friendsUsernames = new ArrayList<>();
+        User.getCurrentUser().getUserData().fetchInBackground((userData, ex) -> {
+            ParseObject.fetchAllInBackground(((UserData) userData).getFriends(), (updatedFriends, innerEx) -> {
+                if (innerEx == null) {
+                    for (User friend : updatedFriends) {
+                        friendsUsernames.add(friend.getUsername());
+                    }
+                    displayShareListDialog(friendsUsernames);
+                } else {
+                    Toast.makeText(ShoppingListDetailsActivity.this,
+                            "Błąd pobierania znajomych!", Toast.LENGTH_LONG).show();
+                }
+            });
+
+        });
+    }
+
+    private void checkIfUserIsAbleToShareList() {
+        if (isNetworkAvailable()) {
+            String ownersUsername = list.getString("belongsTo");
+            if (ParseUser.getCurrentUser().getUsername().equals(ownersUsername)) {
+                getFriendsUsernamesAndDisplayDialog();
+            } else {
+                displayUnsubscribeListDialog();
+            }
+        } else {
+            displayNoConnectionWithInternetToast();
+        }
+
+    }
+
+    private void displayNoConnectionWithInternetToast() {
+        String warningMsg = "Brak połączenia z internetem - brak możliwości udostępniania!";
+        Toast warningToast = Toast.makeText(ShoppingListDetailsActivity.this, warningMsg, Toast.LENGTH_LONG);
+        warningToast.show();
+    }
+
+    private void displayUnsubscribeListDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ShoppingListDetailsActivity.this);
+        builder.setTitle("Czy chcesz odsubskrybować listę?");
+        builder.setMessage("Nie jesteś właścicielem listy, więc nie możesz udostępnić jej swoim znajomym." +
+                " Możesz ją natomiast odsubskrybować, aby już jej więcej nie widzieć.");
+        builder.setIcon(android.R.drawable.ic_menu_share);
+
+        builder.setPositiveButton("Odsubskrybuj", (dialog, which) -> {
+            unsubscribeList();
+        });
+        builder.setNegativeButton("Anuluj", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void unsubscribeList() {
+        List<String> sharedAmong = (List<String>) list.get("sharedAmong");
+        sharedAmong.remove(sharedAmong.indexOf(ParseUser.getCurrentUser().getUsername()));
+        list.put("sharedAmong", sharedAmong);
+        list.saveEventually();
+        list.unpinInBackground();
+
+        Intent intent = new Intent(getBaseContext(), ShoppingListsActivity.class);
+        finish();
+        startActivity(intent);
+    }
+
+    private void displayShareListDialog(List<String> friendsUsernames) {
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ShoppingListDetailsActivity.this);
+        builder.setTitle("Współdziel listę ze znajomymi:");
+        builder.setIcon(android.R.drawable.ic_menu_share);
+
+        String[] friendsArr = friendsUsernames.toArray(new String[0]);
+        boolean[] checkedItems = new boolean[friendsArr.length];
+        List<String> sharedAmongToUpdate = (List<String>) list.get("sharedAmong");
+
+        for (int i = 0; i < friendsArr.length; i++) {
+            if (sharedAmongToUpdate.contains(friendsArr[i])) {
+                checkedItems[i] = true;
+            }
+        }
+
+
+        builder.setMultiChoiceItems(friendsArr, checkedItems, (dialog, which, isChecked) -> {
+            System.out.print(checkedItems.length);
+        });
+
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            List<String> sharedAmongUsernames = getCheckedValues(checkedItems, friendsArr);
+            shareListAmongUsers(sharedAmongUsernames);
+        });
+        builder.setNegativeButton("Anuluj", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private List<String> getCheckedValues(boolean[] checkedItems, String[] arrayToMap) {
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < checkedItems.length; i++) {
+            if (checkedItems[i] == true) {
+                result.add(arrayToMap[i]);
+            }
+        }
+        return result;
+    }
+
+    private void shareListAmongUsers(List<String> usernames) {
+        usernames.add(ParseUser.getCurrentUser().getUsername());
+        list.put("sharedAmong", usernames);
+        list.saveEventually();
+        list.pinInBackground();
+    }
+
+
 }

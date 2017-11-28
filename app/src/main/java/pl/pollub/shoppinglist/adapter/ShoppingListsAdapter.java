@@ -14,9 +14,6 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import pl.pollub.shoppinglist.R;
 
 public class ShoppingListsAdapter extends ArrayAdapter<String> {
