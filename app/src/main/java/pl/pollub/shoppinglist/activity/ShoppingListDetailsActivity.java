@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
@@ -58,7 +59,6 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
 
         list = getIntent().getParcelableExtra("LIST_OBJECT");
         listName = list.getString("name");
-
         setupLiveQueryProductsSubscriptions();
 
         setTitle(listName);
@@ -71,6 +71,8 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         addProductB.setOnClickListener(view -> {
             addNewProduct();
         });
+
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -123,7 +125,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
             ArrayList<String> nestedProductsNames = getNestedProductNames();
 
             productAdapter = new
-                    ShoppingListDetailsAdapter(ShoppingListDetailsActivity.this, nestedProductsNames, nestedProducts);
+                    ShoppingListDetailsAdapter(ShoppingListDetailsActivity.this, nestedProductsNames, nestedProducts, list);
             productListView.setAdapter(null);
             productListView.setAdapter(productAdapter);
             productAdapter.notifyDataSetChanged();

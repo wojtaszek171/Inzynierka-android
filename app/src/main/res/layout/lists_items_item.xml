@@ -28,7 +28,7 @@
                 android:minWidth="40dp" />
 
             <CheckBox
-                android:id="@+id/checkBox"
+                android:id="@+id/checkBoxStatus"
                 style="@style/Widget.AppCompat.CompoundButton.CheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
