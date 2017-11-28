@@ -2,11 +2,15 @@ package pl.pollub.shoppinglist.adapter;
 
 
 import android.app.Activity;
+import android.app.LauncherActivity;
+import android.content.Context;
+import android.graphics.Color;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import pl.pollub.shoppinglist.R;
+import pl.pollub.shoppinglist.activity.ShoppingListsActivity;
 
 public class ShoppingListsAdapter extends ArrayAdapter<String> {
     private final Activity context;
@@ -59,6 +64,12 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
             }
             if(template==true)
                 listDeadline.setText("-");
+            for(int i=0; i<selectedItemIds.size();i++){
+                if(position==selectedItemIds.keyAt(i)){
+                    RelativeLayout itemRelative = (RelativeLayout) rowView.findViewById(R.id.relativList);
+                    itemRelative.setBackground(getContext().getResources().getDrawable(R.drawable.shape_item_grey));
+                }
+            }
 
 
         }
@@ -83,6 +94,7 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
     public void selectView(int position, boolean value) {
         if(value) {
             selectedItemIds.put(position, value);
+
         } else {
             selectedItemIds.delete(position);
         }

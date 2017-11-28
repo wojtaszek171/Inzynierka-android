@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -38,6 +39,7 @@ import com.parse.SubscriptionHandling;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.markushi.ui.CircleButton;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.adapter.ShoppingListsAdapter;
@@ -266,21 +268,23 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                 builder.setView(inflater.inflate(R.layout.lists_dialog,null));
 
                 Dialog dialog1 = builder.create();
+                dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog1.getWindow().setDimAmount(0);
                 dialog1.show();
-                TextView selectMany = dialog1.findViewById(R.id.select_many);
+                CircleButton selectMany = dialog1.findViewById(R.id.select_many);
                 selectMany.setOnClickListener(v -> {
                     list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
                     multiChoiceForDelete(list, listAdapter, resultList);
                     list.setItemChecked(position, true);
                     dialog1.dismiss();
                 });
-                TextView deleteList = dialog1.findViewById(R.id.delete);
+                CircleButton deleteList = dialog1.findViewById(R.id.delete);
                 deleteList.setOnClickListener(v -> {
                     ArrayList<ParseObject> selItem = new ArrayList<>();
                     selItem.add(resultList.get(position));
                     deleteListAction(listAdapter, selItem);
                 });
-                TextView editList = dialog1.findViewById(R.id.edit_list);
+                CircleButton editList = dialog1.findViewById(R.id.edit_list);
                 editList.setOnClickListener(v -> {
                     dialog1.dismiss();
                     Intent intent = new Intent(getApplicationContext(),AddShoppingList.class);

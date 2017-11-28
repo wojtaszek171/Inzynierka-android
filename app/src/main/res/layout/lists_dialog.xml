@@ -1,34 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+    android:animateLayoutChanges="false"
+    android:background="@android:color/transparent"
+    android:backgroundTint="@android:color/transparent">
 
-    <Button
-        android:id="@+id/delete"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:icon="@drawable/ic_action_add_dark"
-        android:text="Usuń listę" />
-
-    <Button
+    <at.markushi.ui.CircleButton
         android:id="@+id/select_many"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/edit_list"
-        android:layout_marginTop="15dp"
-        android:icon="@mipmap/ic_content_copy_black_24dp"
-        android:text="Usuń wiele" />
-
-    <Button
-        android:id="@+id/edit_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/delete"
         android:layout_below="@+id/delete"
-        android:layout_marginTop="15dp"
-        android:text="Edytuj listę" />
+        android:layout_marginEnd="40dp"
+        android:layout_marginLeft="25dp"
+        android:icon="@drawable/ic_delete_white_24dp"
+        android:padding="20dp"
+        android:src="@drawable/ic_playlist_add_check_white_24dp"
+        android:text="Usuń wiele"
+        android:textColor="@android:color/white"
+        app:cb_color="@android:color/holo_orange_dark"
+        app:cb_pressedRingWidth="8dip" />
+
+    <at.markushi.ui.CircleButton
+        android:id="@+id/edit_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/delete"
+        android:layout_below="@+id/delete"
+        android:layout_marginRight="25dp"
+        android:layout_marginStart="40dp"
+        android:padding="20dp"
+        android:src="@drawable/ic_edit_white_24dp"
+        android:text="Edytuj listę"
+        android:textColor="@android:color/white"
+        app:cb_color="#99CC00"
+        app:cb_pressedRingWidth="8dip" />
+
+    <at.markushi.ui.CircleButton
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:padding="20dp"
+        android:src="@drawable/ic_delete_white_24dp"
+        android:text="Usuń listę"
+        app:cb_color="@android:color/holo_red_light"
+        app:cb_pressedRingWidth="8dip"
+        app:fabSize="normal" />
+
 </RelativeLayout>

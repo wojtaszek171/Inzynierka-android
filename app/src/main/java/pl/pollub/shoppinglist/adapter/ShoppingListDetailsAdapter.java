@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -59,6 +60,13 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
             String nameOfFile = (product.get("image") != null) ? product.get("image").toString() : "other";
             int idd = context.getResources().getIdentifier(nameOfFile, "drawable", context.getPackageName());
             image.setBackgroundResource(idd);
+
+            for(int i=0; i<selectedItemIds.size();i++){
+                if(position==selectedItemIds.keyAt(i)){
+                    RelativeLayout itemRelative = (RelativeLayout) rowView.findViewById(R.id.relativListItem);
+                    itemRelative.setBackground(getContext().getResources().getDrawable(R.drawable.shape_item_grey));
+                }
+            }
         }
 
         return rowView;
