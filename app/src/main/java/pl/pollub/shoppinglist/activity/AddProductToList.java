@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -175,49 +176,57 @@ public class AddProductToList extends AppCompatActivity {
         fillInTheForm(productObject);
 
         ArrayList<HashMap> nestedProducts = (ArrayList) list.get("nestedProducts");
+        int indexOfProduct = nestedProducts.indexOf(productObject);
 
-        HashMap productToUpdate = nestedProducts.get(nestedProducts.indexOf(productObject));
 
-        saveProductB.setOnClickListener(view -> {
-            productToUpdate.put("name", productName.getText().toString());
-            productToUpdate.put("amount", productAmount.getText().toString());
-            productToUpdate.put("category", productCategory.getSelectedItem().toString());
-            productToUpdate.put("description", productDescription.getText().toString());
-            productToUpdate.put("measure", productMeasure.getSelectedItem().toString());
-            productToUpdate.put("image", arrayIcons[productCategory.getSelectedItemPosition()]);
+        if(indexOfProduct != -1){
+            HashMap productToUpdate = nestedProducts.get(indexOfProduct);
 
-            if(isNetworkAvailable()){
-                list.put("nestedProducts", nestedProducts);
-                list.saveEventually();
-                list.pinInBackground(ex -> {
-                    if (ex == null) {
-                        finish();
-                    }
-                });
-            } else {
-                ParseQuery offlineListToUpdateQuery = ParseQuery.getQuery("ShoppingList");
-                offlineListToUpdateQuery.whereEqualTo("localId", list.getString("localId"));
-                offlineListToUpdateQuery.fromLocalDatastore();
-                offlineListToUpdateQuery.findInBackground(new FindCallback<ParseObject>() {
-                    public void done(List<ParseObject> resultList, ParseException e) {
-                        if (e == null) {
-                            if(resultList.size() > 0){
-                                ParseObject offlineListToUpdate = (ParseObject) resultList.get(0);
-                                offlineListToUpdate.put("nestedProducts", nestedProducts);
-                                offlineListToUpdate.pinInBackground( ex -> {
-                                    if(ex == null){
-                                        Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
-                                        intent.putExtra("LIST_OBJECT", list);
-                                        finish();
-                                        startActivity(intent);
-                                    }
-                                });
+            saveProductB.setOnClickListener(view -> {
+                productToUpdate.put("name", productName.getText().toString());
+                productToUpdate.put("amount", productAmount.getText().toString());
+                productToUpdate.put("category", productCategory.getSelectedItem().toString());
+                productToUpdate.put("description", productDescription.getText().toString());
+                productToUpdate.put("measure", productMeasure.getSelectedItem().toString());
+                productToUpdate.put("image", arrayIcons[productCategory.getSelectedItemPosition()]);
+
+                if(isNetworkAvailable()){
+                    list.put("nestedProducts", nestedProducts);
+                    list.saveEventually();
+                    list.pinInBackground(ex -> {
+                        if (ex == null) {
+                            finish();
+                        }
+                    });
+                } else {
+                    ParseQuery offlineListToUpdateQuery = ParseQuery.getQuery("ShoppingList");
+                    offlineListToUpdateQuery.whereEqualTo("localId", list.getString("localId"));
+                    offlineListToUpdateQuery.fromLocalDatastore();
+                    offlineListToUpdateQuery.findInBackground(new FindCallback<ParseObject>() {
+                        public void done(List<ParseObject> resultList, ParseException e) {
+                            if (e == null) {
+                                if(resultList.size() > 0){
+                                    ParseObject offlineListToUpdate = (ParseObject) resultList.get(0);
+                                    offlineListToUpdate.put("nestedProducts", nestedProducts);
+                                    offlineListToUpdate.pinInBackground( ex -> {
+                                        if(ex == null){
+                                            Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
+                                            intent.putExtra("LIST_OBJECT", list);
+                                            finish();
+                                            startActivity(intent);
+                                        }
+                                    });
+                                }
                             }
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+        } else {
+            Toast.makeText(getApplicationContext(), "Błąd edycji produktu!", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
     private void fillInTheForm(HashMap productObject) {
