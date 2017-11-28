@@ -104,7 +104,13 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
 
     private void updateNestedProductsAdapter() {
         if (productAdapter != null) {
-            runOnUiThread(() -> productAdapter.swapItems(getNestedProducts()));
+            runOnUiThread(() -> {
+//                productAdapter.swapItems(getNestedProducts());
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(getIntent());
+                overridePendingTransition(0, 0);
+            });
         }
     }
 
@@ -232,12 +238,14 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
             list.pinInBackground();
             list.saveEventually();
         }
-
         actionMode.finish();
-        finish();
-        overridePendingTransition(0, 0);
-        startActivity(getIntent());
-        overridePendingTransition(0, 0);
+
+        runOnUiThread(() -> {
+            finish();
+            overridePendingTransition(0, 0);
+            startActivity(getIntent());
+            overridePendingTransition(0, 0);
+        });
     }
 
     private void changeSelectedIdsToObjects(ShoppingListDetailsAdapter productAdapter, ArrayList<HashMap> selecteditems, List<HashMap> scoreList) {
