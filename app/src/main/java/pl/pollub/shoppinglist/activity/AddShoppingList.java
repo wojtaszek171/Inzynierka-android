@@ -27,6 +27,7 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import pl.pollub.shoppinglist.R;
@@ -216,59 +217,93 @@ public class AddShoppingList extends AppCompatActivity {
     }
 
     private void recoveryTempalte(ParseObject listTemplate, Object localIdd) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
-        if (ParseUser.getCurrentUser() == null) {
-            query.fromLocalDatastore();
-        } else if (!isNetworkAvailable()) {
-            query.fromLocalDatastore();
-        }
-        query.whereEqualTo("belongsTo", listTemplate.getString("localId"));
 
-        query.findInBackground((scoreList, exception) -> {
-            if (exception == null) {
-                ArrayList<ParseObject> products = new ArrayList<>();
-                ArrayList<String> names = new ArrayList<>();
-                for (ParseObject s : scoreList) {
-                    id++;
-                    ParseObject product = new ParseObject("ProductOfList");
-                    product.put("name", s.get("name"));
-                    product.put("status", "0"); //status wykupienia produktu
-                    product.put("amount", s.get("amount"));
-                    product.put("category", s.get("category"));
-                    product.put("description", s.get("description"));
-                    product.put("measure", s.get("measure"));
-                    product.put("icon", s.get("icon"));
-                    if (ParseUser.getCurrentUser() != null) {
-                        String user = ParseUser.getCurrentUser().getUsername();
-                        product.put("localId", user + id);
-                        product.put("belongsTo", localIdd);
-                        product.saveEventually();
-                    } else {
-                        product.put("belongsTo", localIdd);
-                        product.put("localId", id);
-                    }
-                    product.pinInBackground();
-
-                    ParseQuery<ParseObject> queryy = ParseQuery.getQuery("localId");
-                    queryy.fromLocalDatastore();
-                    queryy.findInBackground((scoreListt, e) -> {
-                        if (e == null) {
-                            for (ParseObject item : scoreListt) {
-                                item.put("id", id);
-                                item.pinInBackground();
-                            }
-                        }
-                    });
-                }
-                Intent intent = new Intent(getApplicationContext(), ShoppingListDetailsActivity.class);
-                intent.putExtra("LIST_OBJECT", list);
-                startActivity(intent);
-                Log.d("score", "Retrieved " + scoreList.size() + " scores");
-                finish();
+        List<HashMap> templateProducts = listTemplate.getList("nestedProducts");
+        for(HashMap product : templateProducts){
+            if (ParseUser.getCurrentUser() != null) {
+                String user = ParseUser.getCurrentUser().getUsername();
+                product.put("localId", user + id);
+                product.put("belongsTo", localIdd);
             } else {
-                Log.d("score", "Error: " + exception.getMessage());
+                product.put("belongsTo", localIdd);
+                product.put("localId", id);
             }
-        });
+
+            ParseQuery<ParseObject> queryy = ParseQuery.getQuery("localId");
+            queryy.fromLocalDatastore();
+            queryy.findInBackground((scoreListt, e) -> {
+                if (e == null) {
+                    for (ParseObject item : scoreListt) {
+                        item.put("id", id);
+                        item.pinInBackground();
+                    }
+                }
+            });
+        }
+        list.put("nestedProducts", templateProducts);
+        if (ParseUser.getCurrentUser() != null) {
+            list.saveEventually();
+        }
+        list.pinInBackground();
+        Intent intent = new Intent(getApplicationContext(), ShoppingListDetailsActivity.class);
+        intent.putExtra("LIST_OBJECT", list);
+        startActivity(intent);
+        finish();
+
+
+//        ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
+//        if (ParseUser.getCurrentUser() == null) {
+//            query.fromLocalDatastore();
+//        } else if (!isNetworkAvailable()) {
+//            query.fromLocalDatastore();
+//        }
+//        query.whereEqualTo("belongsTo", listTemplate.getString("localId"));
+//
+//        query.findInBackground((scoreList, exception) -> {
+//            if (exception == null) {
+//                ArrayList<ParseObject> products = new ArrayList<>();
+//                ArrayList<String> names = new ArrayList<>();
+//                for (ParseObject s : scoreList) {
+//                    id++;
+//                    ParseObject product = new ParseObject("ProductOfList");
+//                    product.put("name", s.get("name"));
+//                    product.put("status", "0"); //status wykupienia produktu
+//                    product.put("amount", s.get("amount"));
+//                    product.put("category", s.get("category"));
+//                    product.put("description", s.get("description"));
+//                    product.put("measure", s.get("measure"));
+//                    product.put("icon", s.get("icon"));
+//                    if (ParseUser.getCurrentUser() != null) {
+//                        String user = ParseUser.getCurrentUser().getUsername();
+//                        product.put("localId", user + id);
+//                        product.put("belongsTo", localIdd);
+//                        product.saveEventually();
+//                    } else {
+//                        product.put("belongsTo", localIdd);
+//                        product.put("localId", id);
+//                    }
+//                    product.pinInBackground();
+//
+//                    ParseQuery<ParseObject> queryy = ParseQuery.getQuery("localId");
+//                    queryy.fromLocalDatastore();
+//                    queryy.findInBackground((scoreListt, e) -> {
+//                        if (e == null) {
+//                            for (ParseObject item : scoreListt) {
+//                                item.put("id", id);
+//                                item.pinInBackground();
+//                            }
+//                        }
+//                    });
+//                }
+//                Intent intent = new Intent(getApplicationContext(), ShoppingListDetailsActivity.class);
+//                intent.putExtra("LIST_OBJECT", list);
+//                startActivity(intent);
+//                Log.d("score", "Retrieved " + scoreList.size() + " scores");
+//                finish();
+//            } else {
+//                Log.d("score", "Error: " + exception.getMessage());
+//            }
+//        });
     }
 
     @Override
