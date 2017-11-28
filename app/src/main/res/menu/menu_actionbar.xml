@@ -9,8 +9,8 @@
         android:title="sort"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_friends"
-        android:icon="@drawable/znajomi"
+        android:id="@+id/action_share_list"
+        android:icon="@android:drawable/ic_menu_share"
         android:title="friends"
         app:showAsAction="always" />
 </menu>
