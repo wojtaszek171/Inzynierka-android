@@ -79,10 +79,9 @@ public class FriendListViewAdapter extends BaseRecyclerViewAdapter<User> {
                         lastActiveAtTime.getTime()
                 ));
             }
+
             messageButton.setOnClickListener(view -> onMessageButtonClick(view, updatedFriend));
             deleteButton.setOnClickListener(view -> onDeleteButtonClick(view, updatedFriend));
-
-            notifyItemChanged(currentPosition);
         } else {
             Toast.makeText(getContext(), "FriendListAdapter " + exception.getMessage(), Toast.LENGTH_LONG).show();
             Log.w("FriendListAdapter", exception.getMessage());
