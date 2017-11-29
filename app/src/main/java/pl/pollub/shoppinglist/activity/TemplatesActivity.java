@@ -161,22 +161,26 @@ public class TemplatesActivity extends BaseNavigationActivity {
                 query.findInBackground((scoreList, exception) -> {
                     if (exception == null) {
                         for (ParseObject s : scoreList) {
-                            s.unpinInBackground();
+                            s.unpinInBackground((ex) -> fastActivityReload());
                             s.deleteEventually();
                         }
-                    } else {
 
                     }
                 });
             } else {
                 selecteditems.get(i).deleteEventually();
-                selecteditems.get(i).unpinInBackground();
+                selecteditems.get(i).unpinInBackground((ex) -> fastActivityReload());
             }
 
         }
+
+    }
+
+    private void fastActivityReload(){
+        Intent intent = new Intent(getApplicationContext(),TemplatesActivity.class);
         finish();
         overridePendingTransition(0, 0);
-        startActivity(getIntent());
+        startActivity(intent);
         overridePendingTransition(0, 0);
     }
 
