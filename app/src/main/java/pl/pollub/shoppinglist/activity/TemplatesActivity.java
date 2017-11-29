@@ -174,7 +174,6 @@ public class TemplatesActivity extends BaseNavigationActivity {
             }
 
         }
-        actionMode.finish();
         finish();
         overridePendingTransition(0, 0);
         startActivity(getIntent());
@@ -238,5 +237,13 @@ public class TemplatesActivity extends BaseNavigationActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
     }
 }
