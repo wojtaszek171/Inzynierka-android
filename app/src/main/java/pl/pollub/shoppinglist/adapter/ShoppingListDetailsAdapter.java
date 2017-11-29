@@ -120,6 +120,8 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
                     if (e == null) {
                         ParseObject listToUpdate = resultList.get(0);
                         list.put("nestedProducts", nestedProducts);
+                        list.pinInBackground();
+                        list.saveEventually();
                     }
                 }
             });
