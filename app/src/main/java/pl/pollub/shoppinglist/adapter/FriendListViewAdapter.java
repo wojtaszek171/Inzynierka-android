@@ -47,8 +47,7 @@ public class FriendListViewAdapter extends BaseRecyclerViewAdapter<User> {
     @Override
     protected void bindView(User item, int position, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
         if (item == null || !item.isDataAvailable()) {
-            Log.w("FriendListAdapter", "User is null or not fetched");
-            return;
+            throw new NullPointerException("User is null or not fetched");
         }
 
         final TextView usernameLabel = (TextView) viewHolder.getView(R.id.username_list);

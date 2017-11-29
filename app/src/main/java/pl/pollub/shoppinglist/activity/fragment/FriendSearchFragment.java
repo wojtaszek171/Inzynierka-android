@@ -4,7 +4,6 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -82,6 +80,7 @@ public class FriendSearchFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         interactionListener = null;
+        activity = null;
     }
 
     protected void searchUsers(View view) {
@@ -98,44 +97,44 @@ public class FriendSearchFragment extends Fragment {
     }
 
     private void findAndBindUsers(String nameSubstring) {
-        ParseQuery.getQuery(User.class)
+        Task<List<User>> usersTask = ParseQuery.getQuery(User.class)
                 .whereStartsWith(User.KEY_USERNAME, nameSubstring)
-                .findInBackground()
-                .onSuccessTask(task -> {
-                    final List<User> users = task.getResult();
+                .findInBackground();
 
-                    if (users != null && users.size() == 0) {
-                        return Task.cancelled();
-                    }
+        usersTask.onSuccessTask(task -> {
+            final List<User> users = task.getResult();
 
-                    return ParseObject.fetchAllInBackground(users);
-                })
-                .continueWith(task -> {
-                    activity.runOnUiThread(() -> binding.progressBar.setVisibility(View.GONE));
+            if (users != null && users.size() == 0) {
+                return Task.cancelled();
+            }
 
-                    if (!task.isFaulted() && !task.isCancelled()) {
-                        final List<User> users = task.getResult();
+            return ParseObject.fetchAllInBackground(users);
+        }).continueWith(task -> {
+            activity.runOnUiThread(() -> binding.progressBar.setVisibility(View.GONE));
 
-                        activity.runOnUiThread(() -> {
-                            binding.searchList.setVisibility(View.VISIBLE);
-                            recyclerViewAdapter.setList(users);
-                            recyclerViewAdapter.notifyDataSetChanged();
-                        });
+            if (!task.isFaulted() && !task.isCancelled()) {
+                final List<User> users = task.getResult();
 
-                        return null;
-                    } else if (task.isFaulted()) {
-                        activity.runOnUiThread(() -> Toast.makeText(
-                                getContext(),
-                                "Nie udało się wyszukać użytkowników!",
-                                Toast.LENGTH_LONG
-                        ).show());
-
-                        Log.w("FriendSearchFrag", task.getError());
-                    }
-
-                    activity.runOnUiThread(() -> binding.emptyLabel.setVisibility(View.VISIBLE));
-                    return null;
+                activity.runOnUiThread(() -> {
+                    binding.searchList.setVisibility(View.VISIBLE);
+                    recyclerViewAdapter.setList(users);
+                    recyclerViewAdapter.notifyDataSetChanged();
                 });
+
+                return null;
+            } else if (task.isFaulted()) {
+                activity.runOnUiThread(() -> Toast.makeText(
+                        getContext(),
+                        "Nie udało się wyszukać użytkowników!",
+                        Toast.LENGTH_LONG
+                ).show());
+
+                Log.w("FriendSearchFrag", task.getError());
+            }
+
+            activity.runOnUiThread(() -> binding.emptyLabel.setVisibility(View.VISIBLE));
+            return null;
+        });
     }
 
     /**

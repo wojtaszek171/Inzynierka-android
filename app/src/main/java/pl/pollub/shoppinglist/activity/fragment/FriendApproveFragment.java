@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.parse.ParseException;
+import com.parse.ParseObject;
 
 import java.util.List;
 
+import bolts.Task;
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.adapter.FriendApproveViewAdapter;
 import pl.pollub.shoppinglist.databinding.FragmentFriendApproveBinding;
@@ -33,6 +36,7 @@ import pl.pollub.shoppinglist.model.UserData;
 public class FriendApproveFragment extends Fragment {
 
     private OnFriendApproveInteractionListener interactionListener;
+    private AppCompatActivity activity;
     private FragmentFriendApproveBinding binding;
     private FriendApproveViewAdapter recyclerViewAdapter;
 
@@ -60,11 +64,15 @@ public class FriendApproveFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFriendApproveInteractionListener) {
+        if (context instanceof OnFriendApproveInteractionListener
+                && context instanceof AppCompatActivity) {
             interactionListener = (OnFriendApproveInteractionListener) context;
+            activity = (AppCompatActivity) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFriendSearchInteractionListener");
+                    + " must extend/implement "
+                    + AppCompatActivity.class.getSimpleName()
+                    + " and " + OnFriendApproveInteractionListener.class.getSimpleName());
         }
     }
 
@@ -72,32 +80,43 @@ public class FriendApproveFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         interactionListener = null;
+        activity = null;
     }
 
     private void findAndBindInviters() {
-        User.getCurrentUser()
+        Task<UserData> dataTask = User.getCurrentUser()
                 .getUserData()
-                .fetchIfNeededInBackground(this::onUserDataFetchDone);
-    }
+                .fetchInBackground();
 
-    private void onUserDataFetchDone(UserData userData, ParseException exception) {
-        binding.progressBar.setVisibility(View.GONE);
-        if (exception == null) {
-            List<User> inviters = userData.getInviters();
+        dataTask.onSuccessTask(task -> {
+            final List<User> inviters = task.getResult().getInviters();
+            return ParseObject.fetchAllInBackground(inviters);
+        }).continueWith(task -> {
+            activity.runOnUiThread(() -> binding.progressBar.setVisibility(View.GONE));
 
-            if (inviters != null && inviters.size() > 0) {
-                binding.approvalList.setVisibility(View.VISIBLE);
-                recyclerViewAdapter.setList(inviters);
-                recyclerViewAdapter.notifyDataSetChanged();
+            if (!task.isFaulted()) {
+                final List<User> inviters = task.getResult();
+
+                activity.runOnUiThread(() -> {
+                    binding.approvalList.setVisibility(View.VISIBLE);
+                    recyclerViewAdapter.setList(inviters);
+                    recyclerViewAdapter.notifyDataSetChanged();
+                });
+
+                return null;
+            } else {
+                activity.runOnUiThread(() -> Toast.makeText(
+                        getContext(),
+                        "Nie udało się załadować zapraszających!",
+                        Toast.LENGTH_LONG
+                ).show());
+
+                Log.w("FriendApproveFrag", task.getError());
             }
-        } else {
-            Toast.makeText(
-                    getContext(),
-                    "Nie udało się załadować zaproszeń!",
-                    Toast.LENGTH_SHORT
-            ).show();
-            Log.w("FriendApproveFrag", exception);
-        }
+
+            //activity.runOnUiThread(() -> binding.emptyLabel.setVisibility(View.VISIBLE));
+            return null;
+        });
     }
 
     /**
