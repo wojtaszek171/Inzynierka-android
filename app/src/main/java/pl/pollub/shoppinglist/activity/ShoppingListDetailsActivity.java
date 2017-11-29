@@ -53,6 +53,9 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getIntent().setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
         setContentView(R.layout.activity_shopping_list_details);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
