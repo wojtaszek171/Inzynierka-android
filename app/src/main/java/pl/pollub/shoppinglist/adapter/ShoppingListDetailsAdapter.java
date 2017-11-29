@@ -147,8 +147,8 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
 
     public void swapItems(ArrayList<HashMap> newProducts) {
         this.products = newProducts;
-        
         notifyDataSetChanged();
+        context.recreate();
     }
 
 

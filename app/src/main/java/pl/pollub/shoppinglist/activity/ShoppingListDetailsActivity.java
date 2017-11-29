@@ -117,20 +117,6 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         }
     }
 
-    void refreshVisibleViews() {
-        if (productAdapter != null) {
-            for (int i = productListView.getFirstVisiblePosition(); i <= productListView.getLastVisiblePosition(); i ++) {
-                final int dataPosition = i - productListView.getHeaderViewsCount();
-                final int childPosition = i - productListView.getFirstVisiblePosition();
-                if (dataPosition >= 0 && dataPosition < productAdapter.getCount()
-                        && productListView.getChildAt(childPosition) != null) {
-                    Log.v("lista", "Refreshing view (data=" + dataPosition + ",child=" + childPosition + ")");
-                    productAdapter.getView(dataPosition, productListView.getChildAt(childPosition), this);
-                }
-            }
-        }
-    }
-
     private void displayLiveQueryUpdateToast(String eventName, String modificationAuthorLogin, HashMap recentData) {
         Context context = getApplicationContext();
         CharSequence text = eventName + ": made by " + modificationAuthorLogin;
