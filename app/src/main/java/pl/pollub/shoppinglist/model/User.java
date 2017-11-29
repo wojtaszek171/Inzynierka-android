@@ -1,14 +1,13 @@
 package pl.pollub.shoppinglist.model;
 
+import android.util.Log;
+
 import com.parse.ParseClassName;
 import com.parse.ParseUser;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
+import bolts.Task;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -49,6 +48,38 @@ public class User extends ParseUser {
     }
 
     public static User getCurrentUser() {
-        return (User) ParseUser.getCurrentUser();
+        User currentUser = (User) ParseUser.getCurrentUser();
+
+        if (currentUser != null) {
+            updateLastActiveTime(currentUser);
+        }
+
+        return currentUser;
+    }
+
+    private static void updateLastActiveTime(User user) {
+        Task.callInBackground(() -> {
+            Date currentTime = new Date();
+
+            if (user.getLastActiveAt() != null) {
+                long differenceInMinutes = (currentTime.getTime() - user.getLastActiveAt().getTime()) / 60_000;
+                if (differenceInMinutes >= 5) {
+                    user.setLastActiveAt(currentTime);
+                } else {
+                    throw new IllegalStateException("User was active in last 5 minutes");
+                }
+            } else {
+                user.setLastActiveAt(currentTime);
+            }
+
+            return user;
+        }).onSuccessTask(task -> task.getResult().saveInBackground())
+                .continueWith(task -> {
+                    if (task.isFaulted() || task.isCancelled()) {
+                        Log.w("User", task.getError());
+                    }
+
+                    return null;
+                });
     }
 }

@@ -10,9 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-
 import java.util.Date;
 import java.util.List;
 
@@ -40,11 +37,11 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
 
     @Override
     protected void bindView(User item, int position, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
-        if (item == null) {
-            Toast.makeText(getContext(), "FriendSearchAdapter: User is null", Toast.LENGTH_LONG).show();
-            Log.w("FriendSearchAdapter", "User is null");
+        if (item == null || !item.isDataAvailable()) {
+            Log.w("FriendSearchAdapter", "User is null or not fetched");
             return;
         }
+
         final TextView usernameLabel = (TextView) viewHolder.getView(R.id.username);
         final TextView lastActiveAtLabel = (TextView) viewHolder.getView(R.id.lastActiveAt);
         final Button inviteButton = (Button) viewHolder.getView(R.id.actionButton);
@@ -53,7 +50,7 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
 
         Date lastActiveAt = item.getLastActiveAt();
         if (lastActiveAt == null) {
-            lastActiveAtLabel.setText("never");
+            lastActiveAtLabel.setText(R.string.never);
         } else {
             lastActiveAtLabel.setText(DateUtils.getRelativeTimeSpanString(
                     getContext(),

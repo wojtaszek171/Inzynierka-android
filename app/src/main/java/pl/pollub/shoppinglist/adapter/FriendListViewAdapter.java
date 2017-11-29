@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.ParseException;
 import com.parse.ParseObject;
 
 import java.util.Arrays;
@@ -48,7 +47,6 @@ public class FriendListViewAdapter extends BaseRecyclerViewAdapter<User> {
     @Override
     protected void bindView(User item, int position, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
         if (item == null || !item.isDataAvailable()) {
-            Toast.makeText(getContext(), "FriendListAdapter: User is null or not fetched", Toast.LENGTH_LONG).show();
             Log.w("FriendListAdapter", "User is null or not fetched");
             return;
         }
@@ -63,7 +61,7 @@ public class FriendListViewAdapter extends BaseRecyclerViewAdapter<User> {
         Date lastActiveAtTime = item.getLastActiveAt();
 
         if (lastActiveAtTime == null) {
-            lastActiveAtLabel.setText("never");
+            lastActiveAtLabel.setText(R.string.never);
         } else {
             lastActiveAtLabel.setText(DateUtils.getRelativeTimeSpanString(
                     getContext(),

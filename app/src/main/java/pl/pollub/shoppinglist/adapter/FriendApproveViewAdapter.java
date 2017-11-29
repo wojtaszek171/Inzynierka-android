@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -19,7 +18,6 @@ import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.model.User;
-import pl.pollub.shoppinglist.model.UserData;
 
 /**
  * @author Adrian
@@ -44,11 +42,11 @@ public class FriendApproveViewAdapter extends BaseRecyclerViewAdapter<User> {
 
     @Override
     protected void bindView(User item, int position, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
-        if (item == null) {
-            Toast.makeText(getContext(), "FriendApproveAdapter: User is null", Toast.LENGTH_LONG).show();
-            Log.w("FriendApproveAdapter", "User is null");
+        if (item == null || !item.isDataAvailable()) {
+            Log.w("FriendApproveAdapter", "User is null or not fetched");
             return;
         }
+
         final TextView usernameLabel = (TextView) viewHolder.getView(R.id.username_approve);
         final TextView lastActiveAtLabel = (TextView) viewHolder.getView(R.id.lastActiveAt_approve);
         final Button approveButton = (Button) viewHolder.getView(R.id.actionButton_approve);
@@ -61,7 +59,7 @@ public class FriendApproveViewAdapter extends BaseRecyclerViewAdapter<User> {
 
                 Date lastActiveAt = updatedUser.getLastActiveAt();
                 if (lastActiveAt == null) {
-                    lastActiveAtLabel.setText("never");
+                    lastActiveAtLabel.setText(R.string.never);
                 } else {
                     lastActiveAtLabel.setText(DateUtils.getRelativeTimeSpanString(
                             getContext(),
