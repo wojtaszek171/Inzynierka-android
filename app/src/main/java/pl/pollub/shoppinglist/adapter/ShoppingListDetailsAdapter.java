@@ -147,8 +147,10 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
 
     public void swapItems(ArrayList<HashMap> newProducts) {
         this.products = newProducts;
+        
         notifyDataSetChanged();
     }
+
 
     public void selectView(int position, boolean value) {
         if(value) {

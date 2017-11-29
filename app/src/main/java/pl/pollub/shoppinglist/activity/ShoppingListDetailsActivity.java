@@ -54,7 +54,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getIntent().setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        //getIntent().setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
         setContentView(R.layout.activity_shopping_list_details);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -108,12 +108,26 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     private void updateNestedProductsAdapter() {
         if (productAdapter != null) {
             runOnUiThread(() -> {
-//                productAdapter.swapItems(getNestedProducts());
-                finish();
-                overridePendingTransition(0, 0);
-                startActivity(getIntent());
-                overridePendingTransition(0, 0);
+                productAdapter.swapItems(getNestedProducts());
+//                finish();
+//                overridePendingTransition(0, 0);
+//                startActivity(getIntent());
+//                overridePendingTransition(0, 0);
             });
+        }
+    }
+
+    void refreshVisibleViews() {
+        if (productAdapter != null) {
+            for (int i = productListView.getFirstVisiblePosition(); i <= productListView.getLastVisiblePosition(); i ++) {
+                final int dataPosition = i - productListView.getHeaderViewsCount();
+                final int childPosition = i - productListView.getFirstVisiblePosition();
+                if (dataPosition >= 0 && dataPosition < productAdapter.getCount()
+                        && productListView.getChildAt(childPosition) != null) {
+                    Log.v("lista", "Refreshing view (data=" + dataPosition + ",child=" + childPosition + ")");
+                    productAdapter.getView(dataPosition, productListView.getChildAt(childPosition), this);
+                }
+            }
         }
     }
 
