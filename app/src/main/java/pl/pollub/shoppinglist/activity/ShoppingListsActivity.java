@@ -361,9 +361,10 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                         for (ParseObject s : scoreList) {
                             s.unpinInBackground(e -> {
                                 if (e == null) {
+                                    Intent intent = new Intent(getApplicationContext(),ShoppingListsActivity.class);
                                     finish();
                                     overridePendingTransition(0, 0);
-                                    startActivity(getIntent());
+                                    startActivity(intent);
                                     overridePendingTransition(0, 0);
                                 }
                             });
@@ -377,9 +378,10 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                 selecteditems.get(i).deleteEventually();
                 selecteditems.get(i).unpinInBackground(e -> {
                     if (e == null) {
+                        Intent intent = new Intent(getApplicationContext(),ShoppingListsActivity.class);
                         finish();
                         overridePendingTransition(0, 0);
-                        startActivity(getIntent());
+                        startActivity(intent);
                         overridePendingTransition(0, 0);
                     }
                 });
