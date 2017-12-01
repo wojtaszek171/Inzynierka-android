@@ -19,14 +19,17 @@ import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +40,10 @@ import com.parse.ParseUser;
 import com.parse.SubscriptionHandling;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import at.markushi.ui.CircleButton;
@@ -54,6 +61,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
     private ArrayList<ParseObject> listsItems = new ArrayList<>();
     private ShoppingListsAdapter listAdapter;
     private ListView listView = null;
+    private String sort="";
 
     private FloatingActionButton addNew;
     private Toolbar toolbar;
@@ -74,7 +82,6 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
 
         setTitle(R.string.menuLists);
         setSupportActionBar(toolbar);
-
         displayListsAndSetActions();
         addNewShoppingListDialog();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -123,6 +130,51 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
             @Override
             public void onMenuClosed() {
 
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_sort:
+                PopupMenu popup = new PopupMenu(this, findViewById(R.id.action_sort), Gravity.CENTER);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.menu_sort_list, popup.getMenu());
+                popup.setOnMenuItemClickListener(item1 -> {
+                    switch (item1.getItemId()) {
+                        case R.id.nameSort:
+                            setSortForLists("name");
+                            return true;
+                        case R.id.dateSort:
+                            setSortForLists("date");
+                            return true;
+                        default:
+                            return false;
+                    }
+                });
+                popup.show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    private void setSortForLists(String sortMethod) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("SortLists");
+        query.fromLocalDatastore();
+        query.findInBackground((objects, e) -> {
+            if(e==null){
+                if(objects.size()>0) {
+                    objects.get(0).put("sortBy",sortMethod);
+                    objects.get(0).pinInBackground();
+                }else {
+                    ParseObject sortProduct = new ParseObject("SortLists");
+                    sortProduct.put("sortBy", sortMethod);
+                    sortProduct.pinInBackground();
+                }
+                listAdapter.swapItems(listsItems,sort);
             }
         });
     }
@@ -176,36 +228,72 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
     }
 
     private void displayListsAndSetActions() {
-        ParseUser currentlyLoggedUser = ParseUser.getCurrentUser();
+        ParseQuery<ParseObject> querysort = ParseQuery.getQuery("SortLists");
+        querysort.fromLocalDatastore();
+        querysort.findInBackground((objects, e) -> {
+            if(e==null){
+                if(objects.size()!=0)
+                    sort = objects.get(0).getString("sortBy");
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
-        query.whereEqualTo("isTemplate", false);
+                ParseUser currentlyLoggedUser = ParseUser.getCurrentUser();
 
-        if (currentlyLoggedUser != null) {
-            query.whereEqualTo("sharedAmong", currentlyLoggedUser.getUsername());
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
+                query.whereEqualTo("isTemplate", false);
 
-            if (!isNetworkAvailable()) {
-                query.fromLocalDatastore();
-            }
-        } else {
-            query.fromLocalDatastore();
-            query.whereEqualTo("belongsTo", null);
-        }
-        setIdForLocal();
+                if (currentlyLoggedUser != null) {
+                    query.whereEqualTo("sharedAmong", currentlyLoggedUser.getUsername());
+
+                    if (!isNetworkAvailable()) {
+                        query.fromLocalDatastore();
+                    }
+                } else {
+                    query.fromLocalDatastore();
+                    query.whereEqualTo("belongsTo", null);
+                }
+                setIdForLocal();
 
 
-        query.findInBackground((resultList, exception) -> {
-            if (exception == null) {
-                prepareShoppingListsAdapterFromQueryResult(resultList);
-                Log.d("listsQuerySuccess", "Retrieved " + resultList.size() + " lists.");
-            } else {
-                Log.d("listsQueryError", "Error: " + exception.getMessage());
+                query.findInBackground((resultList, exception) -> {
+                    if (exception == null) {
+                        prepareShoppingListsAdapterFromQueryResult(resultList);
+                        Log.d("listsQuerySuccess", "Retrieved " + resultList.size() + " lists.");
+                    } else {
+                        Log.d("listsQueryError", "Error: " + exception.getMessage());
+                    }
+                });
             }
         });
     }
 
+    public static void sortLists(ArrayList<ParseObject> lists, String sort) {
+        switch(sort){
+            case "name":
+                Collections.sort(lists, new Comparator<ParseObject>() {
+                    @Override
+                    public int compare(ParseObject o1, ParseObject o2) {
+                        String firstValue = o1.get("name").toString().toLowerCase();
+                        String secondValue = o2.get("name").toString().toLowerCase();
+                        return firstValue.compareTo(secondValue);
+                    }
+                });
+                break;
+            case "date":
+//                Collections.sort(lists, new Comparator<ParseObject>() {
+//                    @Override
+//                    public int compare(ParseObject o1, ParseObject o2) {
+//                        String[] string = o1.get("deadline").toString().split("-");
+//                        Date firstValue = new Date();
+//                        Date secondValue = (Date) o2.get("deadline");
+//                        return firstValue.compareTo(secondValue);
+//                    }
+//                });
+                break;
+            default:
+                break;
+        }
+    }
     private void updateShoppingListsAdapterWithQueryResult(ArrayList<ParseObject> resultList){
-        runOnUiThread(() -> listAdapter.swapItems(resultList));
+        runOnUiThread(() -> listAdapter.swapItems(resultList,sort));
     }
 
     private ParseQuery getMyShoppingListsQuery(){
@@ -248,6 +336,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
             dates.add(s.getString("deadline"));
             listsItems.add(s);
         }
+        sortLists(listsItems, sort);
         listAdapter = new
                 ShoppingListsAdapter(ShoppingListsActivity.this, names, dates, listsItems, false);
         list = findViewById(R.id.list);

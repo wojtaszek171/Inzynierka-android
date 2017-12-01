@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.ParseException;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -13,15 +14,20 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
+import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.PopupWindow;
+import android.widget.Switch;
 import android.widget.Toast;
 
+import com.parse.GetCallback;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -29,11 +35,16 @@ import com.parse.ParseUser;
 import com.parse.SubscriptionHandling;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.adapter.ShoppingListDetailsAdapter;
+import pl.pollub.shoppinglist.model.ShoppingList;
 import pl.pollub.shoppinglist.model.User;
 import pl.pollub.shoppinglist.model.UserData;
 
@@ -41,6 +52,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     //    private String listId;
     private String listName;
     private ParseObject list;
+    private String sort="";
 
     private ListView productListView;
     private ShoppingListDetailsAdapter productAdapter;
@@ -75,8 +87,6 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
             addNewProduct();
         });
 
-
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -89,7 +99,16 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     }
 
     private void createListOfProducts() {
-        prepareNestedProductsAdapter();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("SortProducts");
+        query.fromLocalDatastore();
+        query.findInBackground((objects, e) -> {
+            if(e==null){
+                if(objects.size()!=0)
+                    sort = objects.get(0).getString("sortBy");
+                prepareNestedProductsAdapter();
+            }
+        });
+
     }
 
     private void setupLiveQueryProductsSubscriptions() {
@@ -108,7 +127,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     private void updateNestedProductsAdapter() {
         if (productAdapter != null) {
             runOnUiThread(() -> {
-                productAdapter.swapItems(getNestedProducts());
+                productAdapter.swapItems(getNestedProducts(),sort);
 //                finish();
 //                overridePendingTransition(0, 0);
 //                startActivity(getIntent());
@@ -158,12 +177,50 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
 
     private ArrayList<String> getNestedProductNames() {
         ArrayList<HashMap> nestedProducts = getNestedProducts();
+        sortProducts(nestedProducts,sort);
         ArrayList<String> nestedProductsNames = new ArrayList<>();
 
         for (HashMap nestedProduct : nestedProducts) {
             nestedProductsNames.add((String) nestedProduct.get("name"));
         }
         return nestedProductsNames;
+    }
+
+    public static void sortProducts(ArrayList<HashMap> nestedProducts,String sort) {
+        switch(sort){
+            case "name":
+                Collections.sort(nestedProducts, new Comparator<HashMap>() {
+                    @Override
+                    public int compare(HashMap o1, HashMap o2) {
+                        String firstValue = o1.get("name").toString().toLowerCase();
+                        String secondValue = o2.get("name").toString().toLowerCase();
+                        return firstValue.compareTo(secondValue);
+                    }
+                });
+                break;
+            case "category":
+                Collections.sort(nestedProducts, new Comparator<HashMap>() {
+                    @Override
+                    public int compare(HashMap o1, HashMap o2) {
+                        String firstValue = o1.get("category").toString().toLowerCase();
+                        String secondValue = o2.get("category").toString().toLowerCase();
+                        return firstValue.compareTo(secondValue);
+                    }
+                });
+                break;
+            case "status":
+                Collections.sort(nestedProducts, new Comparator<HashMap>() {
+                    @Override
+                    public int compare(HashMap o1, HashMap o2) {
+                        String firstValue = o1.get("status").toString().toLowerCase();
+                        String secondValue = o2.get("status").toString().toLowerCase();
+                        return firstValue.compareTo(secondValue);
+                    }
+                });
+                break;
+            default:
+                break;
+        }
     }
 
     private ArrayList<HashMap> getNestedProducts() {
@@ -273,9 +330,48 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
             case R.id.action_share_list:
                 checkIfUserIsAbleToShareList();
                 return true;
+            case R.id.action_sort:
+                PopupMenu popup = new PopupMenu(this, findViewById(R.id.action_sort), Gravity.CENTER);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.menu_sort_product, popup.getMenu());
+                popup.setOnMenuItemClickListener(item1 -> {
+                    switch (item1.getItemId()) {
+                        case R.id.statusSort:
+                            setSortForProducts("status");
+                            return true;
+                        case R.id.categorySort:
+                            setSortForProducts("category");
+                            return true;
+                        case R.id.nameSort:
+                            setSortForProducts("name");
+                            return true;
+                        default:
+                            return false;
+                    }
+                });
+                popup.show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setSortForProducts(String sortMethod) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("SortProducts");
+        query.fromLocalDatastore();
+        query.findInBackground((objects, e) -> {
+            if(e==null){
+                if(objects.size()>0) {
+                    objects.get(0).put("sortBy",sortMethod);
+                    objects.get(0).pinInBackground();
+                }else {
+                    ParseObject sortProduct = new ParseObject("SortProducts");
+                    sortProduct.put("sortBy", sortMethod);
+                    sortProduct.pinInBackground();
+                }
+                productAdapter.swapItems(getNestedProducts(),sort);
+            }
+        });
     }
 
     public void setIdForLocal() {

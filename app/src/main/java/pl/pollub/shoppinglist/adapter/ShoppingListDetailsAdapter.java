@@ -29,6 +29,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import pl.pollub.shoppinglist.R;
+import pl.pollub.shoppinglist.activity.ShoppingListDetailsActivity;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -145,8 +146,9 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
         notifyDataSetChanged();
     }
 
-    public void swapItems(ArrayList<HashMap> newProducts) {
+    public void swapItems(ArrayList<HashMap> newProducts, String sort) {
         this.products = newProducts;
+        ShoppingListDetailsActivity.sortProducts(products,sort);
         notifyDataSetChanged();
         context.recreate();
     }

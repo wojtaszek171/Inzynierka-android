@@ -108,8 +108,9 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
         collaboratorsTextView.setText(usernamesBuilder.toString());
     }
 
-    public void swapItems(ArrayList<ParseObject> newShoppingLists) {
+    public void swapItems(ArrayList<ParseObject> newShoppingLists, String sort) {
         this.shoppingLists = newShoppingLists;
+        ShoppingListsActivity.sortLists(shoppingLists,sort);
         notifyDataSetChanged();
     }
 
