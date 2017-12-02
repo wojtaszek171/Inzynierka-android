@@ -1,6 +1,6 @@
 package pl.pollub.shoppinglist.activity;
 
-import android.app.DatePickerDialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -13,24 +13,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
+import org.w3c.dom.Text;
+
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import pl.pollub.shoppinglist.R;
+import pl.pollub.shoppinglist.activity.fragment.DatePickerFragment;
+import pl.pollub.shoppinglist.activity.fragment.TimePickerFragment;
+import pl.pollub.shoppinglist.util.scheduling.ScheduleClient;
 
 public class AddShoppingList extends AppCompatActivity {
     private int isLogged = 0;
@@ -44,6 +50,13 @@ public class AddShoppingList extends AppCompatActivity {
     private String listNameString;
     private EditText description;
     private String descriptionString;
+
+    private Button timepickerBtn;
+    ToggleButton setNotificationsToggle;
+
+    private DatePicker datePicker;
+    private ScheduleClient scheduleClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,29 +66,26 @@ public class AddShoppingList extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        id = getIntent().getIntExtra("LOCAL_LIST_ID", 1);
-        template = getIntent().getBooleanExtra("TEMPLATE", false);
-        listTemplate = getIntent().getParcelableExtra("LIST_TEMPLATE");
-        listObject = getIntent().getParcelableExtra("LIST_OBJECT");
-        listName = findViewById(R.id.listName);
-        description = findViewById(R.id.list_description);
+        scheduleClient = new ScheduleClient(this);
+        scheduleClient.doBindService();
 
-        textDate = findViewById(R.id.listDeadline);
+        initLayoutComponets();
+
         if (template) {
             setTitle(R.string.addTemplate);
             textDate.setVisibility(View.GONE);
         } else if (listTemplate != null) {
             setTitle("Podaj szczegóły listy");
-        } else if (listObject != null){
+        } else if (listObject != null) {
             setTitle("Edytuj listę");
-        }else {
+        } else {
             setTitle(R.string.addList);
         }
         Button saveNewList = findViewById(R.id.saveNewList);
         TextView setDeadline = findViewById(R.id.listDeadline);
         ImageButton setListImage = findViewById(R.id.setListImage);
 
-        if(listObject != null){
+        if (listObject != null) {
             listName.setText(listObject.getString("name"));
             description.setText(listObject.getString("description"));
             textDate.setText(listObject.getString("deadline"));
@@ -84,23 +94,50 @@ public class AddShoppingList extends AppCompatActivity {
         saveNewList.setOnClickListener(view -> {
             listNameString = listName.getText().toString();
             descriptionString = description.getText().toString();
-            if(listObject!=null){
+            if (listObject != null) {
                 updateShoppingList();
-            }else {
+            } else {
                 createShoppingList();
             }
         });
 
         setListImage.setOnClickListener(view -> {
+        });
+        setDeadline.setOnClickListener(view -> datePickerDialog());
+    }
 
-        });
-        setDeadline.setOnClickListener(view -> {
-            datePickerDialog();
-        });
+    @Override
+    protected void onStop() {
+        // When our activity is stopped ensure we also stop the connection to the service
+        // this stops us leaking our activity into the system *bad*
+        if (scheduleClient != null)
+            scheduleClient.doUnbindService();
+        super.onStop();
+    }
+
+    private void initLayoutComponets() {
+        id = getIntent().getIntExtra("LOCAL_LIST_ID", 1);
+        template = getIntent().getBooleanExtra("TEMPLATE", false);
+        listTemplate = getIntent().getParcelableExtra("LIST_TEMPLATE");
+        listObject = getIntent().getParcelableExtra("LIST_OBJECT");
+        listName = findViewById(R.id.listName);
+        description = findViewById(R.id.list_description);
+
+        timepickerBtn = findViewById(R.id.listDeadlineTimepickerBtn);
+        timepickerBtn.setOnClickListener(v -> showTimePickerDialog(v));
+
+        setNotificationsToggle = findViewById(R.id.toggleNotifications);
+        setNotificationsToggle.setOnCheckedChangeListener((buttonView, isChecked) -> setNotificationSetButtonsVisibility(isChecked));
+        textDate = findViewById(R.id.listDeadline);
     }
 
     private void updateShoppingList() {
-        if(isNetworkAvailable()){
+
+        if(setNotificationsToggle.isChecked()){
+            setNotification();
+        }
+
+        if (isNetworkAvailable()) {
             listObject.put("name", listNameString);
             listObject.put("status", "0");
             listObject.put("deadline", textDate.getText().toString());
@@ -131,20 +168,62 @@ public class AddShoppingList extends AppCompatActivity {
         }
     }
 
+
+    private void setNotificationSetButtonsVisibility(Boolean show) {
+        Button datepickerBtnLocal = findViewById(R.id.listDeadline);
+        Button timepickerBtnLocal = findViewById(R.id.listDeadlineTimepickerBtn);
+
+        if (show == true) {
+            datepickerBtnLocal.setVisibility(View.VISIBLE);
+            timepickerBtnLocal.setVisibility(View.VISIBLE);
+        } else {
+            datepickerBtnLocal.setVisibility(View.INVISIBLE);
+            timepickerBtnLocal.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setNotification() {
+        Calendar calendar = Calendar.getInstance();
+        TextView datepickerBtnLocal = findViewById(R.id.listDeadline);
+        TextView timepickerBtnLocal = findViewById(R.id.listDeadlineTimepickerBtn);
+        String[] date, time;
+        int year, month, day;
+        int hour, minute;
+        date = datepickerBtnLocal.getText().toString().split("-");
+        time = timepickerBtnLocal.getText().toString().split(":");
+
+        year = Integer.parseInt(date[0]);
+        month = Integer.parseInt(date[1]);
+        day = Integer.parseInt(date[2]);
+
+        hour = Integer.parseInt(time[0]);
+        minute = Integer.parseInt(time[1]);
+
+        String notificationTitle = getApplicationInfo().loadLabel(getPackageManager()).toString();
+        String notificationMessage = "Wykup listę " + listName.getText().toString() + "!"
+                + " - " + day + "-" + month + "-" + year + " " + hour + ":" + minute;
+
+        calendar.set(year, month-1, day, hour, minute);
+        scheduleClient.setAlarmForNotification(calendar, notificationTitle, notificationMessage);
+    }
+
+    private void showTimePickerDialog(View v) {
+        DialogFragment dFragment = new TimePickerFragment();
+        dFragment.show(getFragmentManager(), "Time Picker");
+    }
+
+
     private void datePickerDialog() {
-        final Calendar calendar = Calendar.getInstance();
-        int yy = calendar.get(Calendar.YEAR);
-        int mm = calendar.get(Calendar.MONTH);
-        int dd = calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog datePicker = new DatePickerDialog(AddShoppingList.this, (view1, year, monthOfYear, dayOfMonth) -> {
-            String date = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-            textDate.setText(date);
-        }, yy, mm, dd);
-        datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-        datePicker.show();
+        DialogFragment dFragment = new DatePickerFragment();
+        dFragment.show(getFragmentManager(), "Date Picker");
     }
 
     private void createShoppingList() {
+
+        if(setNotificationsToggle.isChecked()){
+            setNotification();
+        }
+
         list = ParseObject.create("ShoppingList");
 
         list.put("name", listNameString);
@@ -219,7 +298,7 @@ public class AddShoppingList extends AppCompatActivity {
     private void recoveryTempalte(ParseObject listTemplate, Object localIdd) {
 
         List<HashMap> templateProducts = listTemplate.getList("nestedProducts");
-        for(HashMap product : templateProducts){
+        for (HashMap product : templateProducts) {
             if (ParseUser.getCurrentUser() != null) {
                 String user = ParseUser.getCurrentUser().getUsername();
                 product.put("localId", user + id);
@@ -249,61 +328,6 @@ public class AddShoppingList extends AppCompatActivity {
         intent.putExtra("LIST_OBJECT", list);
         startActivity(intent);
         finish();
-
-
-//        ParseQuery<ParseObject> query = ParseQuery.getQuery("ProductOfList");
-//        if (ParseUser.getCurrentUser() == null) {
-//            query.fromLocalDatastore();
-//        } else if (!isNetworkAvailable()) {
-//            query.fromLocalDatastore();
-//        }
-//        query.whereEqualTo("belongsTo", listTemplate.getString("localId"));
-//
-//        query.findInBackground((scoreList, exception) -> {
-//            if (exception == null) {
-//                ArrayList<ParseObject> products = new ArrayList<>();
-//                ArrayList<String> names = new ArrayList<>();
-//                for (ParseObject s : scoreList) {
-//                    id++;
-//                    ParseObject product = new ParseObject("ProductOfList");
-//                    product.put("name", s.get("name"));
-//                    product.put("status", "0"); //status wykupienia produktu
-//                    product.put("amount", s.get("amount"));
-//                    product.put("category", s.get("category"));
-//                    product.put("description", s.get("description"));
-//                    product.put("measure", s.get("measure"));
-//                    product.put("icon", s.get("icon"));
-//                    if (ParseUser.getCurrentUser() != null) {
-//                        String user = ParseUser.getCurrentUser().getUsername();
-//                        product.put("localId", user + id);
-//                        product.put("belongsTo", localIdd);
-//                        product.saveEventually();
-//                    } else {
-//                        product.put("belongsTo", localIdd);
-//                        product.put("localId", id);
-//                    }
-//                    product.pinInBackground();
-//
-//                    ParseQuery<ParseObject> queryy = ParseQuery.getQuery("localId");
-//                    queryy.fromLocalDatastore();
-//                    queryy.findInBackground((scoreListt, e) -> {
-//                        if (e == null) {
-//                            for (ParseObject item : scoreListt) {
-//                                item.put("id", id);
-//                                item.pinInBackground();
-//                            }
-//                        }
-//                    });
-//                }
-//                Intent intent = new Intent(getApplicationContext(), ShoppingListDetailsActivity.class);
-//                intent.putExtra("LIST_OBJECT", list);
-//                startActivity(intent);
-//                Log.d("score", "Retrieved " + scoreList.size() + " scores");
-//                finish();
-//            } else {
-//                Log.d("score", "Error: " + exception.getMessage());
-//            }
-//        });
     }
 
     @Override
