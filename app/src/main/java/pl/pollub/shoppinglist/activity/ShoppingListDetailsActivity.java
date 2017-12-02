@@ -387,11 +387,13 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         sharedAmong.remove(sharedAmong.indexOf(ParseUser.getCurrentUser().getUsername()));
         list.put("sharedAmong", sharedAmong);
         list.saveEventually();
-        list.unpinInBackground();
-
-        Intent intent = new Intent(getBaseContext(), ShoppingListsActivity.class);
-        finish();
-        startActivity(intent);
+        list.unpinInBackground( ex -> {
+            if(ex == null){
+                Intent intent = new Intent(getBaseContext(), ShoppingListsActivity.class);
+                finish();
+                startActivity(intent);
+            }
+        });
     }
 
     private void displayShareListDialog(List<String> friendsUsernames) {
