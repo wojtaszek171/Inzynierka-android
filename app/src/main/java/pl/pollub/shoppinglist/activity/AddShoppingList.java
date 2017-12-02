@@ -159,7 +159,8 @@ public class AddShoppingList extends AppCompatActivity {
                         ParseObject listToUpdate = resultList.get(0);
                         listObject.put("name", listNameString);
                         listObject.put("status", "0");
-                        listObject.put("deadline", textDate.getText().toString());
+                        listObject.put("deadline", textDate.getText().toString() + " "
+                                + timepickerBtn.getText().toString());
                         listObject.put("description", descriptionString);
                         listObject.put("isTemplate", template);
                     }
@@ -228,7 +229,8 @@ public class AddShoppingList extends AppCompatActivity {
 
         list.put("name", listNameString);
         list.put("status", "0");
-        list.put("deadline", textDate.getText().toString());
+        list.put("deadline", textDate.getText().toString() + " "
+                + timepickerBtn.getText().toString());
         list.put("description", descriptionString);
         list.put("isTemplate", template);
 
