@@ -22,12 +22,15 @@ import pl.pollub.shoppinglist.service.NotifyService;
  */
 public class AlarmTask implements Runnable{
 
+    private static int UNIQUE_INT_PER_CALL = 0;
+
     private final Calendar date;
     private final AlarmManager am;
     private final Context context;
     private String title, message;
 
     public AlarmTask(Context context, Calendar date, String title, String message) {
+        UNIQUE_INT_PER_CALL++;
         this.context = context;
         this.am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         this.date = date;
@@ -41,7 +44,7 @@ public class AlarmTask implements Runnable{
         intent.putExtra(NotifyService.INTENT_NOTIFY, true);
         intent.putExtra("title", title);
         intent.putExtra("message", message);
-        PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getService(context, UNIQUE_INT_PER_CALL, intent, 0);
 
         am.set(AlarmManager.RTC, date.getTimeInMillis(), pendingIntent);
     }

@@ -25,8 +25,8 @@ import pl.pollub.shoppinglist.activity.ShoppingListsActivity;
  */
 public class NotifyService extends Service {
 
-    private Intent currentIntent;
     private final IBinder binder = new ServiceBinder();
+    private CharSequence title, text;
 
 
     /**
@@ -50,7 +50,9 @@ public class NotifyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        this.currentIntent = intent;
+        title = intent.getStringExtra("title");
+        text = intent.getStringExtra("message");
+
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
 
         if (intent.getBooleanExtra(INTENT_NOTIFY, false))
@@ -67,9 +69,7 @@ public class NotifyService extends Service {
 
 
     private void showNotification() {
-        CharSequence title = currentIntent.getStringExtra("title");
         int icon = R.mipmap.sym_def_app_icon;
-        CharSequence text = currentIntent.getStringExtra("message");
         long time = System.currentTimeMillis();
 
         Notification notification;

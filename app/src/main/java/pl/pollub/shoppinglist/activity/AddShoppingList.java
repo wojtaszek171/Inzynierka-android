@@ -201,7 +201,7 @@ public class AddShoppingList extends AppCompatActivity {
         minute = Integer.parseInt(time[1]);
 
         String notificationTitle = getApplicationInfo().loadLabel(getPackageManager()).toString();
-        String notificationMessage = "Wykup listę " + listName.getText().toString() + "!"
+        String notificationMessage = "Wykup listę " + listNameString + "!"
                 + " - " + day + "-" + month + "-" + year + " " + hour + ":" + minute;
 
         calendar.set(year, month-1, day, hour, minute);
