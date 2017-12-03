@@ -29,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.parse.ParseException;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -196,12 +197,31 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
         query.findInBackground((resultList, exception) -> {
             if (exception == null) {
                 prepareShoppingListsAdapterFromQueryResult(resultList);
+                if(isNetworkAvailable()){
+                    updateLocalStorageWith(resultList);
+                }
                 Log.d("listsQuerySuccess", "Retrieved " + resultList.size() + " lists.");
             } else {
                 Log.d("listsQueryError", "Error: " + exception.getMessage());
             }
         });
     }
+
+    private void updateLocalStorageWith(List<ParseObject> listsFromServer){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
+        query.fromLocalDatastore();
+        query.findInBackground((resultList, exception) -> {
+            if (exception == null) {
+                ParseObject.unpinAllInBackground(resultList);
+                try {
+                    ParseObject.pinAll(listsFromServer);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
 
     private void updateShoppingListsAdapterWithQueryResult(ArrayList<ParseObject> resultList){
         runOnUiThread(() -> listAdapter.swapItems(resultList));
