@@ -271,14 +271,14 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
     public static void sortLists(ArrayList<ParseObject> lists, String sort) {
         switch(sort){
             case "name":
-//                Collections.sort(lists, new Comparator<ParseObject>() {
-//                    @Override
-//                    public int compare(ParseObject o1, ParseObject o2) {
-//                        String firstValue = o1.get("name").toString().toLowerCase();
-//                        String secondValue = o2.get("name").toString().toLowerCase();
-//                        return firstValue.compareTo(secondValue);
-//                    }
-//                });
+                Collections.sort(lists, new Comparator<ParseObject>() {
+                    @Override
+                    public int compare(ParseObject o1, ParseObject o2) {
+                        String firstValue = o1.get("name").toString().toLowerCase();
+                        String secondValue = o2.get("name").toString().toLowerCase();
+                        return firstValue.compareTo(secondValue);
+                    }
+                });
                 break;
             case "date":
 //                Collections.sort(lists, new Comparator<ParseObject>() {

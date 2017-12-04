@@ -137,18 +137,18 @@ public class AddShoppingList extends AppCompatActivity {
             setNotification();
         }
 
-        if (isNetworkAvailable()) {
-            listObject.put("name", listNameString);
-            listObject.put("status", "0");
-            listObject.put("deadline", textDate.getText().toString());
-            listObject.put("description", descriptionString);
-            listObject.put("isTemplate", template);
-            listObject.saveEventually();
-            listObject.pinInBackground(ex -> {
-                if (ex == null) {
-                    finish();
-                }
-            });
+        if (isNetworkAvailable() && ParseUser.getCurrentUser()!=null) {
+                listObject.put("name", listNameString);
+                listObject.put("status", "0");
+                listObject.put("deadline", textDate.getText().toString());
+                listObject.put("description", descriptionString);
+                listObject.put("isTemplate", template);
+                listObject.saveEventually();
+                listObject.pinInBackground(ex -> {
+                    if (ex == null) {
+                        finish();
+                    }
+                });
         } else {
             ParseQuery offlineListToUpdateQuery = ParseQuery.getQuery("ShoppingList");
             offlineListToUpdateQuery.whereEqualTo("localId", listObject.getString("localId"));

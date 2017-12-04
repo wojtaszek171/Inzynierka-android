@@ -21,6 +21,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,9 +74,11 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
             productDescription.setText(product.get("description").toString());
             CheckBox status = rowView.findViewById(R.id.checkBoxStatus);
             if(product.get("status").toString().equals("1")){
+                if(status.isChecked()==false)
                 status.setChecked(true);
             }else
             {
+                if(status.isChecked()==true)
                 status.setChecked(false);
             }
             String nameOfFile = (product.get("image") != null) ? product.get("image").toString()+"_white" : "other";
@@ -108,10 +111,10 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
     private void updateStatus(int position, int status) {
         ArrayList<HashMap> nestedProducts = (ArrayList) list.get("nestedProducts");
         nestedProducts.get(position).put("status",status);
-        if (isNetworkAvailable()) {
-            list.put("nestedProducts", nestedProducts);
-            list.saveEventually();
-            list.pinInBackground();
+        if (ParseUser.getCurrentUser()!=null && isNetworkAvailable()) {
+                list.put("nestedProducts", nestedProducts);
+                list.saveEventually();
+                list.pinInBackground();
         } else {
             ParseQuery offlineListToUpdateQuery = ParseQuery.getQuery("ShoppingList");
             offlineListToUpdateQuery.whereEqualTo("localId", list.getString("localId"));
@@ -120,9 +123,9 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
                 public void done(List<ParseObject> resultList, ParseException e) {
                     if (e == null) {
                         ParseObject listToUpdate = resultList.get(0);
-                        list.put("nestedProducts", nestedProducts);
-                        list.pinInBackground();
-                        list.saveEventually();
+                        listToUpdate.put("nestedProducts", nestedProducts);
+                        listToUpdate.pinInBackground();
+                        listToUpdate.saveEventually();
                     }
                 }
             });
