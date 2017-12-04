@@ -10,9 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-
 import java.util.Date;
 import java.util.List;
 
@@ -40,11 +37,10 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
 
     @Override
     protected void bindView(User item, int position, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
-        if (item == null) {
-            Toast.makeText(getContext(), "FriendSearchAdapter: User is null", Toast.LENGTH_LONG).show();
-            Log.w("FriendSearchAdapter", "User is null");
-            return;
+        if (item == null || !item.isDataAvailable()) {
+            throw new NullPointerException("User is null or not fetched");
         }
+
         final TextView usernameLabel = (TextView) viewHolder.getView(R.id.username);
         final TextView lastActiveAtLabel = (TextView) viewHolder.getView(R.id.lastActiveAt);
         final Button inviteButton = (Button) viewHolder.getView(R.id.actionButton);
@@ -53,7 +49,7 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
 
         Date lastActiveAt = item.getLastActiveAt();
         if (lastActiveAt == null) {
-            lastActiveAtLabel.setText("never");
+            lastActiveAtLabel.setText(R.string.never);
         } else {
             lastActiveAtLabel.setText(DateUtils.getRelativeTimeSpanString(
                     getContext(),
@@ -64,7 +60,8 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
         final UserData itemData = item.getUserData();
 
         if (hasAlreadyBeenInvitedByCurrentUser(item)
-                || item.getObjectId().equals(User.getCurrentUser().getObjectId())) {
+                || item.getObjectId().equals(User.getCurrentUser().getObjectId())
+                || isAlreadyFriendOfCurrentUser(item)) {
             markButtonAlreadyInvited(inviteButton);
         } else if (hasAlreadyInvitedCurrentUser(item)) {
             markButtonApproveInvitation(inviteButton);
@@ -99,10 +96,25 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
         return false;
     }
 
+    private static boolean isAlreadyFriendOfCurrentUser(User user) {
+        List<User> friends = User.getCurrentUser().getUserData().getFriends();
+
+        if (friends == null || friends.size() == 0) {
+            return false;
+        }
+
+        for (User friend : friends) {
+            if (friend.getObjectId().equals(user.getObjectId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static boolean hasAlreadyInvitedCurrentUser(User user) {
         List<User> inviters = User.getCurrentUser().getUserData().getInviters();
 
-        if (inviters == null) {
+        if (inviters == null || inviters.size() == 0) {
             return false;
         }
 

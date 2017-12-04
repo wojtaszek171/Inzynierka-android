@@ -44,6 +44,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Anuluj</string>
     <string name="addTemplate">Dodaj szablon</string>
+    <string name="never">nigdy</string>
 
     <!--CATEGORIES:-->
     <string-array name="product_categories">

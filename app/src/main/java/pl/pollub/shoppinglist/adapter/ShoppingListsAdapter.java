@@ -93,12 +93,20 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
     }
 
     private void setCollaborators(View rowView, int position){
+        String currentUserName = ParseUser.getCurrentUser().getUsername();
+
         StringBuilder usernamesBuilder = new StringBuilder();
-        List<String> listCollaboratorsUsernames = shoppingLists.get(position).getList("sharedAmong");
-        listCollaboratorsUsernames.remove(ParseUser.getCurrentUser().getUsername().toString());
+        List<String> sharedAmong = shoppingLists.get(position).getList("sharedAmong");
+        List<String> listCollaboratorsUsernames = new ArrayList<>();
+
+        for(String friendUsername : sharedAmong){
+            if(!friendUsername.equals(currentUserName)){
+                listCollaboratorsUsernames.add(friendUsername);
+            }
+        }
 
         for(int i=0; i<listCollaboratorsUsernames.size(); i++){
-            usernamesBuilder.append(listCollaboratorsUsernames.get(i));
+                usernamesBuilder.append(listCollaboratorsUsernames.get(i));
             if(i != listCollaboratorsUsernames.size()-1){
                 usernamesBuilder.append(", ");
             }

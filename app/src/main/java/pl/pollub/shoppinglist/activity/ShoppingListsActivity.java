@@ -33,6 +33,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.ParseException;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -231,8 +232,8 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
         ParseQuery<ParseObject> querysort = ParseQuery.getQuery("SortLists");
         querysort.fromLocalDatastore();
         querysort.findInBackground((objects, e) -> {
-            if(e==null){
-                if(objects.size()!=0)
+            if (e == null) {
+                if (objects.size() != 0)
                     sort = objects.get(0).getString("sortBy");
 
                 ParseUser currentlyLoggedUser = ParseUser.getCurrentUser();
@@ -252,30 +253,32 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                 }
                 setIdForLocal();
 
-
                 query.findInBackground((resultList, exception) -> {
                     if (exception == null) {
                         prepareShoppingListsAdapterFromQueryResult(resultList);
+                        if (isNetworkAvailable()) {
+                            updateLocalStorageWith(resultList);
+                        }
                         Log.d("listsQuerySuccess", "Retrieved " + resultList.size() + " lists.");
                     } else {
                         Log.d("listsQueryError", "Error: " + exception.getMessage());
                     }
                 });
             }
-        });
-    }
+        });}
+
 
     public static void sortLists(ArrayList<ParseObject> lists, String sort) {
         switch(sort){
             case "name":
-                Collections.sort(lists, new Comparator<ParseObject>() {
-                    @Override
-                    public int compare(ParseObject o1, ParseObject o2) {
-                        String firstValue = o1.get("name").toString().toLowerCase();
-                        String secondValue = o2.get("name").toString().toLowerCase();
-                        return firstValue.compareTo(secondValue);
-                    }
-                });
+//                Collections.sort(lists, new Comparator<ParseObject>() {
+//                    @Override
+//                    public int compare(ParseObject o1, ParseObject o2) {
+//                        String firstValue = o1.get("name").toString().toLowerCase();
+//                        String secondValue = o2.get("name").toString().toLowerCase();
+//                        return firstValue.compareTo(secondValue);
+//                    }
+//                });
                 break;
             case "date":
 //                Collections.sort(lists, new Comparator<ParseObject>() {
@@ -292,6 +295,22 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                 break;
         }
     }
+
+    private void updateLocalStorageWith(List<ParseObject> listsFromServer){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
+        query.fromLocalDatastore();
+        query.findInBackground((resultList, exception) -> {
+            if (exception == null) {
+                ParseObject.unpinAllInBackground(resultList);
+                try {
+                    ParseObject.pinAll(listsFromServer);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     private void updateShoppingListsAdapterWithQueryResult(ArrayList<ParseObject> resultList){
         runOnUiThread(() -> listAdapter.swapItems(resultList,sort));
     }
