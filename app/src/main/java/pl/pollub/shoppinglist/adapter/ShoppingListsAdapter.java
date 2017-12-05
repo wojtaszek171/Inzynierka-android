@@ -120,6 +120,7 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
         this.shoppingLists = newShoppingLists;
         ShoppingListsActivity.sortLists(shoppingLists,sort);
         notifyDataSetChanged();
+        context.recreate();
     }
 
     public void toggleSelection(int position) {

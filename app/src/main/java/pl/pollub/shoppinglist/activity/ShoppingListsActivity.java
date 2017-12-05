@@ -40,6 +40,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SubscriptionHandling;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -279,17 +280,26 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                         return firstValue.compareTo(secondValue);
                     }
                 });
+                ArrayList<ParseObject> neww = lists;
                 break;
             case "date":
-//                Collections.sort(lists, new Comparator<ParseObject>() {
-//                    @Override
-//                    public int compare(ParseObject o1, ParseObject o2) {
-//                        String[] string = o1.get("deadline").toString().split("-");
-//                        Date firstValue = new Date();
-//                        Date secondValue = (Date) o2.get("deadline");
-//                        return firstValue.compareTo(secondValue);
-//                    }
-//                });
+                Collections.sort(lists, new Comparator<ParseObject>() {
+                    @Override
+                    public int compare(ParseObject o1, ParseObject o2) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+                        Date firstValue = new Date(500);
+                        Date secondValue = new Date(500);
+                        try {
+                            if (sdf.parse(o1.getString("deadline")) == null || sdf.parse(o2.getString("deadline")) == null)
+                            return 0;
+                            firstValue = sdf.parse(o1.getString("deadline"));
+                            secondValue = sdf.parse(o2.getString("deadline"));
+                        } catch (java.text.ParseException e) {
+                            e.printStackTrace();
+                        }
+                        return firstValue.compareTo(secondValue);
+                    }
+                });
                 break;
             default:
                 break;
@@ -361,7 +371,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
         list = findViewById(R.id.list);
         list.setAdapter(listAdapter);
         list.setOnItemClickListener((adapterView, view, position, id) -> {
-            goToListDetails(resultList, position);
+            goToListDetails(listsItems, position);
         });
         list.setLongClickable(true);
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
