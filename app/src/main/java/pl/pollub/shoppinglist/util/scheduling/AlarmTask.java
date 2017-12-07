@@ -1,11 +1,13 @@
 package pl.pollub.shoppinglist.util.scheduling;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import pl.pollub.shoppinglist.service.NotifyService;
 

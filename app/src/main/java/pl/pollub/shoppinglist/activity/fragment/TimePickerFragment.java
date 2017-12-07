@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -29,8 +30,18 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        TextView tv = getActivity().findViewById(R.id.listDeadlineTimepickerBtn);
-        tv.setText(convertTimeToReadableString(hourOfDay, minute));
+        Calendar calendar = getCalendarForNotification(hourOfDay, minute);
+        if (calendar != null){
+            if( calendar.getTime().after(Calendar.getInstance().getTime())){
+                TextView tv = getActivity().findViewById(R.id.listDeadlineTimepickerBtn);
+                tv.setText(convertTimeToReadableString(hourOfDay, minute));
+            } else {
+                CharSequence text = "Nie możesz ustawić przypomnienia w przeszłości!";
+                Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        }
+
     }
 
     private String convertTimeToReadableString(int hour, int minute){
@@ -45,5 +56,29 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         }
         timeBuilder.append(minute);
         return timeBuilder.toString();
+    }
+
+    private Calendar getCalendarForNotification(int hour, int minute){
+        Calendar calendar = Calendar.getInstance();
+        TextView datepickerBtnLocal = getActivity().findViewById(R.id.listDeadline);
+        String[] date;
+        int year, month, day;
+
+        date = datepickerBtnLocal.getText().toString().split("-");
+
+        try{
+            year = Integer.parseInt(date[0]);
+            month = Integer.parseInt(date[1]);
+            day = Integer.parseInt(date[2]);
+            calendar.set(year, month-1, day, hour, minute, 0);
+        } catch(NumberFormatException nfe){
+            CharSequence text = "Najpierw ustaw datę przypomnienia!";
+            Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
+            toast.show();
+            calendar = null;
+        }
+
+
+        return calendar;
     }
 }

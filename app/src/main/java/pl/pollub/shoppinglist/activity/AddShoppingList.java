@@ -183,7 +183,7 @@ public class AddShoppingList extends AppCompatActivity {
         }
     }
 
-    private void setNotification() {
+    private Calendar getCalendarForNotification(){
         Calendar calendar = Calendar.getInstance();
         TextView datepickerBtnLocal = findViewById(R.id.listDeadline);
         TextView timepickerBtnLocal = findViewById(R.id.listDeadlineTimepickerBtn);
@@ -199,13 +199,22 @@ public class AddShoppingList extends AppCompatActivity {
 
         hour = Integer.parseInt(time[0]);
         minute = Integer.parseInt(time[1]);
+        calendar.set(year, month-1, day, hour, minute);
+
+        return calendar;
+    }
+
+    private void setNotification() {
+
+        Calendar notifyCalendar = getCalendarForNotification();
 
         String notificationTitle = getApplicationInfo().loadLabel(getPackageManager()).toString();
         String notificationMessage = "Wykup listę " + listNameString + "!"
-                + " - " + day + "-" + month + "-" + year + " " + hour + ":" + minute;
+                + " - " + notifyCalendar.get(Calendar.DAY_OF_MONTH) + "-" + notifyCalendar.get(Calendar.MONTH) +
+                "-" + notifyCalendar.get(Calendar.YEAR)+ " " + notifyCalendar.get(Calendar.HOUR) + ":"
+                + notifyCalendar.get(Calendar.MINUTE);
 
-        calendar.set(year, month-1, day, hour, minute);
-        scheduleClient.setAlarmForNotification(calendar, notificationTitle, notificationMessage);
+        scheduleClient.setAlarmForNotification(notifyCalendar, notificationTitle, notificationMessage);
     }
 
     private void showTimePickerDialog(View v) {
