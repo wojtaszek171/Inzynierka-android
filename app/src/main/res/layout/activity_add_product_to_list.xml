@@ -147,14 +147,13 @@
 
                     <Button
                         android:id="@+id/saveProductButton"
-                        style="@style/Widget.AppCompat.Button.Colored"
+                        style="@style/DarkCompatButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="4dp"
                         android:layout_weight=".5"
                         android:background="@drawable/rounded_button"
-                        android:backgroundTint="@color/colorPrimaryDark"
                         android:onClick="submitCustomProduct"
                         android:text="@string/save" />
 
