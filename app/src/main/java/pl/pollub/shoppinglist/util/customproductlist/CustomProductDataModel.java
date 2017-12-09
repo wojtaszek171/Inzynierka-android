@@ -1,5 +1,7 @@
 package pl.pollub.shoppinglist.util.customproductlist;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import lombok.Data;
 
 /**
@@ -9,7 +11,7 @@ import lombok.Data;
 @Data
 public class CustomProductDataModel {
 
-    private static long localIdCounter;
+    private static AtomicLong counter = new AtomicLong(1);
 
     private long localId;
     private String name;
@@ -17,14 +19,9 @@ public class CustomProductDataModel {
     private String description;
 
     public CustomProductDataModel(String name, String category, String description) {
-        this.localId = getIncrementedCounter();
+        this.localId = counter.getAndIncrement();
         this.name = name;
         this.category = category;
         this.description = description;
-    }
-
-    private long getIncrementedCounter() {
-        localIdCounter++;
-        return localIdCounter;
     }
 }
