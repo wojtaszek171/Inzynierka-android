@@ -94,7 +94,6 @@ public class FriendListFragment extends Fragment {
 
                     binding.friendList.setVisibility(View.VISIBLE);
                     recyclerViewAdapter.setList(friends);
-                    recyclerViewAdapter.notifyDataSetChanged();
                 } catch (ParseException e) {
                     Toast.makeText(
                             getContext(),

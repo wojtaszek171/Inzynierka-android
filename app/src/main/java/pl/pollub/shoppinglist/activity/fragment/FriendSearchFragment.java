@@ -117,7 +117,6 @@ public class FriendSearchFragment extends Fragment {
                 activity.runOnUiThread(() -> {
                     binding.searchList.setVisibility(View.VISIBLE);
                     recyclerViewAdapter.setList(users);
-                    recyclerViewAdapter.notifyDataSetChanged();
                 });
 
                 return null;

@@ -98,7 +98,6 @@ public class FriendApproveFragment extends Fragment {
                 activity.runOnUiThread(() -> {
                     binding.approvalList.setVisibility(View.VISIBLE);
                     recyclerViewAdapter.setList(inviters);
-                    recyclerViewAdapter.notifyDataSetChanged();
                 });
 
                 return null;

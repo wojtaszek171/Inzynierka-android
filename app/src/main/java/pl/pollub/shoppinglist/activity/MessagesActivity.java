@@ -8,10 +8,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseRelation;
+import com.parse.SubscriptionHandling;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +38,8 @@ public class MessagesActivity extends AppCompatActivity {
     private User friend;
     private final User currentUser = User.getCurrentUser();
     private Conversation conversation;
-    private final List<Message> messages = new ArrayList<>();
+    private ParseLiveQueryClient liveQueryClient;
+    private int messageCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class MessagesActivity extends AppCompatActivity {
             final Message message = new Message();
             message.setAuthor(currentUser).setContent(input);
 
+            messageCount++;
             conversation.addUniqueMessage(message);
             conversation.saveInBackground().onSuccessTask(task -> {
                 this.runOnUiThread(() -> {
@@ -79,12 +83,14 @@ public class MessagesActivity extends AppCompatActivity {
 
                     binding.messageInput.setText("");
                     recyclerViewAdapter.addItem(message);
+                    binding.messageList.smoothScrollToPosition(messageCount - 1);
                 });
 
                 return Task.forResult(null);
             }).continueWith(task -> {
                 if (task.isFaulted() || task.isCancelled()) {
                     this.runOnUiThread(() -> {
+                        messageCount--;
                         Toast.makeText(
                                 MessagesActivity.this,
                                 "Nie udało się wysłać wiadomości!",
@@ -99,7 +105,7 @@ public class MessagesActivity extends AppCompatActivity {
             });
         });
 
-        findAndBindMessages();
+        subscribeToConversationEvents(findAndBindMessages());
     }
 
     @Override
@@ -114,10 +120,10 @@ public class MessagesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void findAndBindMessages() {
+    private Task<?> findAndBindMessages() {
         Task<UserData> dataTask = currentUser.getUserData().fetchInBackground();
 
-        dataTask.onSuccessTask(task -> {
+        return dataTask.onSuccessTask(task -> {
             final ParseRelation<Conversation> relation = task.getResult().getConversationsRelation();
 
             return relation.getQuery()
@@ -133,7 +139,7 @@ public class MessagesActivity extends AppCompatActivity {
                 friend.getUserData().getConversationsRelation().add(conversation);
                 ParseObject.saveAll(Arrays.asList(currentUser.getUserData(), friend.getUserData()));
 
-                return Task.forResult(Collections.<Message>emptyList());
+                return Task.forResult(null);
             } else if (task.getResult().size() == 1) {
                 conversation = task.getResult().get(0);
 
@@ -141,11 +147,7 @@ public class MessagesActivity extends AppCompatActivity {
             } else {
                 throw new IllegalStateException("There can only be one conversation between two users!");
             }
-        }).onSuccessTask(task -> {
-            messages.addAll(task.getResult());
-            Collections.sort(messages, (o1, o2) -> o1.getCreatedAt().compareTo(o2.getCreatedAt()));
-            return Task.forResult(messages);
-        }).continueWith(task -> {
+        }).continueWithTask(task -> {
             this.runOnUiThread(() -> binding.progressBar.setVisibility(View.GONE));
 
             if (task.isFaulted() || task.isCancelled()) {
@@ -157,18 +159,73 @@ public class MessagesActivity extends AppCompatActivity {
 
                 Log.w("MessagesActivity", task.getError());
 
-                return null;
+                return Task.forError(task.getError());
             }
 
-            if (task.getResult().size() > 0) {
+            final List<Message> messages = task.getResult();
+
+            if (messages != null && !messages.isEmpty()) {
+                Collections.sort(messages, (o1, o2) -> o1.getCreatedAt().compareTo(o2.getCreatedAt()));
                 this.runOnUiThread(() -> {
-                    recyclerViewAdapter.setList(task.getResult());
-                    recyclerViewAdapter.notifyDataSetChanged();
+                    recyclerViewAdapter.setList(messages);
+                    messageCount = recyclerViewAdapter.getItemCount();
                     toggleMessagesVisibility(View.VISIBLE);
                 });
             } else {
                 this.runOnUiThread(() -> toggleMessagesVisibility(View.GONE));
             }
+
+            return Task.forResult(null);
+        });
+    }
+
+    private void subscribeToConversationEvents(Task<?> initMessagesTask) {
+        initMessagesTask.continueWith(task -> {
+            if (task.isFaulted() || task.isCancelled()) {
+                return null;
+            }
+
+            liveQueryClient = ParseLiveQueryClient.Factory.getClient();
+
+            // WORKAROUND: LiveQuery don't work with ParseRelation's queries
+            // also doesn't work with more complex queries
+            // (only whereEqualTo condition is proven to work)
+            ParseQuery<Conversation> conversationQuery = ParseQuery.getQuery(Conversation.class)
+                    //.selectKeys(Collections.singletonList(Conversation.KEY_MESSAGES))
+                    .include(Conversation.KEY_MESSAGES)
+                    .include(Conversation.KEY_PARTICIPANTS)
+                    .whereEqualTo(Conversation.KEY_PARTICIPANTS, currentUser);
+                    //.whereContainedIn(Conversation.KEY_PARTICIPANTS, Arrays.asList(currentUser, friend));
+
+            SubscriptionHandling<Conversation> subscriptionHandling = liveQueryClient
+                    .subscribe(conversationQuery);
+            subscriptionHandling.handleEvents((query, event, conversation) -> {
+
+                // WORKAROUND: as it is required to listen to changes for all conversations currentUser
+                // participates in (see above why), condition must check participants of returned conversation
+                if (conversation.getMessages() == null
+                        || conversation.getMessages().isEmpty()
+                        || conversation.getMessages().size() == messageCount
+                        || !conversation.getParticipants().containsAll(
+                        Arrays.asList(currentUser, friend))) {
+                    return;
+                }
+
+                final List<Message> messages = conversation.getMessages();
+                ParseObject.fetchAllIfNeededInBackground(messages, (updatedMsgs, exception) -> {
+                    if (exception == null) {
+                        Collections.sort(updatedMsgs, (o1, o2) -> o1.getCreatedAt().compareTo(o2.getCreatedAt()));
+                        this.runOnUiThread(() -> {
+                            recyclerViewAdapter.setList(updatedMsgs);
+                            messageCount = recyclerViewAdapter.getItemCount();
+                            toggleMessagesVisibility(View.VISIBLE);
+                            binding.messageList.smoothScrollToPosition(messageCount - 1);
+                        });
+                    } else {
+                        Log.w("MessagesActivity", exception);
+                    }
+                });
+            });
 
             return null;
         });
