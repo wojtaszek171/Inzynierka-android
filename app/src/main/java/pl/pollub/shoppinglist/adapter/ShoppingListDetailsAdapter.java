@@ -15,7 +15,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -44,7 +43,6 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
     private ParseObject list;
 
 
-
     public ShoppingListDetailsAdapter(Activity context,
                                       ArrayList<String> name, ArrayList<HashMap> products, ParseObject shoppingList) {
         super(context, R.layout.lists_list_item, name);
@@ -61,7 +59,7 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.lists_items_item, null, true);
 
-        if(position < products.size()){
+        if (position < products.size()) {
             HashMap product = products.get(position);
             TextView productName = rowView.findViewById(R.id.itemName);
             productName.setText(product.get("name").toString());
@@ -73,20 +71,19 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
             TextView productDescription = rowView.findViewById(R.id.product_description);
             productDescription.setText(product.get("description").toString());
             CheckBox status = rowView.findViewById(R.id.checkBoxStatus);
-            if(product.get("status").toString().equals("1")){
-                if(status.isChecked()==false)
-                status.setChecked(true);
-            }else
-            {
-                if(status.isChecked()==true)
-                status.setChecked(false);
+            if (product.get("status").toString().equals("1")) {
+                if (status.isChecked() == false)
+                    status.setChecked(true);
+            } else {
+                if (status.isChecked() == true)
+                    status.setChecked(false);
             }
-            String nameOfFile = (product.get("image") != null) ? product.get("image").toString()+"_white" : "other";
+            String nameOfFile = (product.get("image") != null) ? product.get("image").toString() + "_white" : "other";
             int idd = context.getResources().getIdentifier(nameOfFile, "drawable", context.getPackageName());
             image.setBackgroundResource(idd);
 
-            for(int i=0; i<selectedItemIds.size();i++){
-                if(position==selectedItemIds.keyAt(i)){
+            for (int i = 0; i < selectedItemIds.size(); i++) {
+                if (position == selectedItemIds.keyAt(i)) {
                     RelativeLayout itemRelative = (RelativeLayout) rowView.findViewById(R.id.relativListItem);
                     itemRelative.setBackground(getContext().getResources().getDrawable(R.drawable.shape_item_grey));
                 }
@@ -96,10 +93,10 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
         checkBoxStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked==true){
+                if (isChecked == true) {
                     updateStatus(position, 1);
                     //Toast.makeText(getContext(), "Zaznaczono "+position, Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     updateStatus(position, 0);
                     //Toast.makeText(getContext(), "Odznaczono "+position, Toast.LENGTH_SHORT).show();
                 }
@@ -110,11 +107,11 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
 
     private void updateStatus(int position, int status) {
         ArrayList<HashMap> nestedProducts = (ArrayList) list.get("nestedProducts");
-        nestedProducts.get(position).put("status",status);
-        if (ParseUser.getCurrentUser()!=null && isNetworkAvailable()) {
-                list.put("nestedProducts", nestedProducts);
-                list.saveEventually();
-                list.pinInBackground();
+        nestedProducts.get(position).put("status", status);
+        if (ParseUser.getCurrentUser() != null && isNetworkAvailable()) {
+            list.put("nestedProducts", nestedProducts);
+            list.saveEventually();
+            list.pinInBackground();
         } else {
             ParseQuery offlineListToUpdateQuery = ParseQuery.getQuery("ShoppingList");
             offlineListToUpdateQuery.whereEqualTo("localId", list.getString("localId"));
@@ -151,20 +148,21 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
 
     public void swapItems(ArrayList<HashMap> newProducts, String sort) {
         this.products = newProducts;
-        ShoppingListDetailsActivity.sortProducts(products,sort);
+        ShoppingListDetailsActivity.sortProducts(products, sort);
         notifyDataSetChanged();
         context.recreate();
     }
 
 
     public void selectView(int position, boolean value) {
-        if(value) {
+        if (value) {
             selectedItemIds.put(position, value);
         } else {
             selectedItemIds.delete(position);
         }
         notifyDataSetChanged();
     }
+
     public SparseBooleanArray getSelectedIds() {
         return selectedItemIds;
     }

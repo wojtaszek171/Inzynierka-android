@@ -1,13 +1,11 @@
 package pl.pollub.shoppinglist.util.scheduling;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
+
+import java.util.Calendar;
 
 import pl.pollub.shoppinglist.service.NotifyService;
 
@@ -15,14 +13,14 @@ import pl.pollub.shoppinglist.service.NotifyService;
 /**
  * Set an alarm for the date passed into the constructor
  * When the alarm is raised it will start the NotifyService
- *
+ * <p>
  * This uses the android build in alarm manager *NOTE* if the phone is turned off this alarm will be cancelled
- *
+ * <p>
  * This will run on it's own thread.
  *
  * @author paul.blundell
  */
-public class AlarmTask implements Runnable{
+public class AlarmTask implements Runnable {
 
     private static int UNIQUE_INT_PER_CALL = 0;
 

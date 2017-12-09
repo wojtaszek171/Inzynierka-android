@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -14,25 +13,25 @@ import java.util.Calendar;
 import pl.pollub.shoppinglist.R;
 
 /**
- * Created by jrwoj on 30.11.2017.
+ * @author Jakub
+ * @since 2017-11-30
  */
-
-public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
+public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState){
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
 
-        return new TimePickerDialog(getActivity(), this, hour, minute,true);
+        return new TimePickerDialog(getActivity(), this, hour, minute, true);
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Calendar calendar = getCalendarForNotification(hourOfDay, minute);
-        if (calendar != null){
-            if( calendar.getTime().after(Calendar.getInstance().getTime())){
+        if (calendar != null) {
+            if (calendar.getTime().after(Calendar.getInstance().getTime())) {
                 TextView tv = getActivity().findViewById(R.id.listDeadlineTimepickerBtn);
                 tv.setText(convertTimeToReadableString(hourOfDay, minute));
             } else {
@@ -44,21 +43,21 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     }
 
-    private String convertTimeToReadableString(int hour, int minute){
+    private String convertTimeToReadableString(int hour, int minute) {
         StringBuilder timeBuilder = new StringBuilder();
-        if(hour < 10){
+        if (hour < 10) {
             timeBuilder.append("0");
         }
         timeBuilder.append(hour);
         timeBuilder.append(":");
-        if(minute < 10){
+        if (minute < 10) {
             timeBuilder.append("0");
         }
         timeBuilder.append(minute);
         return timeBuilder.toString();
     }
 
-    private Calendar getCalendarForNotification(int hour, int minute){
+    private Calendar getCalendarForNotification(int hour, int minute) {
         Calendar calendar = Calendar.getInstance();
         TextView datepickerBtnLocal = getActivity().findViewById(R.id.listDeadline);
         String[] date;
@@ -66,12 +65,12 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
         date = datepickerBtnLocal.getText().toString().split("-");
 
-        try{
+        try {
             year = Integer.parseInt(date[0]);
             month = Integer.parseInt(date[1]);
             day = Integer.parseInt(date[2]);
-            calendar.set(year, month-1, day, hour, minute, 0);
-        } catch(NumberFormatException nfe){
+            calendar.set(year, month - 1, day, hour, minute, 0);
+        } catch (NumberFormatException nfe) {
             CharSequence text = "Najpierw ustaw datę przypomnienia!";
             Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
             toast.show();

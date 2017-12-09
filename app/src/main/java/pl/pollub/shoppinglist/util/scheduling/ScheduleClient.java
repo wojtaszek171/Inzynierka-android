@@ -1,12 +1,12 @@
 package pl.pollub.shoppinglist.util.scheduling;
 
-import java.util.Calendar;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+
+import java.util.Calendar;
 
 import pl.pollub.shoppinglist.service.ScheduleService;
 
@@ -44,9 +44,10 @@ public class ScheduleClient {
 
     /**
      * Tell our service to set an alarm for the given date
+     *
      * @param c a date to set the notification for
      */
-    public void setAlarmForNotification(Calendar c, String title, String message){
+    public void setAlarmForNotification(Calendar c, String title, String message) {
         boundService.setAlarm(c, title, message);
     }
 

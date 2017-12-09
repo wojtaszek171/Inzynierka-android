@@ -28,7 +28,6 @@ public class NotifyService extends Service {
     private final IBinder binder = new ServiceBinder();
     private CharSequence title, text;
 
-
     /**
      * Class for clients to access
      */
@@ -65,8 +64,6 @@ public class NotifyService extends Service {
     public IBinder onBind(Intent intent) {
         return binder;
     }
-
-
 
     private void showNotification() {
         int icon = R.mipmap.sym_def_app_icon;

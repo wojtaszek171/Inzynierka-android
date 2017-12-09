@@ -1,7 +1,8 @@
 package pl.pollub.shoppinglist.model;
 
-import lombok.ToString;
 import com.parse.ParseClassName;
+
+import lombok.ToString;
 
 /**
  * @author Adrian

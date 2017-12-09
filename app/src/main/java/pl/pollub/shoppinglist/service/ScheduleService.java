@@ -1,12 +1,12 @@
 package pl.pollub.shoppinglist.service;
 
-import java.util.Calendar;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+
+import java.util.Calendar;
 
 import pl.pollub.shoppinglist.util.scheduling.AlarmTask;
 

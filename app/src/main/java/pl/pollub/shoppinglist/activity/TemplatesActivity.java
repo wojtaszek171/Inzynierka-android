@@ -176,8 +176,8 @@ public class TemplatesActivity extends BaseNavigationActivity {
 
     }
 
-    private void fastActivityReload(){
-        Intent intent = new Intent(getApplicationContext(),TemplatesActivity.class);
+    private void fastActivityReload() {
+        Intent intent = new Intent(getApplicationContext(), TemplatesActivity.class);
         finish();
         overridePendingTransition(0, 0);
         startActivity(intent);

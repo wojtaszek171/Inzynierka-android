@@ -12,19 +12,19 @@ import java.util.Calendar;
 import pl.pollub.shoppinglist.R;
 
 /**
- * Created by jrwoj on 02.12.2017.
+ * @author Jakub
+ * @since 2017-12-02
  */
-
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState){
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Calendar calendar = Calendar.getInstance();
         int yy = calendar.get(Calendar.YEAR);
         int mm = calendar.get(Calendar.MONTH);
         int dd = calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog datePicker =  new DatePickerDialog(getActivity(), this, yy, mm, dd);
+        DatePickerDialog datePicker = new DatePickerDialog(getActivity(), this, yy, mm, dd);
         datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         return datePicker;
     }

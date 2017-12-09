@@ -123,7 +123,7 @@ public class AddProductToList extends AppCompatActivity {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
         query.whereEqualTo("localId", list.getString("localId"));
 
-        if(ParseUser.getCurrentUser() == null || !isNetworkAvailable()){
+        if (ParseUser.getCurrentUser() == null || !isNetworkAvailable()) {
             query.fromLocalDatastore();
         }
 
@@ -180,7 +180,7 @@ public class AddProductToList extends AppCompatActivity {
         int indexOfProduct = nestedProducts.indexOf(productObject);
 
 
-        if(indexOfProduct != -1){
+        if (indexOfProduct != -1) {
             HashMap productToUpdate = nestedProducts.get(indexOfProduct);
 
             saveProductB.setOnClickListener(view -> {
@@ -191,7 +191,7 @@ public class AddProductToList extends AppCompatActivity {
                 productToUpdate.put("measure", productMeasure.getSelectedItem().toString());
                 productToUpdate.put("image", arrayIcons[productCategory.getSelectedItemPosition()]);
 
-                if(isNetworkAvailable()){
+                if (isNetworkAvailable()) {
                     list.put("nestedProducts", nestedProducts);
                     list.saveEventually();
                     list.pinInBackground(ex -> {
@@ -206,11 +206,11 @@ public class AddProductToList extends AppCompatActivity {
                     offlineListToUpdateQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> resultList, ParseException e) {
                             if (e == null) {
-                                if(resultList.size() > 0){
+                                if (resultList.size() > 0) {
                                     ParseObject offlineListToUpdate = (ParseObject) resultList.get(0);
                                     offlineListToUpdate.put("nestedProducts", nestedProducts);
-                                    offlineListToUpdate.pinInBackground( ex -> {
-                                        if(ex == null){
+                                    offlineListToUpdate.pinInBackground(ex -> {
+                                        if (ex == null) {
                                             Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
                                             intent.putExtra("LIST_OBJECT", list);
                                             finish();

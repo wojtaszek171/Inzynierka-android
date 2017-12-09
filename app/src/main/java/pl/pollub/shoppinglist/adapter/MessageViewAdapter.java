@@ -1,7 +1,6 @@
 package pl.pollub.shoppinglist.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,6 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Random;
 
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.model.Message;

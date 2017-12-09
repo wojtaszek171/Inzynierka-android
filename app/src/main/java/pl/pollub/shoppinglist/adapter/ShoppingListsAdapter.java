@@ -2,15 +2,11 @@ package pl.pollub.shoppinglist.adapter;
 
 
 import android.app.Activity;
-import android.app.LauncherActivity;
-import android.content.Context;
-import android.graphics.Color;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -49,7 +45,7 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.lists_list_item, null, true);
 
-        if( position < shoppingLists.size() ){
+        if (position < shoppingLists.size()) {
             TextView listName = rowView.findViewById(R.id.listNameItem);
             listName.setText(shoppingLists.get(position).getString("name"));
             TextView listDeadline = rowView.findViewById(R.id.listDeadline);
@@ -60,15 +56,15 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
             setProgress(position, listProgress, shoppingLists);
             RelativeLayout collaborators;
             collaborators = rowView.findViewById(R.id.collaborators_layout);
-            if(ParseUser.getCurrentUser() == null){
+            if (ParseUser.getCurrentUser() == null) {
                 collaborators.setVisibility(View.INVISIBLE);
             } else {
                 setCollaborators(rowView, position);
             }
-            if(template==true)
+            if (template == true)
                 listDeadline.setText("-");
-            for(int i=0; i<selectedItemIds.size();i++){
-                if(position==selectedItemIds.keyAt(i)){
+            for (int i = 0; i < selectedItemIds.size(); i++) {
+                if (position == selectedItemIds.keyAt(i)) {
                     RelativeLayout itemRelative = (RelativeLayout) rowView.findViewById(R.id.relativList);
                     itemRelative.setBackground(getContext().getResources().getDrawable(R.drawable.shape_item_grey));
                 }
@@ -81,8 +77,8 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
 
     private void setProgress(int position, TextView listProgress, ArrayList<ParseObject> shoppingLists) {
         ArrayList<HashMap> nestedProducts = (ArrayList) shoppingLists.get(position).get("nestedProducts");
-        int i=0;
-        if(nestedProducts!=null) {
+        int i = 0;
+        if (nestedProducts != null) {
             for (int j = 0; j < nestedProducts.size(); j++) {
                 if (nestedProducts.get(j).get("status").toString().equals("1")) {
                     i++;
@@ -92,22 +88,22 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
         }
     }
 
-    private void setCollaborators(View rowView, int position){
+    private void setCollaborators(View rowView, int position) {
         String currentUserName = ParseUser.getCurrentUser().getUsername();
 
         StringBuilder usernamesBuilder = new StringBuilder();
         List<String> sharedAmong = shoppingLists.get(position).getList("sharedAmong");
         List<String> listCollaboratorsUsernames = new ArrayList<>();
 
-        for(String friendUsername : sharedAmong){
-            if(!friendUsername.equals(currentUserName)){
+        for (String friendUsername : sharedAmong) {
+            if (!friendUsername.equals(currentUserName)) {
                 listCollaboratorsUsernames.add(friendUsername);
             }
         }
 
-        for(int i=0; i<listCollaboratorsUsernames.size(); i++){
-                usernamesBuilder.append(listCollaboratorsUsernames.get(i));
-            if(i != listCollaboratorsUsernames.size()-1){
+        for (int i = 0; i < listCollaboratorsUsernames.size(); i++) {
+            usernamesBuilder.append(listCollaboratorsUsernames.get(i));
+            if (i != listCollaboratorsUsernames.size() - 1) {
                 usernamesBuilder.append(", ");
             }
         }
@@ -118,7 +114,7 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
 
     public void swapItems(ArrayList<ParseObject> newShoppingLists, String sort) {
         this.shoppingLists = newShoppingLists;
-        ShoppingListsActivity.sortLists(shoppingLists,sort);
+        ShoppingListsActivity.sortLists(shoppingLists, sort);
         notifyDataSetChanged();
         context.recreate();
     }
@@ -134,7 +130,7 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
     }
 
     public void selectView(int position, boolean value) {
-        if(value) {
+        if (value) {
             selectedItemIds.put(position, value);
 
         } else {
@@ -142,6 +138,7 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
         }
         notifyDataSetChanged();
     }
+
     public SparseBooleanArray getSelectedIds() {
         return selectedItemIds;
     }

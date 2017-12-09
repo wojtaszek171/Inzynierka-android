@@ -26,10 +26,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import org.w3c.dom.Text;
-
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -133,22 +130,22 @@ public class AddShoppingList extends AppCompatActivity {
 
     private void updateShoppingList() {
 
-        if(setNotificationsToggle.isChecked()){
+        if (setNotificationsToggle.isChecked()) {
             setNotification();
         }
 
-        if (isNetworkAvailable() && ParseUser.getCurrentUser()!=null) {
-                listObject.put("name", listNameString);
-                listObject.put("status", "0");
-                listObject.put("deadline", textDate.getText().toString());
-                listObject.put("description", descriptionString);
-                listObject.put("isTemplate", template);
-                listObject.saveEventually();
-                listObject.pinInBackground(ex -> {
-                    if (ex == null) {
-                        finish();
-                    }
-                });
+        if (isNetworkAvailable() && ParseUser.getCurrentUser() != null) {
+            listObject.put("name", listNameString);
+            listObject.put("status", "0");
+            listObject.put("deadline", textDate.getText().toString());
+            listObject.put("description", descriptionString);
+            listObject.put("isTemplate", template);
+            listObject.saveEventually();
+            listObject.pinInBackground(ex -> {
+                if (ex == null) {
+                    finish();
+                }
+            });
         } else {
             ParseQuery offlineListToUpdateQuery = ParseQuery.getQuery("ShoppingList");
             offlineListToUpdateQuery.whereEqualTo("localId", listObject.getString("localId"));
@@ -183,7 +180,7 @@ public class AddShoppingList extends AppCompatActivity {
         }
     }
 
-    private Calendar getCalendarForNotification(){
+    private Calendar getCalendarForNotification() {
         Calendar calendar = Calendar.getInstance();
         TextView datepickerBtnLocal = findViewById(R.id.listDeadline);
         TextView timepickerBtnLocal = findViewById(R.id.listDeadlineTimepickerBtn);
@@ -199,7 +196,7 @@ public class AddShoppingList extends AppCompatActivity {
 
         hour = Integer.parseInt(time[0]);
         minute = Integer.parseInt(time[1]);
-        calendar.set(year, month-1, day, hour, minute);
+        calendar.set(year, month - 1, day, hour, minute);
 
         return calendar;
     }
@@ -211,7 +208,7 @@ public class AddShoppingList extends AppCompatActivity {
         String notificationTitle = getApplicationInfo().loadLabel(getPackageManager()).toString();
         String notificationMessage = "Wykup listę " + listNameString + "!"
                 + " - " + notifyCalendar.get(Calendar.DAY_OF_MONTH) + "-" + notifyCalendar.get(Calendar.MONTH) +
-                "-" + notifyCalendar.get(Calendar.YEAR)+ " " + notifyCalendar.get(Calendar.HOUR) + ":"
+                "-" + notifyCalendar.get(Calendar.YEAR) + " " + notifyCalendar.get(Calendar.HOUR) + ":"
                 + notifyCalendar.get(Calendar.MINUTE);
 
         scheduleClient.setAlarmForNotification(notifyCalendar, notificationTitle, notificationMessage);
@@ -230,7 +227,7 @@ public class AddShoppingList extends AppCompatActivity {
 
     private void createShoppingList() {
 
-        if(setNotificationsToggle.isChecked()){
+        if (setNotificationsToggle.isChecked()) {
             setNotification();
         }
 

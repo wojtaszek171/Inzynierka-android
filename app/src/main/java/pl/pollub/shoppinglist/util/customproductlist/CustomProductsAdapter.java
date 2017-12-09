@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import pl.pollub.shoppinglist.R;
 
 /**
- * Created by jrwoj on 25.10.2017.
+ * @author Jakub
+ * @since 2017-10-25
  */
-
 public class CustomProductsAdapter extends ArrayAdapter implements View.OnClickListener {
     private ArrayList<CustomProductDataModel> dataSet;
     private SparseBooleanArray selectedItemsIds;
@@ -31,13 +31,14 @@ public class CustomProductsAdapter extends ArrayAdapter implements View.OnClickL
     public CustomProductsAdapter(ArrayList<CustomProductDataModel> data, Context context) {
         super(context, R.layout.custom_products_list_item, data);
         this.dataSet = data;
-        this.context=context;
+        this.context = context;
         this.selectedItemsIds = new SparseBooleanArray();
     }
 
     @Override
-    public void onClick(View v) {}
-    
+    public void onClick(View v) {
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
@@ -51,7 +52,7 @@ public class CustomProductsAdapter extends ArrayAdapter implements View.OnClickL
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.custom_products_list_item, parent, false);
-            viewHolder.nameField =  convertView.findViewById(R.id.custom_product_item_name);
+            viewHolder.nameField = convertView.findViewById(R.id.custom_product_item_name);
             viewHolder.categoryField = convertView.findViewById(R.id.custom_product_item_category);
 
 
@@ -81,14 +82,14 @@ public class CustomProductsAdapter extends ArrayAdapter implements View.OnClickL
     }
 
     private void selectView(int position, boolean value) {
-        if(value) {
+        if (value) {
             selectedItemsIds.put(position, value);
         } else {
             selectedItemsIds.delete(position);
         }
         notifyDataSetChanged();
     }
-    
+
     public SparseBooleanArray getSelectedIds() {
         return selectedItemsIds;
     }

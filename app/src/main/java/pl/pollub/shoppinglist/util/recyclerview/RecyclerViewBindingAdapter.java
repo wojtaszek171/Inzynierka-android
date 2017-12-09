@@ -3,9 +3,9 @@ package pl.pollub.shoppinglist.util.recyclerview;
 import android.databinding.BindingAdapter;
 import android.support.v7.widget.RecyclerView;
 
-import pl.pollub.shoppinglist.util.recyclerview.binder.ItemBinder;
-
 import java.util.Collection;
+
+import pl.pollub.shoppinglist.util.recyclerview.binder.ItemBinder;
 
 /**
  * @author Adrian

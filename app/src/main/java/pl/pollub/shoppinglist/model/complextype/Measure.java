@@ -3,9 +3,6 @@ package pl.pollub.shoppinglist.model.complextype;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
 /**
  * @author Pawel
  * @since 2017-07-27

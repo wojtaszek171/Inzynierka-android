@@ -29,9 +29,9 @@ import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.util.customproductlist.CustomProductDataModel;
 
 /**
- * Created by jrwoj on 24.10.2017.
+ * @author Jakub
+ * @since 2017-10-24
  */
-
 public class CustomProductAppenderActivity extends BaseNavigationActivity implements
         Validator.ValidationListener,
         LabelledSpinner.OnItemChosenListener {

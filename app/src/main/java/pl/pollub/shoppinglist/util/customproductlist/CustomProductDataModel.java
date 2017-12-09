@@ -3,9 +3,9 @@ package pl.pollub.shoppinglist.util.customproductlist;
 import lombok.Data;
 
 /**
- * Created by jrwoj on 25.10.2017.
+ * @author Jakub
+ * @since 2017-10-25
  */
-
 @Data
 public class CustomProductDataModel {
 
@@ -23,7 +23,7 @@ public class CustomProductDataModel {
         this.description = description;
     }
 
-    private long getIncrementedCounter(){
+    private long getIncrementedCounter() {
         localIdCounter++;
         return localIdCounter;
     }

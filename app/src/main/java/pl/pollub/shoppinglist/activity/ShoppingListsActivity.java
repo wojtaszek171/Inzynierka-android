@@ -30,7 +30,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseException;
@@ -45,7 +44,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import at.markushi.ui.CircleButton;
@@ -63,7 +61,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
     private ArrayList<ParseObject> listsItems = new ArrayList<>();
     private ShoppingListsAdapter listAdapter;
     private ListView listView = null;
-    private String sort="";
+    private String sort = "";
 
     private FloatingActionButton addNew;
     private Toolbar toolbar;
@@ -138,7 +136,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_sort:
                 PopupMenu popup = new PopupMenu(this, findViewById(R.id.action_sort), Gravity.CENTER);
                 MenuInflater inflater = popup.getMenuInflater();
@@ -167,16 +165,16 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("SortLists");
         query.fromLocalDatastore();
         query.findInBackground((objects, e) -> {
-            if(e==null){
-                if(objects.size()>0) {
-                    objects.get(0).put("sortBy",sortMethod);
+            if (e == null) {
+                if (objects.size() > 0) {
+                    objects.get(0).put("sortBy", sortMethod);
                     objects.get(0).pinInBackground();
-                }else {
+                } else {
                     ParseObject sortProduct = new ParseObject("SortLists");
                     sortProduct.put("sortBy", sortMethod);
                     sortProduct.pinInBackground();
                 }
-                listAdapter.swapItems(listsItems,sort);
+                listAdapter.swapItems(listsItems, sort);
             }
         });
     }
@@ -266,11 +264,12 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                     }
                 });
             }
-        });}
+        });
+    }
 
 
     public static void sortLists(ArrayList<ParseObject> lists, String sort) {
-        switch(sort){
+        switch (sort) {
             case "name":
                 Collections.sort(lists, new Comparator<ParseObject>() {
                     @Override
@@ -291,7 +290,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                         Date secondValue = new Date(500);
                         try {
                             if (sdf.parse(o1.getString("deadline")) == null || sdf.parse(o2.getString("deadline")) == null)
-                            return 0;
+                                return 0;
                             firstValue = sdf.parse(o1.getString("deadline"));
                             secondValue = sdf.parse(o2.getString("deadline"));
                         } catch (java.text.ParseException e) {
@@ -306,7 +305,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
         }
     }
 
-    private void updateLocalStorageWith(List<ParseObject> listsFromServer){
+    private void updateLocalStorageWith(List<ParseObject> listsFromServer) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
         query.fromLocalDatastore();
         query.findInBackground((resultList, exception) -> {
@@ -321,25 +320,25 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
         });
     }
 
-    private void updateShoppingListsAdapterWithQueryResult(ArrayList<ParseObject> resultList){
-        runOnUiThread(() -> listAdapter.swapItems(resultList,sort));
+    private void updateShoppingListsAdapterWithQueryResult(ArrayList<ParseObject> resultList) {
+        runOnUiThread(() -> listAdapter.swapItems(resultList, sort));
     }
 
-    private ParseQuery getMyShoppingListsQuery(){
+    private ParseQuery getMyShoppingListsQuery() {
         ParseUser currentlyLoggedUser = ParseUser.getCurrentUser();
 
         ParseQuery<ParseObject> updateShoppingListsQuery = ParseQuery.getQuery("ShoppingList");
-        updateShoppingListsQuery.whereEqualTo("isTemplate",false);
+        updateShoppingListsQuery.whereEqualTo("isTemplate", false);
 
         if (currentlyLoggedUser != null) {
-            updateShoppingListsQuery.whereEqualTo("sharedAmong",currentlyLoggedUser.getUsername());
+            updateShoppingListsQuery.whereEqualTo("sharedAmong", currentlyLoggedUser.getUsername());
         }
         setIdForLocal();
         return updateShoppingListsQuery;
     }
 
 
-    private void subscribeToShoppingListsQuery(){
+    private void subscribeToShoppingListsQuery() {
 
         parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         ParseQuery updateShoppingListsQuery = getMyShoppingListsQuery();
@@ -349,7 +348,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
         certainListQuerysubscriptionHandling.handleEvents((query, event, object) -> {
             query.findInBackground((resultList, e) -> {
                 if (e == null) {
-                    updateShoppingListsAdapterWithQueryResult((ArrayList)resultList);
+                    updateShoppingListsAdapterWithQueryResult((ArrayList) resultList);
                     Log.d("syncListsSuccess", "Retrieved " + resultList.size() + " lists.");
                 } else {
                     Log.d("syncListsError", "Error: " + e.getMessage());
@@ -380,10 +379,10 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 AlertDialog.Builder builder = new
                         AlertDialog.Builder(new ContextThemeWrapper(ShoppingListsActivity.this, R.style.NewDialog));
-                LayoutInflater inflater =(LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 builder.setCancelable(true);
 
-                builder.setView(inflater.inflate(R.layout.lists_dialog,null));
+                builder.setView(inflater.inflate(R.layout.lists_dialog, null));
 
                 Dialog dialog1 = builder.create();
                 dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -405,8 +404,8 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                 CircleButton editList = dialog1.findViewById(R.id.edit_list);
                 editList.setOnClickListener(v -> {
                     dialog1.dismiss();
-                    Intent intent = new Intent(getApplicationContext(),AddShoppingList.class);
-                    intent.putExtra("LIST_OBJECT",resultList.get(position));
+                    Intent intent = new Intent(getApplicationContext(), AddShoppingList.class);
+                    intent.putExtra("LIST_OBJECT", resultList.get(position));
                     startActivity(intent);
                 });
                 return true;
@@ -479,7 +478,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                         for (ParseObject s : scoreList) {
                             s.unpinInBackground(e -> {
                                 if (e == null) {
-                                    Intent intent = new Intent(getApplicationContext(),ShoppingListsActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), ShoppingListsActivity.class);
                                     finish();
                                     overridePendingTransition(0, 0);
                                     startActivity(intent);
@@ -496,7 +495,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                 selecteditems.get(i).deleteEventually();
                 selecteditems.get(i).unpinInBackground(e -> {
                     if (e == null) {
-                        Intent intent = new Intent(getApplicationContext(),ShoppingListsActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), ShoppingListsActivity.class);
                         finish();
                         overridePendingTransition(0, 0);
                         startActivity(intent);

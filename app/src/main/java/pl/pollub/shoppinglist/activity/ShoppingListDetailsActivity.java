@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.ParseException;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,16 +17,11 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.AbsListView;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.PopupWindow;
-import android.widget.Switch;
 import android.widget.Toast;
 
-import com.parse.GetCallback;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -39,12 +33,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.adapter.ShoppingListDetailsAdapter;
-import pl.pollub.shoppinglist.model.ShoppingList;
 import pl.pollub.shoppinglist.model.User;
 import pl.pollub.shoppinglist.model.UserData;
 
@@ -52,7 +43,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     //    private String listId;
     private String listName;
     private ParseObject list;
-    private String sort="";
+    private String sort = "";
 
     private ListView productListView;
     private ShoppingListDetailsAdapter productAdapter;
@@ -102,8 +93,8 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("SortProducts");
         query.fromLocalDatastore();
         query.findInBackground((objects, e) -> {
-            if(e==null){
-                if(objects.size()!=0)
+            if (e == null) {
+                if (objects.size() != 0)
                     sort = objects.get(0).getString("sortBy");
                 prepareNestedProductsAdapter();
             }
@@ -127,7 +118,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     private void updateNestedProductsAdapter() {
         if (productAdapter != null) {
             runOnUiThread(() -> {
-                productAdapter.swapItems(getNestedProducts(),sort);
+                productAdapter.swapItems(getNestedProducts(), sort);
 //                finish();
 //                overridePendingTransition(0, 0);
 //                startActivity(getIntent());
@@ -177,7 +168,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
 
     private ArrayList<String> getNestedProductNames() {
         ArrayList<HashMap> nestedProducts = getNestedProducts();
-        sortProducts(nestedProducts,sort);
+        sortProducts(nestedProducts, sort);
         ArrayList<String> nestedProductsNames = new ArrayList<>();
 
         for (HashMap nestedProduct : nestedProducts) {
@@ -186,8 +177,8 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         return nestedProductsNames;
     }
 
-    public static void sortProducts(ArrayList<HashMap> nestedProducts,String sort) {
-        switch(sort){
+    public static void sortProducts(ArrayList<HashMap> nestedProducts, String sort) {
+        switch (sort) {
             case "name":
                 Collections.sort(nestedProducts, new Comparator<HashMap>() {
                     @Override
@@ -360,16 +351,16 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("SortProducts");
         query.fromLocalDatastore();
         query.findInBackground((objects, e) -> {
-            if(e==null){
-                if(objects.size()>0) {
-                    objects.get(0).put("sortBy",sortMethod);
+            if (e == null) {
+                if (objects.size() > 0) {
+                    objects.get(0).put("sortBy", sortMethod);
                     objects.get(0).pinInBackground();
-                }else {
+                } else {
                     ParseObject sortProduct = new ParseObject("SortProducts");
                     sortProduct.put("sortBy", sortMethod);
                     sortProduct.pinInBackground();
                 }
-                productAdapter.swapItems(getNestedProducts(),sort);
+                productAdapter.swapItems(getNestedProducts(), sort);
             }
         });
     }
@@ -483,8 +474,8 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         sharedAmong.remove(sharedAmong.indexOf(ParseUser.getCurrentUser().getUsername()));
         list.put("sharedAmong", sharedAmong);
         list.saveEventually();
-        list.unpinInBackground( ex -> {
-            if(ex == null){
+        list.unpinInBackground(ex -> {
+            if (ex == null) {
                 Intent intent = new Intent(getBaseContext(), ShoppingListsActivity.class);
                 finish();
                 startActivity(intent);

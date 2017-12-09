@@ -1,9 +1,7 @@
 package pl.pollub.shoppinglist.model;
 
 import com.parse.ParseClassName;
-import com.parse.ParseObject;
 
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import pl.pollub.shoppinglist.model.complextype.Icon;
 
