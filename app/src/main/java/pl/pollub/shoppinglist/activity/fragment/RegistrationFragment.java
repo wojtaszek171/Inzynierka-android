@@ -1,17 +1,20 @@
 package pl.pollub.shoppinglist.activity.fragment;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.ParseException;
 
@@ -19,6 +22,11 @@ import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.databinding.FragmentRegistrationBinding;
 import pl.pollub.shoppinglist.model.User;
 import pl.pollub.shoppinglist.model.UserData;
+import pl.pollub.shoppinglist.util.TextWatcher;
+import pl.pollub.shoppinglist.util.ToastUtils;
+
+import static com.parse.ParseException.*;
+import static pl.pollub.shoppinglist.util.ToastUtils.*;
 
 /**
  * @author Adrian
@@ -27,7 +35,10 @@ import pl.pollub.shoppinglist.model.UserData;
 public class RegistrationFragment extends Fragment {
 
     private FragmentRegistrationBinding binding;
+    private AppCompatActivity activity;
     private ActionBar actionBar;
+    private boolean validated;
+    private TextWatcher textWatcher = (text) -> clearValidation();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,6 +46,10 @@ public class RegistrationFragment extends Fragment {
 
         binding.emailInput.requestFocus();
         binding.registerButton.setOnClickListener(this::onRegisterClick);
+        binding.emailInput.addTextChangedListener(textWatcher);
+        binding.loginInput.addTextChangedListener(textWatcher);
+        binding.passwordInput.addTextChangedListener(textWatcher);
+        binding.pwdRepeatInput.addTextChangedListener(textWatcher);
 
         return binding.getRoot();
     }
@@ -49,36 +64,133 @@ public class RegistrationFragment extends Fragment {
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof AppCompatActivity) {
+            activity = (AppCompatActivity) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must extend "
+                    + AppCompatActivity.class.getSimpleName());
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        activity = null;
+    }
+
     private void onRegisterClick(View view) {
-        //TODO: walidacja danych
+        if (!isFormValid()) {
+            return;
+        }
 
-        if (getText(binding.passwordInput).equals(getText(binding.pwdRepeatInput))) {
-            User newUser = new User();
-            newUser.setUsername(getText(binding.loginInput));
-            newUser.setPassword(getText(binding.passwordInput));
-            newUser.setEmail(getText(binding.emailInput));
+        User newUser = new User();
+        newUser.setUsername(getTrimmedText(binding.loginInput));
+        newUser.setPassword(getTrimmedText(binding.passwordInput));
+        newUser.setEmail(getTrimmedText(binding.emailInput));
 
-            newUser.signUpInBackground(exception -> {
-                if (exception == null) {
+        newUser.signUpInBackground().onSuccessTask(task -> {
+            UserData newUserData = new UserData();
+            User currentUser = User.getCurrentUser();
+            currentUser.setUserData(newUserData);
 
-                    try {
-                        UserData newUserData = new UserData();
-                        User.getCurrentUser().setUserData(newUserData);
-                        User.getCurrentUser().save();
-                    } catch (ParseException e) {
-                        Log.e("RegistrationActivity", exception.getMessage());
+            return currentUser.saveInBackground();
+        }).continueWith(task -> {
+            if (task.isFaulted() || task.isCancelled()) {
+                if (task.getError() instanceof ParseException) {
+                    ParseException exception = (ParseException) task.getError();
+                    Runnable showError = null;
+
+                    switch (exception.getCode()) {
+                        case INVALID_EMAIL_ADDRESS:
+                        case EMAIL_MISSING:
+                            showError = () -> binding.emailLayout.setError(getString(R.string.email_format_invalid));
+                            break;
+                        case USERNAME_MISSING:
+                            showError = () -> binding.loginLayout.setError(getString(R.string.login_missing));
+                            break;
+                        case USERNAME_TAKEN:
+                            showError = () -> binding.loginLayout.setError(getString(R.string.login_taken));
+                            break;
+                        case EMAIL_TAKEN:
+                            showError = () -> binding.emailLayout.setError(getString(R.string.email_taken));
+                            break;
+                        case TIMEOUT:
+                            showError = () -> showToast(getContext(), R.string.server_timed_out);
+                            break;
+                        case CONNECTION_FAILED:
+                            showError = () -> showToast(getContext(), R.string.connection_failed);
+                            break;
+                        default:
+                            Log.w("RegistrationActivity", exception);
+                            showError = () -> showToast(getContext(), R.string.unknown_error);
                     }
 
-                    resetRegistrationForm();
-                    String text = "Pomyślnie zarejestrowano!";
-                    Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
-
+                    activity.runOnUiThread(showError);
                 } else {
-                    resetPasswordTextView();
-                    Log.e("RegistrationActivity", exception.getMessage());
+                    Log.w("RegistrationActivity", task.getError());
+                    showToast(getContext(), R.string.unknown_error);
                 }
-            });
+
+                return null;
+            }
+
+            resetRegistrationForm();
+            showLongToast(getContext(), R.string.registration_completed);
+
+            return null;
+        });
+    }
+
+    private boolean isFormValid() {
+        boolean valid = true;
+        validated = true;
+
+        // email is valid
+        if (!isEmailValid(getTrimmedText(binding.emailInput))) {
+            binding.emailLayout.setError(getString(R.string.email_format_invalid));
+            valid = false;
         }
+
+        // username has at least 4 characters
+        if (getTrimmedText(binding.loginInput).length() < 4) {
+            binding.loginLayout.setError("Login musi mieć co najmniej 4 znaki");
+            valid = false;
+        }
+
+        // password has at least 6 characters and is different than login
+        if (getTrimmedText(binding.passwordInput).length() < 6
+                || getTrimmedText(binding.passwordInput).equals(getTrimmedText(binding.loginInput))) {
+            binding.passwordLayout.setError("Hasło musi mieć co najmniej 6 znaków i być inne niż login");
+            valid = false;
+        }
+
+        // passwords match
+        if (!getTrimmedText(binding.passwordInput).equals(getTrimmedText(binding.pwdRepeatInput))) {
+            binding.repeatPasswordLayout.setError("Podane hasła muszą być takie same");
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    public static boolean isEmailValid(String target) {
+        return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }
+
+    private void clearValidation() {
+        if (!validated) {
+            return;
+        }
+
+        validated = false;
+        binding.emailLayout.setError(null);
+        binding.loginLayout.setError(null);
+        binding.passwordLayout.setError(null);
+        binding.repeatPasswordLayout.setError(null);
     }
 
     private void resetPasswordTextView() {
@@ -93,7 +205,7 @@ public class RegistrationFragment extends Fragment {
         binding.loginInput.clearComposingText();
     }
 
-    private String getText(TextView view) {
-        return view.getText().toString();
+    private static String getTrimmedText(TextView view) {
+        return view.getText().toString().trim();
     }
 }

@@ -212,6 +212,7 @@ public class MessagesActivity extends AppCompatActivity {
                 }
 
                 final List<Message> messages = conversation.getMessages();
+                // fetch is needed as newly added pointers are not fetched initially
                 ParseObject.fetchAllIfNeededInBackground(messages, (updatedMsgs, exception) -> {
                     if (exception == null) {
                         Collections.sort(updatedMsgs, (o1, o2) -> o1.getCreatedAt().compareTo(o2.getCreatedAt()));

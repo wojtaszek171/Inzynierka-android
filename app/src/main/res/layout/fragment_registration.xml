@@ -10,12 +10,10 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_marginTop="20sp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <ImageView
                 android:id="@+id/login_logo"
@@ -29,90 +27,88 @@
                 android:id="@+id/email_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:theme="@style/TextLabel">
+                android:theme="@style/DarkTextInputLayout"
+                app:hintTextAppearance="@style/DarkHintText"
+                android:textColorHint="@color/white"
+                app:errorEnabled="true">
 
-            <EditText
-                android:id="@+id/email_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/white"
-                android:textColorLink="@color/white"
-                android:hint="E-mail" />
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/email_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="E-mail"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/white"
+                    android:theme="@style/DarkEditText" />
 
             </android.support.design.widget.TextInputLayout>
-
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/login_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:theme="@style/TextLabel">
+                android:theme="@style/DarkTextInputLayout"
+                app:hintTextAppearance="@style/DarkHintText"
+                android:textColorHint="@color/white"
+                app:errorEnabled="true">
 
-            <EditText
-                android:id="@+id/login_input"
-                android:hint="Login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textColorLink="@color/white"
-                android:inputType="textPersonName" />
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/login_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Login"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/white"
+                    android:theme="@style/DarkEditText" />
 
             </android.support.design.widget.TextInputLayout>
-
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/password_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"
-                android:textColor="@color/white"
-                android:textColorLink="@color/white"
-                android:layout_marginTop="8dp"
-                android:theme="@style/TextLabel">
+                android:theme="@style/DarkTextInputLayout"
+                app:hintTextAppearance="@style/DarkHintText"
+                android:textColorHint="@color/white"
+                app:errorEnabled="true">
 
-            <EditText
-                android:id="@+id/password_input"
-                android:hint="Hasło"
-                android:textColor="@color/white"
-                android:textColorLink="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword" />
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/password_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Hasło"
+                    android:inputType="textPassword"
+                    android:textColor="@color/white"
+                    android:theme="@style/DarkEditText" />
 
             </android.support.design.widget.TextInputLayout>
-
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/repeat_password_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:theme="@style/TextLabel">
+                android:theme="@style/DarkTextInputLayout"
+                app:hintTextAppearance="@style/DarkHintText"
+                android:textColorHint="@color/white"
+                app:errorEnabled="true">
 
-            <EditText
-                android:id="@+id/pwd_repeat_input"
-                android:hint="Powtórz hasło"
-                android:textColor="@color/white"
-                android:textColorLink="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword" />
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/pwd_repeat_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Powtórz hasło"
+                    android:inputType="textPassword"
+                    android:textColor="@color/white"
+                    android:theme="@style/DarkEditText" />
 
             </android.support.design.widget.TextInputLayout>
-
 
             <Button
                 android:id="@+id/register_button"
                 style="@style/DarkCompatButton"
-                android:layout_marginTop="25sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="25sp"
                 android:background="@drawable/rounded_button"
                 android:elegantTextHeight="false"
                 android:foreground="?attr/selectableItemBackground"

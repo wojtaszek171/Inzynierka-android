@@ -53,6 +53,14 @@
     <string name="conversation_with">Rozmowa z</string>
     <string name="minutes_ago">minut temu</string>
     <string name="couldnt_load_messages">Nie udało się załadować wiadomości!</string>
+    <string name="unknown_error">Nieznany błąd, spróbuj ponownie.</string>
+    <string name="registration_completed">Pomyślnie zarejestrowano!</string>
+    <string name="email_format_invalid">Nieprawidłowy format e-maila</string>
+    <string name="server_timed_out">Przekroczono czas odpowiedzi serwera</string>
+    <string name="connection_failed">Połączenie nieudane, spróbuj ponownie</string>
+    <string name="email_taken">E-mail jest już zajęty</string>
+    <string name="login_taken">Login jest już zajęty</string>
+    <string name="login_missing">Login nie może być pusty</string>
 
     <!--CATEGORIES:-->
     <string-array name="product_categories">
