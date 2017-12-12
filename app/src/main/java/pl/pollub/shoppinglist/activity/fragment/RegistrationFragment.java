@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -23,7 +22,6 @@ import pl.pollub.shoppinglist.databinding.FragmentRegistrationBinding;
 import pl.pollub.shoppinglist.model.User;
 import pl.pollub.shoppinglist.model.UserData;
 import pl.pollub.shoppinglist.util.TextWatcher;
-import pl.pollub.shoppinglist.util.ToastUtils;
 
 import static com.parse.ParseException.*;
 import static pl.pollub.shoppinglist.util.ToastUtils.*;
@@ -100,10 +98,10 @@ public class RegistrationFragment extends Fragment {
             return currentUser.saveInBackground();
         }).continueWith(task -> {
             if (task.isFaulted() || task.isCancelled()) {
+                Runnable showError = null;
+
                 if (task.getError() instanceof ParseException) {
                     ParseException exception = (ParseException) task.getError();
-                    Runnable showError = null;
-
                     switch (exception.getCode()) {
                         case INVALID_EMAIL_ADDRESS:
                         case EMAIL_MISSING:
@@ -128,18 +126,17 @@ public class RegistrationFragment extends Fragment {
                             Log.w("RegistrationActivity", exception);
                             showError = () -> showToast(getContext(), R.string.unknown_error);
                     }
-
-                    activity.runOnUiThread(showError);
                 } else {
                     Log.w("RegistrationActivity", task.getError());
-                    showToast(getContext(), R.string.unknown_error);
+                    showError = () -> showToast(getContext(), R.string.unknown_error);
                 }
 
+                activity.runOnUiThread(showError);
                 return null;
             }
 
             resetRegistrationForm();
-            showLongToast(getContext(), R.string.registration_completed);
+            activity.runOnUiThread(() -> showLongToast(getContext(), R.string.registration_completed));
 
             return null;
         });
@@ -157,20 +154,20 @@ public class RegistrationFragment extends Fragment {
 
         // username has at least 4 characters
         if (getTrimmedText(binding.loginInput).length() < 4) {
-            binding.loginLayout.setError("Login musi mieć co najmniej 4 znaki");
+            binding.loginLayout.setError(getString(R.string.login_too_short));
             valid = false;
         }
 
         // password has at least 6 characters and is different than login
         if (getTrimmedText(binding.passwordInput).length() < 6
                 || getTrimmedText(binding.passwordInput).equals(getTrimmedText(binding.loginInput))) {
-            binding.passwordLayout.setError("Hasło musi mieć co najmniej 6 znaków i być inne niż login");
+            binding.passwordLayout.setError(getString(R.string.pwd_too_short_or_same_as_login));
             valid = false;
         }
 
         // passwords match
         if (!getTrimmedText(binding.passwordInput).equals(getTrimmedText(binding.pwdRepeatInput))) {
-            binding.repeatPasswordLayout.setError("Podane hasła muszą być takie same");
+            binding.repeatPasswordLayout.setError(getString(R.string.passwords_dont_match));
             valid = false;
         }
 
@@ -194,14 +191,14 @@ public class RegistrationFragment extends Fragment {
     }
 
     private void resetPasswordTextView() {
-        binding.passwordInput.setText("");
-        binding.pwdRepeatInput.setText("");
+        binding.passwordInput.setText(null);
+        binding.pwdRepeatInput.setText(null);
     }
 
     private void resetRegistrationForm() {
         resetPasswordTextView();
-        binding.emailInput.setText("");
-        binding.loginInput.setText("");
+        binding.emailInput.setText(null);
+        binding.loginInput.setText(null);
         binding.loginInput.clearComposingText();
     }
 
