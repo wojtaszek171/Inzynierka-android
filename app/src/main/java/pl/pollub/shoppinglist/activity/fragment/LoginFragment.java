@@ -20,6 +20,7 @@ import com.parse.ParseUser;
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.activity.ShoppingListsActivity;
 import pl.pollub.shoppinglist.databinding.FragmentLoginBinding;
+import pl.pollub.shoppinglist.model.User;
 
 /**
  * @author Adrian
@@ -83,6 +84,7 @@ public class LoginFragment extends Fragment {
 
         if (exception == null && user != null) {
             feedbackMessage.append("Zalogowano jako ").append(user.getUsername());
+            User.loggedIn.compareAndSet(false, true);
             Intent intent = new Intent(getActivity(), ShoppingListsActivity.class);
             // passing flag to clear activity stack so that the application will exit on 'back' button press
             // https://stackoverflow.com/a/16388608

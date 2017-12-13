@@ -8,13 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.parse.ParseUser;
-
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.activity.fragment.LoginFragment;
 import pl.pollub.shoppinglist.activity.fragment.RegistrationFragment;
 import pl.pollub.shoppinglist.activity.fragment.WelcomeFragment;
 import pl.pollub.shoppinglist.databinding.ActivityMainBinding;
+import pl.pollub.shoppinglist.model.User;
 
 public class MainActivity extends AppCompatActivity implements
         WelcomeFragment.OnWelcomeInteractionListener,
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements
             attachLoginFragment(false);
         } else if (isKeySet(GO_TO_REGISTRATION_KEY)) {
             attachRegistrationFragment(false);
-        } else if (ParseUser.getCurrentUser() != null) {
+        } else if (User.getCurrentUser() != null) {
             openShoppingListsActivity(true);
         } else {
             attachWelcomeFragment();

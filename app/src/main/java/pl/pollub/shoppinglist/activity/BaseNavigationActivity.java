@@ -8,6 +8,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,6 +17,7 @@ import com.parse.ParseUser;
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.databinding.NavigationHeaderBinding;
 import pl.pollub.shoppinglist.model.User;
+import pl.pollub.shoppinglist.util.ToastUtils;
 
 /**
  * @author Adrian
@@ -87,7 +89,14 @@ public abstract class BaseNavigationActivity extends AppCompatActivity implement
         } else if (itemId == R.id.nav_settings && !(this instanceof SettingsActivity)) {
             intent.setClass(this, SettingsActivity.class);
         } else if (itemId == R.id.nav_logout) {
-            ParseUser.logOut();
+            ParseUser.logOutInBackground(exception -> {
+                if (exception != null) {
+                    ToastUtils.showToast(this, "Błąd, spróbuj ponownie.");
+                    Log.w("BaseNavActivity", exception);
+                }
+            });
+            User.loggedIn.compareAndSet(true, false);
+
             // passing flag to clear activity stack so that the application will exit on 'back' button press
             // https://stackoverflow.com/a/16388608
             intent.setClass(this, MainActivity.class)

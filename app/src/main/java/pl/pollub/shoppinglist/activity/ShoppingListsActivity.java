@@ -36,7 +36,6 @@ import com.parse.ParseException;
 import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.parse.SubscriptionHandling;
 
 import java.text.SimpleDateFormat;
@@ -50,6 +49,7 @@ import at.markushi.ui.CircleButton;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.adapter.ShoppingListsAdapter;
+import pl.pollub.shoppinglist.model.User;
 
 public class ShoppingListsActivity extends BaseNavigationActivity {
 
@@ -62,6 +62,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
     private ShoppingListsAdapter listAdapter;
     private ListView listView = null;
     private String sort = "";
+    private final User currentUser = User.getCurrentUser();
 
     private FloatingActionButton addNew;
     private Toolbar toolbar;
@@ -182,8 +183,8 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
     private void getAllTemplates() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
 
-        if (ParseUser.getCurrentUser() != null) {
-            query.whereEqualTo("belongsTo", ParseUser.getCurrentUser().getUsername());
+        if (currentUser != null) {
+            query.whereEqualTo("belongsTo", currentUser.getUsername());
             if (!isNetworkAvailable()) {
                 query.fromLocalDatastore();
             }
@@ -235,13 +236,11 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                 if (objects.size() != 0)
                     sort = objects.get(0).getString("sortBy");
 
-                ParseUser currentlyLoggedUser = ParseUser.getCurrentUser();
-
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
                 query.whereEqualTo("isTemplate", false);
 
-                if (currentlyLoggedUser != null) {
-                    query.whereEqualTo("sharedAmong", currentlyLoggedUser.getUsername());
+                if (currentUser != null) {
+                    query.whereEqualTo("sharedAmong", currentUser.getUsername());
 
                     if (!isNetworkAvailable()) {
                         query.fromLocalDatastore();
@@ -325,13 +324,11 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
     }
 
     private ParseQuery getMyShoppingListsQuery() {
-        ParseUser currentlyLoggedUser = ParseUser.getCurrentUser();
-
         ParseQuery<ParseObject> updateShoppingListsQuery = ParseQuery.getQuery("ShoppingList");
         updateShoppingListsQuery.whereEqualTo("isTemplate", false);
 
-        if (currentlyLoggedUser != null) {
-            updateShoppingListsQuery.whereEqualTo("sharedAmong", currentlyLoggedUser.getUsername());
+        if (currentUser != null) {
+            updateShoppingListsQuery.whereEqualTo("sharedAmong", currentUser.getUsername());
         }
         setIdForLocal();
         return updateShoppingListsQuery;
@@ -468,7 +465,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
 
     private void deleteListAction(ShoppingListsAdapter listAdapter, ArrayList<ParseObject> selecteditems) {
         for (int i = 0; i < selecteditems.size(); i++) {
-            if (ParseUser.getCurrentUser() == null) {
+            if (currentUser == null) {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
                 query.fromLocalDatastore();
                 String ident = selecteditems.get(i).getString("localId");

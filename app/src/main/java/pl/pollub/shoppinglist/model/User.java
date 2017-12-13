@@ -7,6 +7,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import bolts.Task;
 import lombok.ToString;
@@ -24,6 +25,8 @@ public class User extends ParseUser {
     public static final String KEY_EMAIL = "email";
     public static final String KEY_USERDATA = "userData";
     public static final String KEY_LAST_ACTIVE_AT = "lastActiveAt";
+
+    public static AtomicBoolean loggedIn = new AtomicBoolean(true);
 
     public Date getLastActiveAt() {
         return getDate(KEY_LAST_ACTIVE_AT);
@@ -47,6 +50,10 @@ public class User extends ParseUser {
     }
 
     public static User getCurrentUser() {
+        if (!loggedIn.get()) {
+            return null;
+        }
+
         User currentUser = (User) ParseUser.getCurrentUser();
 
         if (currentUser != null) {
