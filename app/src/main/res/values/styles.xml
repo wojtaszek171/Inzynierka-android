@@ -9,7 +9,7 @@
         <item name="windowActionModeOverlay">true</item>
     </style>
 
-    <style name="DarkTextInputLayout" parent="TextAppearance.AppCompat">
+    <style name="DarkTextInputLayout" parent="Theme.AppCompat">
         <!-- Hint color and label color in FALSE state -->
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/white</item>
@@ -18,10 +18,6 @@
         <item name="colorAccent">@color/ActiveText</item>
         <item name="colorControlNormal">@color/white</item>
         <item name="colorControlActivated">@color/ActiveText</item>
-    </style>
-
-    <style name="DarkHintText" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/ActiveText</item>
     </style>
 
     <style name="DarkEditText" parent="TextAppearance.AppCompat">
