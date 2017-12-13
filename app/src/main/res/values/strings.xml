@@ -64,6 +64,7 @@
     <string name="passwords_dont_match">Podane hasła muszą być takie same</string>
     <string name="login_too_short">Login musi mieć co najmniej 4 znaki</string>
     <string name="pwd_too_short_or_same_as_login">Hasło musi mieć co najmniej 6 znaków i być inne niż login</string>
+    <string name="not_logged_in">niezalogowany</string>
 
     <!--CATEGORIES:-->
     <string-array name="product_categories">

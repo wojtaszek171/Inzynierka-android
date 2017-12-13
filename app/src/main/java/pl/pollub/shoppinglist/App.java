@@ -17,6 +17,7 @@ import static com.parse.ParseObject.registerSubclass;
  * @since 2017-09-17
  */
 public class App extends Application {
+
     @Override
     public void onCreate() {
         super.onCreate();

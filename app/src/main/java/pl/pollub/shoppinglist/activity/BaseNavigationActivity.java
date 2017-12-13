@@ -17,7 +17,10 @@ import com.parse.ParseUser;
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.databinding.NavigationHeaderBinding;
 import pl.pollub.shoppinglist.model.User;
+import pl.pollub.shoppinglist.util.MiscUtils;
 import pl.pollub.shoppinglist.util.ToastUtils;
+
+import static pl.pollub.shoppinglist.util.ToastUtils.showToast;
 
 /**
  * @author Adrian
@@ -31,6 +34,7 @@ public abstract class BaseNavigationActivity extends AppCompatActivity implement
     private ActionBarDrawerToggle drawerToggle;
     private NavigationView navigationView;
     private NavigationHeaderBinding headerBinding;
+    private final User currentUser = User.getCurrentUser();
 
     /**
      * Subclasses must implement these 2 methods
@@ -54,17 +58,18 @@ public abstract class BaseNavigationActivity extends AppCompatActivity implement
         navigationView = getNavigationView();
         navigationView.setNavigationItemSelectedListener(this);
         Menu navMenu = navigationView.getMenu();
+        headerBinding = DataBindingUtil.bind(navigationView.getHeaderView(0));
 
         // show current user's name
-        if (User.getCurrentUser() != null) {
-            String username = User.getCurrentUser().getUsername();
-            headerBinding = DataBindingUtil.bind(navigationView.getHeaderView(0));
+        if (currentUser != null) {
+            String username = currentUser.getUsername();
             headerBinding.usernameLabel.setText(username);
 
             navMenu.findItem(R.id.nav_logout).setVisible(true);
             navMenu.findItem(R.id.nav_login).setVisible(false);
             navMenu.findItem(R.id.nav_register).setVisible(false);
         } else {
+            headerBinding.usernameLabel.setText(R.string.not_logged_in);
             navMenu.findItem(R.id.nav_logout).setVisible(false);
             navMenu.findItem(R.id.nav_login).setVisible(true);
             navMenu.findItem(R.id.nav_register).setVisible(true);
@@ -79,7 +84,15 @@ public abstract class BaseNavigationActivity extends AppCompatActivity implement
         Intent intent = new Intent();
         // navigation view item clicks handling
         if (itemId == R.id.nav_friends && !(this instanceof FriendsActivity)) {
-            intent.setClass(this, FriendsActivity.class);
+            if (currentUser != null && MiscUtils.isNetworkAvailable(this)) {
+                intent.setClass(this, FriendsActivity.class);
+            } else if (currentUser == null) {
+                showToast(this, "Funkcja dostępna po zalogowaniu.");
+                return true;
+            } else {
+                showToast(this, "Brak dostępu do internetu.");
+                return true;
+            }
         } else if (itemId == R.id.nav_lists && !(this instanceof ShoppingListsActivity)) {
             intent.setClass(this, ShoppingListsActivity.class);
         } else if (itemId == R.id.nav_templates && !(this instanceof TemplatesActivity)) {
@@ -91,7 +104,7 @@ public abstract class BaseNavigationActivity extends AppCompatActivity implement
         } else if (itemId == R.id.nav_logout) {
             ParseUser.logOutInBackground(exception -> {
                 if (exception != null) {
-                    ToastUtils.showToast(this, "Błąd, spróbuj ponownie.");
+                    showToast(this, "Błąd, spróbuj ponownie.");
                     Log.w("BaseNavActivity", exception);
                 }
             });

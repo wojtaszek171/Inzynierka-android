@@ -7,7 +7,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,15 +17,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 
@@ -60,12 +56,12 @@ public class AddProductToList extends AppCompatActivity {
         arrayIcons = getResources().getStringArray(R.array.product_icons);
         setIcon();
 
-        if (productObject != null) {//editing product
+        if (productObject != null) {
+            //editing product
             editProduct();
         } else {
             createNewProduct();
         }
-
     }
 
     private void initLayoutElements() {
@@ -116,7 +112,7 @@ public class AddProductToList extends AppCompatActivity {
     }
 
     private void createNewProduct() {
-        String title = listName + " " + R.string.newProductToList;
+        String title = listName + " - " + getString(R.string.newProductToList).toLowerCase();
         setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -191,7 +187,7 @@ public class AddProductToList extends AppCompatActivity {
                 productToUpdate.put("measure", productMeasure.getSelectedItem().toString());
                 productToUpdate.put("image", arrayIcons[productCategory.getSelectedItemPosition()]);
 
-                if (isNetworkAvailable() && ParseUser.getCurrentUser().getUsername()!=null) {
+                if (isNetworkAvailable() && ParseUser.getCurrentUser().getUsername() != null) {
                     list.put("nestedProducts", nestedProducts);
                     list.saveEventually();
                     list.pinInBackground(ex -> {
@@ -203,23 +199,21 @@ public class AddProductToList extends AppCompatActivity {
                     ParseQuery offlineListToUpdateQuery = ParseQuery.getQuery("ShoppingList");
                     offlineListToUpdateQuery.whereEqualTo("localId", list.getString("localId"));
                     offlineListToUpdateQuery.fromLocalDatastore();
-                    offlineListToUpdateQuery.findInBackground(new FindCallback<ParseObject>() {
-                        public void done(List<ParseObject> resultList, ParseException e) {
-                            if (e == null) {
-                                if (resultList.size() > 0) {
-                                    ParseObject offlineListToUpdate = (ParseObject) resultList.get(0);
-                                    offlineListToUpdate.put("nestedProducts", nestedProducts);
-                                    offlineListToUpdate.pinInBackground(ex -> {
-                                        if (ex == null) {
-                                            Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
-                                            intent.putExtra("LIST_OBJECT", list);
-                                            finish();
-                                            startActivity(intent);
-                                        }
-                                    });
-                                    if(ParseUser.getCurrentUser().getUsername()!=null){
-                                        offlineListToUpdate.saveEventually();
+                    offlineListToUpdateQuery.findInBackground((resultList, e) -> {
+                        if (e == null) {
+                            if (resultList.size() > 0) {
+                                ParseObject offlineListToUpdate = (ParseObject) resultList.get(0);
+                                offlineListToUpdate.put("nestedProducts", nestedProducts);
+                                offlineListToUpdate.pinInBackground(ex -> {
+                                    if (ex == null) {
+                                        Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
+                                        intent.putExtra("LIST_OBJECT", list);
+                                        finish();
+                                        startActivity(intent);
                                     }
+                                });
+                                if (ParseUser.getCurrentUser().getUsername() != null) {
+                                    offlineListToUpdate.saveEventually();
                                 }
                             }
                         }
@@ -229,8 +223,6 @@ public class AddProductToList extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "Błąd edycji produktu!", Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
     private void fillInTheForm(HashMap productObject) {
@@ -241,13 +233,6 @@ public class AddProductToList extends AppCompatActivity {
         productDescription.setText(productObject.get("description").toString());
         int spinnerPositionMeasure = adapterMeasure.getPosition(productObject.get("measure").toString());
         productMeasure.setSelection(spinnerPositionMeasure);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_actionbar, menu);
-        return true;
     }
 
     private boolean isNetworkAvailable() {
