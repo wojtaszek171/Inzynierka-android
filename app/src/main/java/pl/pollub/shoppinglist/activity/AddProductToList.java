@@ -191,7 +191,7 @@ public class AddProductToList extends AppCompatActivity {
                 productToUpdate.put("measure", productMeasure.getSelectedItem().toString());
                 productToUpdate.put("image", arrayIcons[productCategory.getSelectedItemPosition()]);
 
-                if (isNetworkAvailable()) {
+                if (isNetworkAvailable() && ParseUser.getCurrentUser().getUsername()!=null) {
                     list.put("nestedProducts", nestedProducts);
                     list.saveEventually();
                     list.pinInBackground(ex -> {
@@ -217,6 +217,9 @@ public class AddProductToList extends AppCompatActivity {
                                             startActivity(intent);
                                         }
                                     });
+                                    if(ParseUser.getCurrentUser().getUsername()!=null){
+                                        offlineListToUpdate.saveEventually();
+                                    }
                                 }
                             }
                         }
