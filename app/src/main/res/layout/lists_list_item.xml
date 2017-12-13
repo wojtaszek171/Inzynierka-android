@@ -56,14 +56,14 @@
                 <RelativeLayout
                     android:id="@+id/collaborators_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="40dp"
                     android:layout_below="@+id/relativ2">
 
                         <TextView
                             android:id="@+id/textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
+                            android:layout_above="@+id/textView2"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
                             android:gravity="center_vertical"
@@ -78,9 +78,25 @@
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentTop="true"
                             android:gravity="center_vertical"
-                            android:hint="znajomi"
                             android:paddingLeft="5dp"
                             android:textStyle="italic" />
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentStart="true"
+                            android:paddingLeft="5dp"
+                            android:text="Właściciel:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/owner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_below="@+id/textView" />
 
                 </RelativeLayout>
         </RelativeLayout>

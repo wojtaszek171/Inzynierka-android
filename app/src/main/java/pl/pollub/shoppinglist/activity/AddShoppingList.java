@@ -90,10 +90,14 @@ public class AddShoppingList extends AppCompatActivity {
         saveNewList.setOnClickListener(view -> {
             listNameString = listName.getText().toString();
             descriptionString = description.getText().toString();
-            if (listObject != null) {
-                updateShoppingList();
-            } else {
-                createShoppingList();
+            if(listNameString==null){
+                Toast.makeText(this, "Musisz podać nazwę listy", Toast.LENGTH_SHORT).show();
+            }else {
+                if (listObject != null) {
+                    updateShoppingList();
+                } else {
+                    createShoppingList();
+                }
             }
         });
 

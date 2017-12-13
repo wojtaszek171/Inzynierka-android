@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -110,6 +112,8 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
 
         TextView collaboratorsTextView = rowView.findViewById(R.id.collaborators);
         collaboratorsTextView.setText(usernamesBuilder.toString());
+        TextView owner = rowView.findViewById(R.id.owner);
+        owner.setText(shoppingLists.get(position).getString("belongsTo"));
     }
 
     public void swapItems(ArrayList<ParseObject> newShoppingLists, String sort) {
