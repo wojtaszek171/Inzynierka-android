@@ -1,6 +1,7 @@
 package pl.pollub.shoppinglist.activity.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.parse.ParseException;
 
 import pl.pollub.shoppinglist.R;
+import pl.pollub.shoppinglist.activity.ShoppingListsActivity;
 import pl.pollub.shoppinglist.databinding.FragmentRegistrationBinding;
 import pl.pollub.shoppinglist.model.User;
 import pl.pollub.shoppinglist.model.UserData;
@@ -135,8 +137,15 @@ public class RegistrationFragment extends Fragment {
                 return null;
             }
 
-            resetRegistrationForm();
-            activity.runOnUiThread(() -> showLongToast(getContext(), R.string.registration_completed));
+            activity.runOnUiThread(() -> {
+                resetRegistrationForm();
+                showLongToast(getContext(), R.string.registration_completed);
+            });
+            Intent intent = new Intent(getActivity(), ShoppingListsActivity.class);
+            // passing flag to clear activity stack so that the application will exit on 'back' button press
+            // https://stackoverflow.com/a/16388608
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
 
             return null;
         });
