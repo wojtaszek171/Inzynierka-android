@@ -80,7 +80,6 @@ public class AddShoppingList extends AppCompatActivity {
         }
         Button saveNewList = findViewById(R.id.saveNewList);
         TextView setDeadline = findViewById(R.id.listDeadline);
-        ImageButton setListImage = findViewById(R.id.setListImage);
 
         if (listObject != null) {
             listName.setText(listObject.getString("name"));
@@ -98,8 +97,6 @@ public class AddShoppingList extends AppCompatActivity {
             }
         });
 
-        setListImage.setOnClickListener(view -> {
-        });
         setDeadline.setOnClickListener(view -> datePickerDialog());
     }
 
