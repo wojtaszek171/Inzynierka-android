@@ -250,7 +250,7 @@ public class AddShoppingList extends AppCompatActivity {
             list.saveEventually(e -> {
                 if (e == null) {
                     // No error, the object was saved
-                    Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_LONG).show();
                 } else {
                     // Error saving object, print the logs
                     e.printStackTrace();
