@@ -111,7 +111,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         certainListQuerysubscriptionHandling.handleEvents((query, event, object) -> {
             // HANDLING all events
             updateNestedProductsAdapter();
-            displayLiveQueryUpdateToast(event.name(), "someUser", (HashMap) object.get("estimatedData"));
+            //displayLiveQueryUpdateToast(event.name(), "someUser", (HashMap) object.get("estimatedData"));
         });
     }
 
