@@ -87,17 +87,16 @@ public class RegistrationFragment extends Fragment {
             return;
         }
 
-        User newUser = new User();
+        final User newUser = new User();
         newUser.setUsername(getTrimmedText(binding.loginInput));
         newUser.setPassword(getTrimmedText(binding.passwordInput));
         newUser.setEmail(getTrimmedText(binding.emailInput));
 
         newUser.signUpInBackground().onSuccessTask(task -> {
             UserData newUserData = new UserData();
-            User currentUser = User.getCurrentUser();
-            currentUser.setUserData(newUserData);
+            newUser.setUserData(newUserData);
 
-            return currentUser.saveInBackground();
+            return newUser.saveInBackground();
         }).continueWith(task -> {
             if (task.isFaulted() || task.isCancelled()) {
                 Runnable showError = null;
