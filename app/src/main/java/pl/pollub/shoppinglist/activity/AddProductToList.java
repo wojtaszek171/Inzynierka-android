@@ -17,12 +17,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 
@@ -196,10 +198,10 @@ public class AddProductToList extends AppCompatActivity {
                         }
                     });
                 } else {
-                    ParseQuery offlineListToUpdateQuery = ParseQuery.getQuery("ShoppingList");
+                    ParseQuery<ParseObject> offlineListToUpdateQuery = ParseQuery.getQuery("ShoppingList");
                     offlineListToUpdateQuery.whereEqualTo("localId", list.getString("localId"));
                     offlineListToUpdateQuery.fromLocalDatastore();
-                    offlineListToUpdateQuery.findInBackground((resultList, e) -> {
+                    offlineListToUpdateQuery.findInBackground((List<ParseObject> resultList, ParseException e) -> {
                         if (e == null) {
                             if (resultList.size() > 0) {
                                 ParseObject offlineListToUpdate = (ParseObject) resultList.get(0);
