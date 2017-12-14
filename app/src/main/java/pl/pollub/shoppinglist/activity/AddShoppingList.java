@@ -84,7 +84,12 @@ public class AddShoppingList extends AppCompatActivity {
         if (listObject != null) {
             listName.setText(listObject.getString("name"));
             description.setText(listObject.getString("description"));
-            textDate.setText(listObject.getString("deadline"));
+
+            if(!listObject.getString("deadline").equals("Data Czas")){
+                String[] dateAndTimeString = listObject.getString("deadline").split(" ");
+                textDate.setText(dateAndTimeString[0]);
+                timepickerBtn.setText(dateAndTimeString[1]);
+            }
         }
 
         saveNewList.setOnClickListener(view -> {
