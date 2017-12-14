@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.internal.NavigationMenu;
 import android.support.design.widget.FloatingActionButton;
@@ -46,6 +44,8 @@ import io.github.yavski.fabspeeddial.FabSpeedDial;
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.adapter.ShoppingListsAdapter;
 import pl.pollub.shoppinglist.model.User;
+
+import static pl.pollub.shoppinglist.util.MiscUtils.isNetworkAvailable;
 
 public class ShoppingListsActivity extends BaseNavigationActivity {
 
@@ -149,7 +149,6 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     private void setSortForLists(String sortMethod) {
@@ -175,7 +174,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
 
         if (currentUser != null) {
             query.whereEqualTo("belongsTo", currentUser.getUsername());
-            if (!isNetworkAvailable()) {
+            if (!isNetworkAvailable(this)) {
                 query.fromLocalDatastore();
             }
         } else {
@@ -232,7 +231,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                 if (currentUser != null) {
                     query.whereEqualTo("sharedAmong", currentUser.getUsername());
 
-                    if (!isNetworkAvailable()) {
+                    if (!isNetworkAvailable(this)) {
                         query.fromLocalDatastore();
                     }
                 } else {
@@ -244,7 +243,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                 query.findInBackground((resultList, exception) -> {
                     if (exception == null) {
                         prepareShoppingListsAdapterFromQueryResult(resultList);
-                        if (isNetworkAvailable()) {
+                        if (isNetworkAvailable(this)) {
                             updateLocalStorageWith(resultList);
                         }
                         Log.d("listsQuerySuccess", "Retrieved " + resultList.size() + " lists.");
@@ -526,13 +525,6 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menulists, menu);
         return true;
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @Override

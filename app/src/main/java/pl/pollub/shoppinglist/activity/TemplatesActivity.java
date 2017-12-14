@@ -2,8 +2,6 @@ package pl.pollub.shoppinglist.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -26,6 +24,7 @@ import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.adapter.ShoppingListsAdapter;
+import pl.pollub.shoppinglist.util.MiscUtils;
 
 public class TemplatesActivity extends BaseNavigationActivity {
 
@@ -66,7 +65,7 @@ public class TemplatesActivity extends BaseNavigationActivity {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
         if (ParseUser.getCurrentUser() != null) {
             query.whereEqualTo("belongsTo", ParseUser.getCurrentUser().getUsername());
-            if (!isNetworkAvailable()) {
+            if (!MiscUtils.isNetworkAvailable(this)) {
                 query.fromLocalDatastore();
             }
         } else {
@@ -171,9 +170,7 @@ public class TemplatesActivity extends BaseNavigationActivity {
                 selecteditems.get(i).deleteEventually();
                 selecteditems.get(i).unpinInBackground((ex) -> fastActivityReload());
             }
-
         }
-
     }
 
     private void fastActivityReload() {
@@ -235,16 +232,8 @@ public class TemplatesActivity extends BaseNavigationActivity {
         return true;
     }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         finish();
         overridePendingTransition(0, 0);
         startActivity(getIntent());

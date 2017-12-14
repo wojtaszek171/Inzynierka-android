@@ -1,9 +1,6 @@
 package pl.pollub.shoppinglist.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import pl.pollub.shoppinglist.R;
+
+import static pl.pollub.shoppinglist.util.MiscUtils.isNetworkAvailable;
 
 public class AddProductToList extends AppCompatActivity {
     private String listName;
@@ -121,7 +120,7 @@ public class AddProductToList extends AppCompatActivity {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ShoppingList");
         query.whereEqualTo("localId", list.getString("localId"));
 
-        if (ParseUser.getCurrentUser() == null || !isNetworkAvailable()) {
+        if (ParseUser.getCurrentUser() == null || !isNetworkAvailable(this)) {
             query.fromLocalDatastore();
         }
 
@@ -189,7 +188,7 @@ public class AddProductToList extends AppCompatActivity {
                 productToUpdate.put("measure", productMeasure.getSelectedItem().toString());
                 productToUpdate.put("image", arrayIcons[productCategory.getSelectedItemPosition()]);
 
-                if (isNetworkAvailable() && ParseUser.getCurrentUser().getUsername() != null) {
+                if (isNetworkAvailable(this) && ParseUser.getCurrentUser().getUsername() != null) {
                     list.put("nestedProducts", nestedProducts);
                     list.saveEventually();
                     list.pinInBackground(ex -> {
@@ -235,13 +234,6 @@ public class AddProductToList extends AppCompatActivity {
         productDescription.setText(productObject.get("description").toString());
         int spinnerPositionMeasure = adapterMeasure.getPosition(productObject.get("measure").toString());
         productMeasure.setSelection(spinnerPositionMeasure);
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @Override

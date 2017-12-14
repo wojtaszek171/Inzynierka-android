@@ -3,8 +3,6 @@ package pl.pollub.shoppinglist.activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -30,7 +28,6 @@ import com.parse.SubscriptionHandling;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,6 +35,7 @@ import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.adapter.ShoppingListDetailsAdapter;
 import pl.pollub.shoppinglist.model.User;
 import pl.pollub.shoppinglist.model.UserData;
+import pl.pollub.shoppinglist.util.MiscUtils;
 
 public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     //    private String listId;
@@ -208,7 +206,6 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     private ArrayList<HashMap> getNestedProducts() {
         return (ArrayList) list.get("nestedProducts");
     }
-
 
     private void multiChoiceForDelete(ListView list, ShoppingListDetailsAdapter productAdapter, List<HashMap> scoreList) {
         productListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
@@ -390,21 +387,13 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         return findViewById(R.id.nav_view);
     }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         finish();
         overridePendingTransition(0, 0);
         startActivity(getIntent());
         overridePendingTransition(0, 0);
     }
-
 
     private void getFriendsUsernamesAndDisplayDialog() {
         List<String> friendsUsernames = new ArrayList<>();
@@ -425,7 +414,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     }
 
     private void checkIfUserIsAbleToShareList() {
-        if (isNetworkAvailable()) {
+        if (MiscUtils.isNetworkAvailable(this)) {
             String ownersUsername = list.getString("belongsTo");
             if (ParseUser.getCurrentUser().getUsername().equals(ownersUsername)) {
                 getFriendsUsernamesAndDisplayDialog();
@@ -475,8 +464,6 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     }
 
     private void displayShareListDialog(List<String> friendsUsernames) {
-
-
         AlertDialog.Builder builder = new AlertDialog.Builder(ShoppingListDetailsActivity.this);
         builder.setTitle("Współdziel listę ze znajomymi:");
         builder.setIcon(android.R.drawable.ic_menu_share);
@@ -490,7 +477,6 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
                 checkedItems[i] = true;
             }
         }
-
 
         builder.setMultiChoiceItems(friendsArr, checkedItems, (dialog, which, isChecked) -> {
             System.out.print(checkedItems.length);
@@ -522,6 +508,4 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         list.saveEventually();
         list.pinInBackground();
     }
-
-
 }

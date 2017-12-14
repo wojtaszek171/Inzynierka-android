@@ -1,10 +1,7 @@
 package pl.pollub.shoppinglist.activity;
 
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +27,7 @@ import java.util.List;
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.activity.fragment.DatePickerFragment;
 import pl.pollub.shoppinglist.activity.fragment.TimePickerFragment;
+import pl.pollub.shoppinglist.util.MiscUtils;
 import pl.pollub.shoppinglist.util.scheduling.ScheduleClient;
 
 public class AddShoppingList extends AppCompatActivity {
@@ -82,7 +80,7 @@ public class AddShoppingList extends AppCompatActivity {
             listName.setText(listObject.getString("name"));
             description.setText(listObject.getString("description"));
 
-            if(!listObject.getString("deadline").equals("Data Czas")){
+            if (!listObject.getString("deadline").equals("Data Czas")) {
                 String[] dateAndTimeString = listObject.getString("deadline").split(" ");
                 textDate.setText(dateAndTimeString[0]);
                 timepickerBtn.setText(dateAndTimeString[1]);
@@ -137,7 +135,7 @@ public class AddShoppingList extends AppCompatActivity {
             setNotification();
         }
 
-        if (isNetworkAvailable() && ParseUser.getCurrentUser() != null) {
+        if (MiscUtils.isNetworkAvailable(this) && ParseUser.getCurrentUser() != null) {
             listObject.put("name", listNameString);
             listObject.put("status", "0");
             listObject.put("deadline", textDate.getText().toString());
@@ -220,7 +218,6 @@ public class AddShoppingList extends AppCompatActivity {
         dFragment.show(getFragmentManager(), "Time Picker");
     }
 
-
     private void datePickerDialog() {
         DialogFragment dFragment = new DatePickerFragment();
         dFragment.show(getFragmentManager(), "Date Picker");
@@ -272,13 +269,6 @@ public class AddShoppingList extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     public void setIdForLocal() {
