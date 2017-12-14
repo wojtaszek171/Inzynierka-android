@@ -102,7 +102,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                 Toast.makeText(context, menuItem.getTitle(), Toast.LENGTH_SHORT).show();
                 switch (menuItem.getItemId()) {
                     case R.id.addList:
-                        Intent intent = new Intent(ShoppingListsActivity.this, AddShoppingList.class);
+                        Intent intent = new Intent(ShoppingListsActivity.this, AddShoppingListActivity.class);
                         intent.putExtra("LOCAL_LIST_ID", id);
                         startActivityForResult(intent, 1);
                         break;
@@ -201,7 +201,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
             items.add(s.getString("name"));
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                R.layout.string_list_item, R.id.txtitem, items);
+                R.layout.item_list_string, R.id.txtitem, items);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((adapterView, view, position, id) -> {
             finish();
@@ -210,7 +210,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
     }
 
     private void CreateListFromTemplate(List<ParseObject> scoreList, int position) {
-        Intent intent = new Intent(getApplicationContext(), AddShoppingList.class);
+        Intent intent = new Intent(getApplicationContext(), AddShoppingListActivity.class);
         intent.putExtra("LIST_TEMPLATE", scoreList.get(position));
         intent.putExtra("LOCAL_LIST_ID", id);
         finish();
@@ -354,7 +354,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
             AlertDialog.Builder builder = new
                     AlertDialog.Builder(new ContextThemeWrapper(ShoppingListsActivity.this, R.style.NewDialog));
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            builder.setCancelable(true).setView(inflater.inflate(R.layout.lists_dialog, null));
+            builder.setCancelable(true).setView(inflater.inflate(R.layout.menu_context_list, null));
 
             Dialog dialog1 = builder.create();
             dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -376,7 +376,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
             CircleButton editList = dialog1.findViewById(R.id.edit_list);
             editList.setOnClickListener(v -> {
                 dialog1.dismiss();
-                Intent intent = new Intent(getApplicationContext(), AddShoppingList.class);
+                Intent intent = new Intent(getApplicationContext(), AddShoppingListActivity.class);
                 intent.putExtra("LIST_OBJECT", resultList.get(position));
                 startActivity(intent);
             });

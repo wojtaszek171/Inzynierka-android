@@ -53,7 +53,7 @@ public class TemplatesActivity extends BaseNavigationActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         addNew.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), AddShoppingList.class);
+            Intent intent = new Intent(getApplicationContext(), AddShoppingListActivity.class);
             intent.putExtra("TEMPLATE", true);
             intent.putExtra("LOCAL_LIST_ID", id);
             startActivity(intent);

@@ -29,7 +29,7 @@ public class CustomProductsAdapter extends ArrayAdapter implements View.OnClickL
     }
 
     public CustomProductsAdapter(ArrayList<CustomProductDataModel> data, Context context) {
-        super(context, R.layout.custom_products_list_item, data);
+        super(context, R.layout.item_product_custom, data);
         this.dataSet = data;
         this.context = context;
         this.selectedItemsIds = new SparseBooleanArray();
@@ -51,7 +51,7 @@ public class CustomProductsAdapter extends ArrayAdapter implements View.OnClickL
 
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.custom_products_list_item, parent, false);
+            convertView = inflater.inflate(R.layout.item_product_custom, parent, false);
             viewHolder.nameField = convertView.findViewById(R.id.custom_product_item_name);
             viewHolder.categoryField = convertView.findViewById(R.id.custom_product_item_category);
 

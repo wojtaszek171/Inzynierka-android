@@ -29,7 +29,7 @@ import pl.pollub.shoppinglist.util.customproductlist.CustomProductsAdapter;
  * @author Jakub
  * @since 2017-10-24
  */
-public class CustomProductsListActivity extends BaseNavigationActivity {
+public class CustomProductsActivity extends BaseNavigationActivity {
 
     private ListView list;
     private CustomProductsAdapter adapter;
@@ -43,7 +43,7 @@ public class CustomProductsListActivity extends BaseNavigationActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_custom_products_list);
+        setContentView(R.layout.activity_custom_products);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -67,14 +67,14 @@ public class CustomProductsListActivity extends BaseNavigationActivity {
             if (e == null) {
                 allCustomProducts = resultList;
                 dataModels = convertAllParseObjects(resultList);
-                adapter = new CustomProductsAdapter(dataModels, CustomProductsListActivity.this);
+                adapter = new CustomProductsAdapter(dataModels, CustomProductsActivity.this);
                 list.setAdapter(adapter);
 
 
                 list.setOnItemClickListener((adapterView, view, position, id) -> {
                     ParseObject productToEdit = allCustomProducts.get(position);
 
-                    Intent editProductIntent = new Intent(CustomProductsListActivity.this, CustomProductAppenderActivity.class);
+                    Intent editProductIntent = new Intent(CustomProductsActivity.this, AddCustomProductActivity.class);
                     editProductIntent.putExtra("EDIT_MODE_ENABLED", true);
                     editProductIntent.putExtra("PRODUCT_TO_EDIT", productToEdit);
                     startActivity(editProductIntent);
@@ -165,7 +165,7 @@ public class CustomProductsListActivity extends BaseNavigationActivity {
     }
 
     public void goToCustomProductCreation(View view) {
-        Intent intent = new Intent(CustomProductsListActivity.this, CustomProductAppenderActivity.class);
+        Intent intent = new Intent(CustomProductsActivity.this, AddCustomProductActivity.class);
         startActivity(intent);
     }
 

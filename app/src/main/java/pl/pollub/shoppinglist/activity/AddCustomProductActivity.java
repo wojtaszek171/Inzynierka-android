@@ -32,7 +32,7 @@ import pl.pollub.shoppinglist.util.customproductlist.CustomProductDataModel;
  * @author Jakub
  * @since 2017-10-24
  */
-public class CustomProductAppenderActivity extends BaseNavigationActivity implements
+public class AddCustomProductActivity extends BaseNavigationActivity implements
         Validator.ValidationListener,
         LabelledSpinner.OnItemChosenListener {
 
@@ -58,7 +58,7 @@ public class CustomProductAppenderActivity extends BaseNavigationActivity implem
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_custom_product_appender);
+        setContentView(R.layout.activity_add_custom_product);
 
         categoriesList = Arrays.asList(getResources().getStringArray(R.array.product_categories));
 
@@ -86,7 +86,7 @@ public class CustomProductAppenderActivity extends BaseNavigationActivity implem
     //////////////////////////////////////////
 
     private void cancelProductEditing() {
-        Intent cancelEditIntent = new Intent(CustomProductAppenderActivity.this, CustomProductsListActivity.class);
+        Intent cancelEditIntent = new Intent(AddCustomProductActivity.this, CustomProductsActivity.class);
         startActivity(cancelEditIntent);
     }
 
@@ -192,7 +192,7 @@ public class CustomProductAppenderActivity extends BaseNavigationActivity implem
     }
 
     public void goToCustomProductsList() {
-        Intent intent = new Intent(CustomProductAppenderActivity.this, CustomProductsListActivity.class);
+        Intent intent = new Intent(AddCustomProductActivity.this, CustomProductsActivity.class);
         startActivity(intent);
     }
 

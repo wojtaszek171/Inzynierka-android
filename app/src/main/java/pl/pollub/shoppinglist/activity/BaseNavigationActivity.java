@@ -96,8 +96,8 @@ public abstract class BaseNavigationActivity extends AppCompatActivity implement
             intent.setClass(this, ShoppingListsActivity.class);
         } else if (itemId == R.id.nav_templates && !(this instanceof TemplatesActivity)) {
             intent.setClass(this, TemplatesActivity.class);
-        } else if (itemId == R.id.nav_custom_user_products && !(this instanceof CustomProductsListActivity)) {
-            intent.setClass(this, CustomProductsListActivity.class);
+        } else if (itemId == R.id.nav_custom_user_products && !(this instanceof CustomProductsActivity)) {
+            intent.setClass(this, CustomProductsActivity.class);
         } else if (itemId == R.id.nav_settings && !(this instanceof SettingsActivity)) {
             intent.setClass(this, SettingsActivity.class);
         } else if (itemId == R.id.nav_logout) {

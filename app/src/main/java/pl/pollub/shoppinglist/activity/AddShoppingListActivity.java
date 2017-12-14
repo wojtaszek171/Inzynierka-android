@@ -30,7 +30,7 @@ import pl.pollub.shoppinglist.activity.fragment.TimePickerFragment;
 import pl.pollub.shoppinglist.util.MiscUtils;
 import pl.pollub.shoppinglist.util.scheduling.ScheduleClient;
 
-public class AddShoppingList extends AppCompatActivity {
+public class AddShoppingListActivity extends AppCompatActivity {
     private int isLogged = 0;
     private static int id;
     private Button textDate;
@@ -262,7 +262,7 @@ public class AddShoppingList extends AppCompatActivity {
                 if (listTemplate != null) {
                     recoveryTempalte(listTemplate, list.get("localId"));
                 } else {
-                    Intent intent = new Intent(AddShoppingList.this, ShoppingListDetailsActivity.class);
+                    Intent intent = new Intent(AddShoppingListActivity.this, ShoppingListDetailsActivity.class);
                     intent.putExtra("LIST_OBJECT", list);
                     startActivity(intent);
                     finish();

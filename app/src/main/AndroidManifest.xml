@@ -32,12 +32,12 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.ShoppingListDetailsActivity"/>
         <activity android:name=".activity.ShoppingListsActivity" />
-        <activity android:name=".activity.CustomProductAppenderActivity" />
-        <activity android:name=".activity.CustomProductsListActivity" />
-        <activity android:name=".activity.AddShoppingList" />
+        <activity android:name=".activity.AddCustomProductActivity" />
+        <activity android:name=".activity.CustomProductsActivity" />
+        <activity android:name=".activity.AddShoppingListActivity" />
         <activity android:name=".activity.TemplatesActivity" />
         <activity android:name=".activity.SettingsActivity" />
-        <activity android:name=".activity.AddProductToList" />
+        <activity android:name=".activity.AddProductToListActivity" />
         <activity android:name=".activity.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

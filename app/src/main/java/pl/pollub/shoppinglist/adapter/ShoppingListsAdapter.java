@@ -13,8 +13,6 @@ import android.widget.TextView;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +30,7 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
 
     public ShoppingListsAdapter(Activity context,
                                 ArrayList<String> name, ArrayList<String> date, ArrayList<ParseObject> listsItems, Boolean template) {
-        super(context, R.layout.lists_list_item, name);
+        super(context, R.layout.item_shopping_list, name);
 
         selectedItemIds = new SparseBooleanArray();
         this.context = context;
@@ -45,7 +43,7 @@ public class ShoppingListsAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View rowView = inflater.inflate(R.layout.lists_list_item, null, true);
+        View rowView = inflater.inflate(R.layout.item_shopping_list, null, true);
 
         if (position < shoppingLists.size()) {
             TextView listName = rowView.findViewById(R.id.listNameItem);

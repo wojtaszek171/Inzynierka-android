@@ -53,12 +53,16 @@ public class FriendListViewAdapter extends BaseRecyclerViewAdapter<User> {
             throw new IllegalArgumentException("User is null or not fetched");
         }
 
+        final TextView profileImage = (TextView) viewHolder.getView(R.id.profile_image_list);
         final TextView usernameLabel = (TextView) viewHolder.getView(R.id.username_list);
         final TextView lastActiveAtLabel = (TextView) viewHolder.getView(R.id.lastActiveAt_list);
         final AppCompatImageButton messageButton = (AppCompatImageButton) viewHolder.getView(R.id.actionMessageButton_list);
         final AppCompatImageButton deleteButton = (AppCompatImageButton) viewHolder.getView(R.id.actionDeleteButton_list);
 
-        usernameLabel.setText(item.getUsername());
+        final String username = item.getUsername();
+        final char firstChar = username.toUpperCase().charAt(0);
+        profileImage.setText(Character.toString(firstChar));
+        usernameLabel.setText(username);
         lastActiveAtLabel.setText(TimeUtils.getRelativeTimeString(getContext(), item.getLastActiveAt()));
 
         messageButton.setOnClickListener(view -> fragment

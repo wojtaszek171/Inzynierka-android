@@ -80,7 +80,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     }
 
     private void addNewProduct() {
-        Intent intent = new Intent(getBaseContext(), AddProductToList.class);
+        Intent intent = new Intent(getBaseContext(), AddProductToListActivity.class);
         intent.putExtra("LIST_NAME", listName);
         intent.putExtra("LIST_OBJECT", list);
         intent.putExtra("LOCAL_ID", id);
@@ -150,7 +150,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
             productListView.setOnItemClickListener((adapterView, view, position, id) -> {
                 //Context context = ShoppingListDetailsActivity.this;
                 //Toast.makeText(context, "Position: "+String.valueOf(position), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getBaseContext(), AddProductToList.class);
+                Intent intent = new Intent(getBaseContext(), AddProductToListActivity.class);
                 intent.putExtra("PRODUCT_OBJECT", nestedProducts.get(position));
                 intent.putExtra("PRODUCT_OBJECT_ID", nestedProducts.get(position).get("localId").toString());
                 intent.putExtra("LIST_NAME", listName);

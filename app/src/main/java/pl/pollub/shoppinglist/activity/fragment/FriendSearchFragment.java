@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,8 @@ import pl.pollub.shoppinglist.adapter.FriendSearchViewAdapter;
 import pl.pollub.shoppinglist.databinding.FragmentFriendSearchBinding;
 import pl.pollub.shoppinglist.model.User;
 
+import static pl.pollub.shoppinglist.util.ToastUtils.*;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -33,7 +37,7 @@ import pl.pollub.shoppinglist.model.User;
  * @since 2017-11-17
  */
 public class FriendSearchFragment extends Fragment {
-    public static final int MINIMUM_CHARS = 3;
+    public static final int MINIMUM_CHARS = 4;
     private OnFriendSearchInteractionListener interactionListener;
     private AppCompatActivity activity;
     private FragmentFriendSearchBinding binding;
@@ -48,6 +52,11 @@ public class FriendSearchFragment extends Fragment {
         binding.searchList.setVisibility(View.GONE);
         recyclerViewAdapter = new FriendSearchViewAdapter(getContext());
         binding.searchList.setAdapter(recyclerViewAdapter);
+
+        LinearLayoutManager recyclerLayoutManager = (LinearLayoutManager) binding.searchList.getLayoutManager();
+        binding.searchList.addItemDecoration(
+                new DividerItemDecoration(getContext(), recyclerLayoutManager.getOrientation())
+        );
         binding.searchButton.setOnClickListener(this::searchUsers);
 
         return binding.getRoot();
@@ -91,7 +100,7 @@ public class FriendSearchFragment extends Fragment {
             binding.progressBar.setVisibility(View.VISIBLE);
             findAndBindUsers(searchQuery);
         } else {
-            Toast.makeText(activity, "Wprowadź przynajmniej 3 znaki", Toast.LENGTH_SHORT).show();
+            showToast(getContext(), "Wprowadź przynajmniej " + MINIMUM_CHARS + " znaki");
         }
     }
 
@@ -121,11 +130,8 @@ public class FriendSearchFragment extends Fragment {
 
                 return null;
             } else if (task.isFaulted()) {
-                activity.runOnUiThread(() -> Toast.makeText(
-                        getContext(),
-                        "Nie udało się wyszukać użytkowników!",
-                        Toast.LENGTH_LONG
-                ).show());
+                activity.runOnUiThread(() ->
+                        showLongToast(getContext(), "Nie udało się wyszukać użytkowników!"));
 
                 Log.w("FriendSearchFrag", task.getError());
             }

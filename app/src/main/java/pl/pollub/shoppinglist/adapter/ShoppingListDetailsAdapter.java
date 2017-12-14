@@ -39,7 +39,7 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
 
     public ShoppingListDetailsAdapter(Activity context, ArrayList<String> name,
                                       ArrayList<HashMap> products, ParseObject shoppingList) {
-        super(context, R.layout.lists_list_item, name);
+        super(context, R.layout.item_shopping_list, name);
         selectedItemIds = new SparseBooleanArray();
         this.context = context;
         this.products = products;
@@ -51,7 +51,7 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View rowView = inflater.inflate(R.layout.lists_items_item, null, true);
+        View rowView = inflater.inflate(R.layout.item_product, null, true);
 
         if (position < products.size()) {
             HashMap product = products.get(position);

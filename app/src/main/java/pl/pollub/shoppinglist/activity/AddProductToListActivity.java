@@ -27,7 +27,7 @@ import pl.pollub.shoppinglist.R;
 
 import static pl.pollub.shoppinglist.util.MiscUtils.isNetworkAvailable;
 
-public class AddProductToList extends AppCompatActivity {
+public class AddProductToListActivity extends AppCompatActivity {
     private String listName;
     private String productId;
     private EditText productName;
@@ -88,7 +88,6 @@ public class AddProductToList extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
@@ -153,7 +152,7 @@ public class AddProductToList extends AppCompatActivity {
                     list.pinInBackground(innerE -> {
                         if (e == null) {
                             finish();
-                            Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
+                            Intent intent = new Intent(AddProductToListActivity.this, ShoppingListDetailsActivity.class);
                             intent.putExtra("LIST_OBJECT", list);
                             startActivity(intent);
                         } else {
@@ -207,7 +206,7 @@ public class AddProductToList extends AppCompatActivity {
                                 offlineListToUpdate.put("nestedProducts", nestedProducts);
                                 offlineListToUpdate.pinInBackground(ex -> {
                                     if (ex == null) {
-                                        Intent intent = new Intent(AddProductToList.this, ShoppingListDetailsActivity.class);
+                                        Intent intent = new Intent(AddProductToListActivity.this, ShoppingListDetailsActivity.class);
                                         intent.putExtra("LIST_OBJECT", list);
                                         finish();
                                         startActivity(intent);

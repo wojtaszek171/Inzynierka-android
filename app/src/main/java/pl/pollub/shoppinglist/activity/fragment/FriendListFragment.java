@@ -5,6 +5,8 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +49,11 @@ public class FriendListFragment extends Fragment {
         binding.friendList.setVisibility(View.GONE);
         recyclerViewAdapter = new FriendListViewAdapter(getContext(), this);
         binding.friendList.setAdapter(recyclerViewAdapter);
+
+        LinearLayoutManager recyclerLayoutManager = (LinearLayoutManager) binding.friendList.getLayoutManager();
+        binding.friendList.addItemDecoration(
+                new DividerItemDecoration(getContext(), recyclerLayoutManager.getOrientation())
+        );
         binding.addFriendsButton.setOnClickListener(interactionListener::onSearchClick);
         binding.approveFriendsButton.setOnClickListener(interactionListener::onApproveClick);
         findAndBindFriends();

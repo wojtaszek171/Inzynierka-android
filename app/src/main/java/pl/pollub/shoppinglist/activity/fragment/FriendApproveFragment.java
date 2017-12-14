@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +49,11 @@ public class FriendApproveFragment extends Fragment {
         binding.approvalList.setVisibility(View.GONE);
         recyclerViewAdapter = new FriendApproveViewAdapter(getContext());
         binding.approvalList.setAdapter(recyclerViewAdapter);
+
+        LinearLayoutManager recyclerLayoutManager = (LinearLayoutManager) binding.approvalList.getLayoutManager();
+        binding.approvalList.addItemDecoration(
+                new DividerItemDecoration(getContext(), recyclerLayoutManager.getOrientation())
+        );
         findAndBindInviters();
 
         return binding.getRoot();
