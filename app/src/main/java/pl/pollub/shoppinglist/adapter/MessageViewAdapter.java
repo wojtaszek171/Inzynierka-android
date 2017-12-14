@@ -6,12 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.model.Message;
 import pl.pollub.shoppinglist.model.User;
+import pl.pollub.shoppinglist.util.TimeUtils;
 
 /**
  * @author Adrian
@@ -82,28 +80,8 @@ public class MessageViewAdapter extends BaseRecyclerViewAdapter<Message> {
 
     private void updateRowView(Message message, TextView messageText, TextView timeText, TextView... participantExtras) {
         messageText.setText(message.getContent());
+        timeText.setText(TimeUtils.getRelativeTimeString(getContext(), message.getCreatedAt()));
 
-        Date currentTime = new Date();
-        long differenceInMinutes = (currentTime.getTime() - message.getCreatedAt().getTime()) / 60_000;
-        differenceInMinutes = differenceInMinutes < 0 ? 0 : differenceInMinutes;
-        long differenceInHours = differenceInMinutes / 60;
-        long differenceInDays = differenceInHours / 24;
-        String time = null;
-
-        if (differenceInMinutes < 60) {
-            time = differenceInMinutes + " " + getContext().getString(R.string.minutes_ago);
-        } else if (differenceInMinutes >= 60 && differenceInHours < 24) {
-            SimpleDateFormat formatter = new SimpleDateFormat("kk:mm");
-            time = formatter.format(message.getCreatedAt());
-        } else if (differenceInHours >= 24 && differenceInDays < 7) {
-            SimpleDateFormat formatter = new SimpleDateFormat("EEEE, kk:mm");
-            time = formatter.format(message.getCreatedAt());
-        } else {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd kk:mm");
-            time = formatter.format(message.getCreatedAt());
-        }
-
-        timeText.setText(time);
         for (TextView extra : participantExtras) {
             String username = message.getAuthor().getUsername();
 

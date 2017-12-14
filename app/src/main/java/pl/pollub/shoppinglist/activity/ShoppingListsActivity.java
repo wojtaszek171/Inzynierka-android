@@ -1,6 +1,5 @@
 package pl.pollub.shoppinglist.activity;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -24,9 +23,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -41,7 +38,6 @@ import com.parse.SubscriptionHandling;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -116,13 +112,8 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                         AlertDialog.Builder builder = new
                                 AlertDialog.Builder(ShoppingListsActivity.this);
 
-                        builder.setCancelable(true);
-
-                        builder.setView(listView);
-
-                        AlertDialog dialog1 = builder.create();
-
-                        dialog1.show();
+                        builder.setCancelable(true).setView(listView);
+                        builder.create().show();
                 }
 
                 return true;
@@ -130,7 +121,6 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
 
             @Override
             public void onMenuClosed() {
-
             }
         });
     }
@@ -270,33 +260,27 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
     public static void sortLists(ArrayList<ParseObject> lists, String sort) {
         switch (sort) {
             case "name":
-                Collections.sort(lists, new Comparator<ParseObject>() {
-                    @Override
-                    public int compare(ParseObject o1, ParseObject o2) {
-                        String firstValue = o1.get("name").toString().toLowerCase();
-                        String secondValue = o2.get("name").toString().toLowerCase();
-                        return firstValue.compareTo(secondValue);
-                    }
+                Collections.sort(lists, (o1, o2) -> {
+                    String firstValue = o1.get("name").toString().toLowerCase();
+                    String secondValue = o2.get("name").toString().toLowerCase();
+                    return firstValue.compareTo(secondValue);
                 });
                 ArrayList<ParseObject> neww = lists;
                 break;
             case "date":
-                Collections.sort(lists, new Comparator<ParseObject>() {
-                    @Override
-                    public int compare(ParseObject o1, ParseObject o2) {
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
-                        Date firstValue = new Date(500);
-                        Date secondValue = new Date(500);
-                        try {
-                            if (sdf.parse(o1.getString("deadline")) == null || sdf.parse(o2.getString("deadline")) == null)
-                                return 0;
-                            firstValue = sdf.parse(o1.getString("deadline"));
-                            secondValue = sdf.parse(o2.getString("deadline"));
-                        } catch (java.text.ParseException e) {
-                            e.printStackTrace();
-                        }
-                        return firstValue.compareTo(secondValue);
+                Collections.sort(lists, (o1, o2) -> {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+                    Date firstValue = new Date(500);
+                    Date secondValue = new Date(500);
+                    try {
+                        if (sdf.parse(o1.getString("deadline")) == null || sdf.parse(o2.getString("deadline")) == null)
+                            return 0;
+                        firstValue = sdf.parse(o1.getString("deadline"));
+                        secondValue = sdf.parse(o2.getString("deadline"));
+                    } catch (java.text.ParseException e) {
+                        e.printStackTrace();
                     }
+                    return firstValue.compareTo(secondValue);
                 });
                 break;
             default:
@@ -334,9 +318,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
         return updateShoppingListsQuery;
     }
 
-
     private void subscribeToShoppingListsQuery() {
-
         parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         ParseQuery updateShoppingListsQuery = getMyShoppingListsQuery();
 
@@ -352,7 +334,6 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                 }
             });
         });
-
     }
 
     private void prepareShoppingListsAdapterFromQueryResult(List<ParseObject> resultList) {
@@ -370,43 +351,37 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
             goToListDetails(listsItems, position);
         });
         list.setLongClickable(true);
-        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @SuppressLint("ResourceType")
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                AlertDialog.Builder builder = new
-                        AlertDialog.Builder(new ContextThemeWrapper(ShoppingListsActivity.this, R.style.NewDialog));
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                builder.setCancelable(true);
+        list.setOnItemLongClickListener((parent, view, position, id) -> {
+            AlertDialog.Builder builder = new
+                    AlertDialog.Builder(new ContextThemeWrapper(ShoppingListsActivity.this, R.style.NewDialog));
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            builder.setCancelable(true).setView(inflater.inflate(R.layout.lists_dialog, null));
 
-                builder.setView(inflater.inflate(R.layout.lists_dialog, null));
-
-                Dialog dialog1 = builder.create();
-                dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog1.getWindow().setDimAmount(0);
-                dialog1.show();
-                CircleButton selectMany = dialog1.findViewById(R.id.select_many);
-                selectMany.setOnClickListener(v -> {
-                    list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-                    multiChoiceForDelete(list, listAdapter, resultList);
-                    list.setItemChecked(position, true);
-                    dialog1.dismiss();
-                });
-                CircleButton deleteList = dialog1.findViewById(R.id.delete);
-                deleteList.setOnClickListener(v -> {
-                    ArrayList<ParseObject> selItem = new ArrayList<>();
-                    selItem.add(resultList.get(position));
-                    deleteListAction(listAdapter, selItem);
-                });
-                CircleButton editList = dialog1.findViewById(R.id.edit_list);
-                editList.setOnClickListener(v -> {
-                    dialog1.dismiss();
-                    Intent intent = new Intent(getApplicationContext(), AddShoppingList.class);
-                    intent.putExtra("LIST_OBJECT", resultList.get(position));
-                    startActivity(intent);
-                });
-                return true;
-            }
+            Dialog dialog1 = builder.create();
+            dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog1.getWindow().setDimAmount(0);
+            dialog1.show();
+            CircleButton selectMany = dialog1.findViewById(R.id.select_many);
+            selectMany.setOnClickListener(v -> {
+                list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+                multiChoiceForDelete(list, listAdapter, resultList);
+                list.setItemChecked(position, true);
+                dialog1.dismiss();
+            });
+            CircleButton deleteList = dialog1.findViewById(R.id.delete);
+            deleteList.setOnClickListener(v -> {
+                ArrayList<ParseObject> selItem = new ArrayList<>();
+                selItem.add(resultList.get(position));
+                deleteListAction(listAdapter, selItem);
+            });
+            CircleButton editList = dialog1.findViewById(R.id.edit_list);
+            editList.setOnClickListener(v -> {
+                dialog1.dismiss();
+                Intent intent = new Intent(getApplicationContext(), AddShoppingList.class);
+                intent.putExtra("LIST_OBJECT", resultList.get(position));
+                startActivity(intent);
+            });
+            return true;
         });
     }
 
@@ -422,8 +397,8 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
 
             @Override
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-
                 actionMode.getMenuInflater().inflate(R.menu.main, menu);
+
                 return true;
             }
 
@@ -485,7 +460,6 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                             s.deleteEventually();
                         }
                     } else {
-
                     }
                 });
             } else {
@@ -500,9 +474,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
                     }
                 });
             }
-
         }
-
     }
 
     private void goToListDetails(List<ParseObject> scoreList, int position) {

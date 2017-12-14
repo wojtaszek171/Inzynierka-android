@@ -180,33 +180,24 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     public static void sortProducts(ArrayList<HashMap> nestedProducts, String sort) {
         switch (sort) {
             case "name":
-                Collections.sort(nestedProducts, new Comparator<HashMap>() {
-                    @Override
-                    public int compare(HashMap o1, HashMap o2) {
-                        String firstValue = o1.get("name").toString().toLowerCase();
-                        String secondValue = o2.get("name").toString().toLowerCase();
-                        return firstValue.compareTo(secondValue);
-                    }
+                Collections.sort(nestedProducts, (o1, o2) -> {
+                    String firstValue = o1.get("name").toString().toLowerCase();
+                    String secondValue = o2.get("name").toString().toLowerCase();
+                    return firstValue.compareTo(secondValue);
                 });
                 break;
             case "category":
-                Collections.sort(nestedProducts, new Comparator<HashMap>() {
-                    @Override
-                    public int compare(HashMap o1, HashMap o2) {
-                        String firstValue = o1.get("category").toString().toLowerCase();
-                        String secondValue = o2.get("category").toString().toLowerCase();
-                        return firstValue.compareTo(secondValue);
-                    }
+                Collections.sort(nestedProducts, (o1, o2) -> {
+                    String firstValue = o1.get("category").toString().toLowerCase();
+                    String secondValue = o2.get("category").toString().toLowerCase();
+                    return firstValue.compareTo(secondValue);
                 });
                 break;
             case "status":
-                Collections.sort(nestedProducts, new Comparator<HashMap>() {
-                    @Override
-                    public int compare(HashMap o1, HashMap o2) {
-                        String firstValue = o1.get("status").toString().toLowerCase();
-                        String secondValue = o2.get("status").toString().toLowerCase();
-                        return firstValue.compareTo(secondValue);
-                    }
+                Collections.sort(nestedProducts, (o1, o2) -> {
+                    String firstValue = o1.get("status").toString().toLowerCase();
+                    String secondValue = o2.get("status").toString().toLowerCase();
+                    return firstValue.compareTo(secondValue);
                 });
                 break;
             default:
@@ -246,7 +237,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.delete:
-                        ArrayList<HashMap> selecteditems = new ArrayList<HashMap>();
+                        ArrayList<HashMap> selecteditems = new ArrayList<>();
                         changeSelectedIdsToObjects(productAdapter, selecteditems, scoreList);
                         deleteListAction(productAdapter, selecteditems, actionMode);
                         return true;

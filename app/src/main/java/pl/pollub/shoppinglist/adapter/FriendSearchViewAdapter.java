@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Date;
 import java.util.List;
@@ -15,6 +14,8 @@ import java.util.List;
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.model.User;
 import pl.pollub.shoppinglist.model.UserData;
+
+import static pl.pollub.shoppinglist.util.ToastUtils.showToast;
 
 public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
 
@@ -70,7 +71,7 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
                 itemData.addUniqueInviter(User.getCurrentUser());
                 itemData.saveInBackground(exception -> {
                     if (exception == null) {
-                        Toast.makeText(getContext(), "Wysłano zaproszenie!", Toast.LENGTH_SHORT).show();
+                        showToast(getContext(), "Wysłano zaproszenie!");
                     } else {
                         resetButtonState(inviteButton);
                     }

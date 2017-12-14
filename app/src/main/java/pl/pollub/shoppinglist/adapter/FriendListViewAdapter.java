@@ -4,21 +4,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageButton;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.ParseObject;
 
 import java.util.Arrays;
-import java.util.Date;
 
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.activity.fragment.FriendListFragment;
 import pl.pollub.shoppinglist.model.User;
+import pl.pollub.shoppinglist.util.TimeUtils;
+
+import static pl.pollub.shoppinglist.util.ToastUtils.showToast;
 
 /**
  * @author Adrian
@@ -59,26 +59,12 @@ public class FriendListViewAdapter extends BaseRecyclerViewAdapter<User> {
         final AppCompatImageButton deleteButton = (AppCompatImageButton) viewHolder.getView(R.id.actionDeleteButton_list);
 
         usernameLabel.setText(item.getUsername());
-
-        Date lastActiveAtTime = item.getLastActiveAt();
-
-        if (lastActiveAtTime == null) {
-            lastActiveAtLabel.setText(R.string.never);
-        } else {
-            lastActiveAtLabel.setText(DateUtils.getRelativeTimeSpanString(
-                    getContext(),
-                    lastActiveAtTime.getTime()
-            ));
-        }
+        lastActiveAtLabel.setText(TimeUtils.getRelativeTimeString(getContext(), item.getLastActiveAt()));
 
         messageButton.setOnClickListener(view -> fragment
                 .getInteractionListener()
                 .onOpenMessagesClick(view, item));
         deleteButton.setOnClickListener(view -> onDeleteButtonClick(view, item, position));
-    }
-
-    private void onMessageButtonClick(View view, User currentFriend) {
-        Toast.makeText(getContext(), "messageButton: nie zaimplementowano", Toast.LENGTH_SHORT).show();
     }
 
     private void onDeleteButtonClick(View view, User currentFriend, int positionOnViewport) {
@@ -102,7 +88,7 @@ public class FriendListViewAdapter extends BaseRecyclerViewAdapter<User> {
                 ParseObject.saveAllInBackground(Arrays.asList(currentUser, currentFriend), exception -> {
                     if (exception == null) {
                         removeItem(currentFriend);
-                        Toast.makeText(getContext(), "Pomyślnie usunięto znajomego!", Toast.LENGTH_SHORT).show();
+                        showToast(getContext(), "Pomyślnie usunięto znajomego!");
                     }
                 });
                 break;

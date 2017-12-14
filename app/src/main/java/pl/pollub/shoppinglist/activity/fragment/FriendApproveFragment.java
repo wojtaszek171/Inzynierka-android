@@ -88,11 +88,15 @@ public class FriendApproveFragment extends Fragment {
 
         dataTask.onSuccessTask(task -> {
             final List<User> inviters = task.getResult().getInviters();
+            if (inviters == null || inviters.isEmpty()) {
+                return Task.cancelled();
+            }
+
             return ParseObject.fetchAllInBackground(inviters);
         }).continueWith(task -> {
             activity.runOnUiThread(() -> binding.progressBar.setVisibility(View.GONE));
 
-            if (!task.isFaulted()) {
+            if (!task.isFaulted() && !task.isCancelled()) {
                 final List<User> inviters = task.getResult();
 
                 activity.runOnUiThread(() -> {
@@ -101,7 +105,7 @@ public class FriendApproveFragment extends Fragment {
                 });
 
                 return null;
-            } else {
+            } else if (task.isFaulted()) {
                 activity.runOnUiThread(() -> Toast.makeText(
                         getContext(),
                         "Nie udało się załadować zapraszających!",

@@ -1,23 +1,21 @@
 package pl.pollub.shoppinglist.adapter;
 
 import android.content.Context;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.ParseObject;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.model.User;
+import pl.pollub.shoppinglist.util.TimeUtils;
+import pl.pollub.shoppinglist.util.ToastUtils;
 
 /**
  * @author Adrian
@@ -50,26 +48,8 @@ public class FriendApproveViewAdapter extends BaseRecyclerViewAdapter<User> {
         final TextView lastActiveAtLabel = (TextView) viewHolder.getView(R.id.lastActiveAt_approve);
         final Button approveButton = (Button) viewHolder.getView(R.id.actionButton_approve);
 
-        item.fetchIfNeededInBackground((updatedItem, exception) -> {
-            if (exception == null) {
-                User updatedUser = (User) updatedItem;
-
-                usernameLabel.setText(updatedUser.getUsername());
-
-                Date lastActiveAt = updatedUser.getLastActiveAt();
-                if (lastActiveAt == null) {
-                    lastActiveAtLabel.setText(R.string.never);
-                } else {
-                    lastActiveAtLabel.setText(DateUtils.getRelativeTimeSpanString(
-                            getContext(),
-                            lastActiveAt.getTime()
-                    ));
-                }
-            } else {
-                Toast.makeText(getContext(), "FriendApproveAdapter " + exception.getMessage(), Toast.LENGTH_LONG).show();
-                Log.w("FriendApproveAdapter", exception.getMessage());
-            }
-        });
+        usernameLabel.setText(item.getUsername());
+        lastActiveAtLabel.setText(TimeUtils.getRelativeTimeString(getContext(), item.getLastActiveAt()));
 
         if (hasAlreadyBeenApprovedByCurrentUser(item)) {
             markButtonAlreadyApproved(approveButton);
@@ -84,7 +64,7 @@ public class FriendApproveViewAdapter extends BaseRecyclerViewAdapter<User> {
 
                 ParseObject.saveAllInBackground(Arrays.asList(currentUser, item), exception -> {
                     if (exception == null) {
-                        Toast.makeText(getContext(), "Potwierdzono znajomość!", Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToast(getContext(), "Potwierdzono znajomość!");
                     } else {
                         resetButtonState(approveButton);
                     }

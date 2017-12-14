@@ -15,13 +15,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -95,9 +92,9 @@ public class AddShoppingList extends AppCompatActivity {
         saveNewList.setOnClickListener(view -> {
             listNameString = listName.getText().toString();
             descriptionString = description.getText().toString();
-            if(listNameString.equals("")){
+            if (listNameString.equals("")) {
                 Toast.makeText(this, "Musisz podać nazwę listy", Toast.LENGTH_SHORT).show();
-            }else {
+            } else {
                 if (listObject != null) {
                     updateShoppingList();
                 } else {
@@ -127,7 +124,7 @@ public class AddShoppingList extends AppCompatActivity {
         description = findViewById(R.id.list_description);
 
         timepickerBtn = findViewById(R.id.listDeadlineTimepickerBtn);
-        timepickerBtn.setOnClickListener(v -> showTimePickerDialog(v));
+        timepickerBtn.setOnClickListener(this::showTimePickerDialog);
 
         setNotificationsToggle = findViewById(R.id.toggleNotifications);
         setNotificationsToggle.setOnCheckedChangeListener((buttonView, isChecked) -> setNotificationSetButtonsVisibility(isChecked));
@@ -153,31 +150,29 @@ public class AddShoppingList extends AppCompatActivity {
                 }
             });
         } else {
-            ParseQuery offlineListToUpdateQuery = ParseQuery.getQuery("ShoppingList");
+            ParseQuery<ParseObject> offlineListToUpdateQuery = ParseQuery.getQuery("ShoppingList");
             offlineListToUpdateQuery.whereEqualTo("localId", listObject.getString("localId"));
             offlineListToUpdateQuery.fromLocalDatastore();
-            offlineListToUpdateQuery.findInBackground(new FindCallback<ParseObject>() {
-                public void done(List<ParseObject> resultList, ParseException e) {
-                    if (e == null) {
-                        ParseObject listToUpdate = resultList.get(0);
-                        listObject.put("name", listNameString);
-                        listObject.put("status", "0");
-                        listObject.put("deadline", textDate.getText().toString() + " "
-                                + timepickerBtn.getText().toString());
-                        listObject.put("description", descriptionString);
-                        listObject.put("isTemplate", template);
-                    }
+            offlineListToUpdateQuery.findInBackground((resultList, e) -> {
+                if (e == null) {
+                    ParseObject listToUpdate = resultList.get(0);
+                    listObject.put("name", listNameString);
+                    listObject.put("status", "0");
+                    listObject.put("deadline", textDate.getText().toString() + " "
+                            + timepickerBtn.getText().toString());
+                    listObject.put("description", descriptionString);
+                    listObject.put("isTemplate", template);
                 }
             });
         }
     }
 
 
-    private void setNotificationSetButtonsVisibility(Boolean show) {
+    private void setNotificationSetButtonsVisibility(boolean show) {
         Button datepickerBtnLocal = findViewById(R.id.listDeadline);
         Button timepickerBtnLocal = findViewById(R.id.listDeadlineTimepickerBtn);
 
-        if (show == true) {
+        if (show) {
             datepickerBtnLocal.setVisibility(View.VISIBLE);
             timepickerBtnLocal.setVisibility(View.VISIBLE);
         } else {
@@ -255,7 +250,7 @@ public class AddShoppingList extends AppCompatActivity {
             list.saveEventually(e -> {
                 if (e == null) {
                     // No error, the object was saved
-                   // Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_LONG).show();
+                    // Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_LONG).show();
                 } else {
                     // Error saving object, print the logs
                     e.printStackTrace();

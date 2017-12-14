@@ -18,7 +18,6 @@ import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.databinding.NavigationHeaderBinding;
 import pl.pollub.shoppinglist.model.User;
 import pl.pollub.shoppinglist.util.MiscUtils;
-import pl.pollub.shoppinglist.util.ToastUtils;
 
 import static pl.pollub.shoppinglist.util.ToastUtils.showToast;
 
