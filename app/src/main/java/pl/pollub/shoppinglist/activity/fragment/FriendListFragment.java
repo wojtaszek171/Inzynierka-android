@@ -5,25 +5,26 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.parse.ParseException;
 import com.parse.ParseObject;
 
 import java.util.List;
 
+import bolts.Task;
 import lombok.Getter;
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.adapter.FriendListViewAdapter;
 import pl.pollub.shoppinglist.databinding.FragmentFriendListBinding;
 import pl.pollub.shoppinglist.model.User;
 import pl.pollub.shoppinglist.model.UserData;
+import pl.pollub.shoppinglist.util.ToastUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,12 +41,13 @@ public class FriendListFragment extends Fragment {
     private OnFriendListInteractionListener interactionListener;
     private FragmentFriendListBinding binding;
     private FriendListViewAdapter recyclerViewAdapter;
+    private AppCompatActivity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_friend_list, container, false);
         onInteracted(null);
-        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.spinnerLayout.loadingSpinner.setVisibility(View.VISIBLE);
         binding.friendList.setVisibility(View.GONE);
         recyclerViewAdapter = new FriendListViewAdapter(getContext(), this);
         binding.friendList.setAdapter(recyclerViewAdapter);
@@ -71,11 +73,15 @@ public class FriendListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFriendListInteractionListener) {
+        if (context instanceof OnFriendListInteractionListener
+                && context instanceof AppCompatActivity) {
             interactionListener = (OnFriendListInteractionListener) context;
+            activity = (AppCompatActivity) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFriendSearchInteractionListener");
+                    + " must extend/implement "
+                    + AppCompatActivity.class.getSimpleName()
+                    + " and " + OnFriendListInteractionListener.class.getSimpleName());
         }
     }
 
@@ -83,44 +89,43 @@ public class FriendListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         interactionListener = null;
+        activity = null;
     }
 
     private void findAndBindFriends() {
-        User.getCurrentUser()
+        Task<UserData> dataTask = User.getCurrentUser()
                 .getUserData()
-                .fetchInBackground(this::onFetchDone);
-    }
+                .fetchInBackground();
 
-    private void onFetchDone(UserData updatedUserData, ParseException exception) {
-        if (exception == null) {
-            List<User> friends = updatedUserData.getFriends();
+        dataTask.onSuccessTask(task -> {
+            List<User> friends = task.getResult().getFriends();
 
-            if (friends != null && friends.size() > 0) {
-                try {
-                    friends = ParseObject.fetchAll(friends);
+            if (friends == null || friends.isEmpty()) {
+                return Task.cancelled();
+            }
 
+            return ParseObject.fetchAllInBackground(friends);
+        }).continueWith(task -> {
+            activity.runOnUiThread(() -> binding.spinnerLayout.loadingSpinner.setVisibility(View.GONE));
+
+            if (!task.isFaulted() && !task.isCancelled()) {
+                List<User> friends = task.getResult();
+
+                activity.runOnUiThread(() -> {
                     binding.friendList.setVisibility(View.VISIBLE);
                     recyclerViewAdapter.setList(friends);
-                } catch (ParseException e) {
-                    Toast.makeText(
-                            getContext(),
-                            "Nie udało się załadować znajomych!",
-                            Toast.LENGTH_SHORT
-                    ).show();
+                });
 
-                    Log.w("FriendListFrag", e);
-                }
+                return null;
+            } else if (task.isFaulted()) {
+                activity.runOnUiThread(() -> ToastUtils.showLongToast(getContext(), "Nie udało się załadować znajomych!"));
+
+                Log.w("FriendListFrag", task.getError());
             }
-        } else {
-            Toast.makeText(
-                    getContext(),
-                    "Nie udało się załadować znajomych!",
-                    Toast.LENGTH_SHORT
-            ).show();
-            Log.w("FriendListFrag", exception);
-        }
 
-        binding.progressBar.setVisibility(View.GONE);
+            activity.runOnUiThread(() -> binding.emptyLabel.setVisibility(View.VISIBLE));
+            return null;
+        });
     }
 
     /**

@@ -73,7 +73,7 @@ public class FriendListViewAdapter extends BaseRecyclerViewAdapter<User> {
 
     private void onDeleteButtonClick(View view, User currentFriend, int positionOnViewport) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-        alertDialogBuilder.setIcon(R.drawable.ic_action_delete)
+        alertDialogBuilder.setIconAttribute(android.R.attr.alertDialogIcon)
                 .setTitle("Usuń znajomego")
                 .setMessage("Czy na pewno chcesz usunąć znajomego? Tej operacji nie da się odwrócić.")
                 .setPositiveButton(R.string.ok, ((dialog, buttonId) ->

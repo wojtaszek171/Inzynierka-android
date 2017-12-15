@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/profile_image_list"
@@ -62,13 +64,18 @@
             android:id="@+id/actionMessageButton_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_message_dark" />
+            android:contentDescription="Message"
+            android:tint="@color/cardview_dark_background"
+            app:srcCompat="@drawable/ic_message_24dp" />
 
         <ImageButton
             android:id="@+id/actionDeleteButton_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_delete_dark" />
+            android:layout_gravity="center_vertical"
+            android:contentDescription="Delete"
+            android:tint="@color/cardview_dark_background"
+            app:srcCompat="@drawable/ic_delete_forever_24dp" />
 
     </LinearLayout>
 

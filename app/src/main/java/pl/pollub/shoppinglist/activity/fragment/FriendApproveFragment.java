@@ -45,7 +45,7 @@ public class FriendApproveFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_friend_approve, container, false);
         onInteracted(null);
-        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.spinnerLayout.loadingSpinner.setVisibility(View.VISIBLE);
         binding.approvalList.setVisibility(View.GONE);
         recyclerViewAdapter = new FriendApproveViewAdapter(getContext());
         binding.approvalList.setAdapter(recyclerViewAdapter);
@@ -101,7 +101,7 @@ public class FriendApproveFragment extends Fragment {
 
             return ParseObject.fetchAllInBackground(inviters);
         }).continueWith(task -> {
-            activity.runOnUiThread(() -> binding.progressBar.setVisibility(View.GONE));
+            activity.runOnUiThread(() -> binding.spinnerLayout.loadingSpinner.setVisibility(View.GONE));
 
             if (!task.isFaulted() && !task.isCancelled()) {
                 final List<User> inviters = task.getResult();
@@ -122,7 +122,7 @@ public class FriendApproveFragment extends Fragment {
                 Log.w("FriendApproveFrag", task.getError());
             }
 
-            //activity.runOnUiThread(() -> binding.emptyLabel.setVisibility(View.VISIBLE));
+            activity.runOnUiThread(() -> binding.emptyLabel.setVisibility(View.VISIBLE));
             return null;
         });
     }

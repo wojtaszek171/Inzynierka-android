@@ -48,7 +48,7 @@ public class FriendSearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_friend_search, container, false);
         onInteracted(null);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.spinnerLayout.loadingSpinner.setVisibility(View.GONE);
         binding.searchList.setVisibility(View.GONE);
         recyclerViewAdapter = new FriendSearchViewAdapter(getContext());
         binding.searchList.setAdapter(recyclerViewAdapter);
@@ -97,7 +97,7 @@ public class FriendSearchFragment extends Fragment {
             searchQuery = searchInput;
             binding.emptyLabel.setVisibility(View.GONE);
             binding.searchList.setVisibility(View.GONE);
-            binding.progressBar.setVisibility(View.VISIBLE);
+            binding.spinnerLayout.loadingSpinner.setVisibility(View.VISIBLE);
             findAndBindUsers(searchQuery);
         } else {
             showToast(getContext(), "Wprowadź przynajmniej " + MINIMUM_CHARS + " znaki");
@@ -118,7 +118,7 @@ public class FriendSearchFragment extends Fragment {
 
             return ParseObject.fetchAllInBackground(users);
         }).continueWith(task -> {
-            activity.runOnUiThread(() -> binding.progressBar.setVisibility(View.GONE));
+            activity.runOnUiThread(() -> binding.spinnerLayout.loadingSpinner.setVisibility(View.GONE));
 
             if (!task.isFaulted() && !task.isCancelled()) {
                 final List<User> users = task.getResult();
