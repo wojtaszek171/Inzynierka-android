@@ -4,11 +4,16 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.IdRes;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 import java.util.Random;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import pl.pollub.shoppinglist.R;
 
 /**
  * @author Adrian
@@ -36,5 +41,29 @@ public class MiscUtils {
         return Color.parseColor(
                 COLOR_VALUES[GENERATOR.nextInt(COLOR_VALUES.length - 1)]
         );
+    }
+
+    public static void attachFragment(Class<? extends Fragment> fragmentClass,
+                                      FragmentManager fm,
+                                      @IdRes int containerViewId,
+                                      boolean addToBackStack) {
+        Fragment fragment;
+
+        try {
+            fragment = fragmentClass.getDeclaredConstructor().newInstance();
+        } catch (ReflectiveOperationException exception) {
+            throw new IllegalAccessError(exception.getMessage());
+        }
+
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                .replace(containerViewId, fragment);
+
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+
+        transaction.commit();
     }
 }

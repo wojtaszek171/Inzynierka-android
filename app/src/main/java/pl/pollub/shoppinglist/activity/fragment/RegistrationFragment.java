@@ -60,7 +60,7 @@ public class RegistrationFragment extends Fragment {
 
         actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         actionBar.show();
-        actionBar.setTitle(R.string.menuRegister);
+        actionBar.setTitle(R.string.register);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 

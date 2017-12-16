@@ -137,10 +137,6 @@ public class FriendListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFriendListInteractionListener {
-        void onSearchClick(View view);
-
-        void onApproveClick(View view);
-
         void onOpenMessagesClick(View view, User selectedFriend);
 
         void onFriendListInteraction(Uri uri);

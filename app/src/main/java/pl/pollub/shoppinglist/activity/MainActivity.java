@@ -3,7 +3,6 @@ package pl.pollub.shoppinglist.activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +13,8 @@ import pl.pollub.shoppinglist.activity.fragment.RegistrationFragment;
 import pl.pollub.shoppinglist.activity.fragment.WelcomeFragment;
 import pl.pollub.shoppinglist.databinding.ActivityMainBinding;
 import pl.pollub.shoppinglist.model.User;
+
+import static pl.pollub.shoppinglist.util.MiscUtils.attachFragment;
 
 public class MainActivity extends AppCompatActivity implements
         WelcomeFragment.OnWelcomeInteractionListener,
@@ -31,13 +32,16 @@ public class MainActivity extends AppCompatActivity implements
         setSupportActionBar(binding.toolbar.toolbar);
 
         if (isKeySet(GO_TO_LOGIN_KEY)) {
-            attachLoginFragment(false);
+            attachFragment(LoginFragment.class, getSupportFragmentManager(),
+                    binding.mainFragmentContainer.getId(), false);
         } else if (isKeySet(GO_TO_REGISTRATION_KEY)) {
-            attachRegistrationFragment(false);
+            attachFragment(RegistrationFragment.class, getSupportFragmentManager(),
+                    binding.mainFragmentContainer.getId(), false);
         } else if (User.getCurrentUser() != null) {
             openShoppingListsActivity(true);
         } else {
-            attachWelcomeFragment();
+            attachFragment(WelcomeFragment.class, getSupportFragmentManager(),
+                    binding.mainFragmentContainer.getId(), false);
         }
     }
 
@@ -55,12 +59,14 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onLoginClick(View view) {
-        attachLoginFragment(true);
+        attachFragment(LoginFragment.class, getSupportFragmentManager(),
+                binding.mainFragmentContainer.getId(), true);
     }
 
     @Override
     public void onRegisterClick(View view) {
-        attachRegistrationFragment(true);
+        attachFragment(RegistrationFragment.class, getSupportFragmentManager(),
+                binding.mainFragmentContainer.getId(), true);
     }
 
     @Override
@@ -77,41 +83,6 @@ public class MainActivity extends AppCompatActivity implements
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         }
         startActivity(intent);
-    }
-
-    protected void attachWelcomeFragment() {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        WelcomeFragment fragment = new WelcomeFragment();
-        transaction.replace(R.id.main_fragment_container, fragment)
-                .commit();
-    }
-
-    protected void attachLoginFragment(boolean addToBackStack) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        LoginFragment fragment = new LoginFragment();
-        transaction
-                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-                .replace(R.id.main_fragment_container, fragment);
-
-        if (addToBackStack) {
-            transaction.addToBackStack(null);
-        }
-
-        transaction.commit();
-    }
-
-    protected void attachRegistrationFragment(boolean addToBackStack) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        RegistrationFragment fragment = new RegistrationFragment();
-        transaction
-                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-                .replace(R.id.main_fragment_container, fragment);
-
-        if (addToBackStack) {
-            transaction.addToBackStack(null);
-        }
-
-        transaction.commit();
     }
 
     private boolean isKeySet(String key) {

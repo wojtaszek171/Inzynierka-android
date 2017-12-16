@@ -77,7 +77,7 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
 
         subscribeToShoppingListsQuery();
 
-        setTitle(R.string.menuLists);
+        setTitle(R.string.my_lists);
         setSupportActionBar(toolbar);
         displayListsAndSetActions();
         addNewShoppingListDialog();

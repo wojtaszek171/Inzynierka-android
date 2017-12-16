@@ -8,27 +8,37 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <include
-                android:id="@+id/toolbar_layout"
-                layout="@layout/toolbar" />
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tab_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryDark"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
             <android.support.v4.view.ViewPager
-                android:id="@+id/friend_fragment_container"
+                android:id="@+id/friend_view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-        </LinearLayout>
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimaryDark"
+                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    app:layout_scrollFlags="scroll|enterAlways" />
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tab_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimaryDark"
+                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+            </android.support.design.widget.AppBarLayout>
+        </android.support.design.widget.CoordinatorLayout>
 
         <include
             android:id="@+id/nav_view_layout"

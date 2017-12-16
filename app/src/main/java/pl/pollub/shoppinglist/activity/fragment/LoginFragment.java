@@ -50,7 +50,7 @@ public class LoginFragment extends Fragment {
 
         actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         actionBar.show();
-        actionBar.setTitle(R.string.menuLogInto);
+        actionBar.setTitle(R.string.login);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 

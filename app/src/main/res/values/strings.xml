@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">Shopping List</string>
-    <string name="menuLogInto">Zaloguj się</string>
-    <string name="menuRegister">Zarejestruj się</string>
-    <string name="menuLists">TWOJE LISTY</string>
+    <string name="register">Zarejestruj się</string>
+    <string name="my_lists">Moje listy</string>
     <string name="login">Zaloguj się</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
@@ -11,9 +10,6 @@
     <string name="templates">Szablony</string>
     <string name="options">Ustawienia</string>
     <string name="logout">Wyloguj się</string>
-    <string name="friendNick">Pseudonim</string>
-    <string name="addFriend">Dodaj znajomego</string>
-    <string name="editFriend">Edytuj znajomego</string>
     <string name="add">Dodaj</string>
     <string name="edit">Edytuj</string>
     <string name="product">Produkt</string>
@@ -67,6 +63,9 @@
     <string name="not_logged_in">niezalogowany</string>
     <string name="no_friends">Nie masz jeszcze znajomych.</string>
     <string name="no_invites">Nie masz żadnych zaproszeń.</string>
+    <string name="my_friends">Moi znajomi</string>
+    <string name="invites">Zaproszenia</string>
+    <string name="search_engine">Wyszukiwarka</string>
 
     <!--CATEGORIES:-->
     <string-array name="product_categories">

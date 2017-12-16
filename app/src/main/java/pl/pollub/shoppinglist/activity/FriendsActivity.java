@@ -39,13 +39,13 @@ public class FriendsActivity extends BaseNavigationActivity implements
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_friends);
 
-        setSupportActionBar(binding.toolbarLayout.toolbar);
+        setSupportActionBar(binding.toolbar);
         setTitle(R.string.friends);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager());
-        fragmentPagerAdapter.addFragment(new FriendListFragment(), "Twoi znajomi");
-        fragmentPagerAdapter.addFragment(new FriendApproveFragment(), "Zaproszenia");
-        fragmentPagerAdapter.addFragment(new FriendSearchFragment(), "Wyszukiwarka");
+        fragmentPagerAdapter.addFragment(new FriendListFragment(), getString(R.string.my_friends));
+        fragmentPagerAdapter.addFragment(new FriendApproveFragment(), getString(R.string.invites));
+        fragmentPagerAdapter.addFragment(new FriendSearchFragment(), getString(R.string.search_engine));
         binding.tabBar.addTab(
                 binding.tabBar
                         .newTab()
@@ -63,10 +63,10 @@ public class FriendsActivity extends BaseNavigationActivity implements
         );
         binding.tabBar.setTabGravity(TabLayout.GRAVITY_FILL);
         binding.tabBar.addOnTabSelectedListener((OnTabSelectedListener) tab ->
-                binding.friendFragmentContainer.setCurrentItem(tab.getPosition()));
+                binding.friendViewPager.setCurrentItem(tab.getPosition()));
 
-        binding.friendFragmentContainer.setAdapter(fragmentPagerAdapter);
-        binding.friendFragmentContainer
+        binding.friendViewPager.setAdapter(fragmentPagerAdapter);
+        binding.friendViewPager
                 .addOnPageChangeListener(
                         new TabLayout.TabLayoutOnPageChangeListener(binding.tabBar)
                 );
@@ -80,16 +80,6 @@ public class FriendsActivity extends BaseNavigationActivity implements
     @Override
     protected NavigationView getNavigationView() {
         return binding.navViewLayout.navView;
-    }
-
-    @Override
-    public void onSearchClick(View view) {
-        attachFriendFunctionalityFragment(FriendSearchFragment.class, true);
-    }
-
-    @Override
-    public void onApproveClick(View view) {
-        attachFriendFunctionalityFragment(FriendApproveFragment.class, true);
     }
 
     @Override
@@ -109,31 +99,5 @@ public class FriendsActivity extends BaseNavigationActivity implements
 
     @Override
     public void onFriendSearchInteraction(Uri uri) {
-    }
-
-    protected void attachFriendFunctionalityFragment(Class<? extends Fragment> fragmentClass, boolean addToBackStack) {
-        if (User.getCurrentUser() == null) {
-            showLongToast(this, R.string.not_logged_in);
-            return;
-        }
-
-        Fragment fragment;
-
-        try {
-            fragment = fragmentClass.getDeclaredConstructor().newInstance();
-        } catch (ReflectiveOperationException exception) {
-            throw new RuntimeException(exception);
-        }
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction
-                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-                .replace(R.id.friend_fragment_container, fragment);
-
-        if (addToBackStack) {
-            transaction.addToBackStack(null);
-        }
-
-        transaction.commit();
     }
 }
