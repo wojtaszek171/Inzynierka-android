@@ -14,10 +14,10 @@
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/left_right_margin"
-            android:layout_marginRight="@dimen/left_right_margin"
+            android:layout_marginLeft="@dimen/single_left_right_margin"
+            android:layout_marginRight="@dimen/single_left_right_margin"
             android:layout_weight="1"
-            tools:listitem="@layout/item_friend_approve" />
+            tools:listitem="@layout/item_friend_sa" />
 
         <TextView
             android:id="@+id/empty_label"

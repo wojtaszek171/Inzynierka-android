@@ -1,6 +1,7 @@
 package pl.pollub.shoppinglist.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,9 @@ import pl.pollub.shoppinglist.model.Message;
 import pl.pollub.shoppinglist.model.User;
 import pl.pollub.shoppinglist.util.TimeUtils;
 
+import static android.support.v4.view.ViewCompat.setBackgroundTintList;
+import static pl.pollub.shoppinglist.util.MiscUtils.getRandomAvatarBackgroundColor;
+
 /**
  * @author Adrian
  * @since 2017-11-26
@@ -20,14 +24,16 @@ public class MessageViewAdapter extends BaseRecyclerViewAdapter<Message> {
     private static final int VIEWTYPE_MESSAGE_RECEIVED = 2;
 
     private final User currentUser = User.getCurrentUser();
-    private int friendAvatarColor;
+    private final ColorStateList friendAvatarColors;
 
     public MessageViewAdapter(Context context) {
         super(context);
+        friendAvatarColors = ColorStateList.valueOf(getRandomAvatarBackgroundColor());
     }
 
     public MessageViewAdapter(Context context, OnViewHolderClick<Message> listener) {
         super(context, listener);
+        friendAvatarColors = ColorStateList.valueOf(getRandomAvatarBackgroundColor());
     }
 
     @Override
@@ -92,6 +98,7 @@ public class MessageViewAdapter extends BaseRecyclerViewAdapter<Message> {
                 case R.id.r_profile_image:
                     char firstChar = username.toUpperCase().charAt(0);
                     extra.setText(Character.toString(firstChar));
+                    setBackgroundTintList(extra, friendAvatarColors);
                     break;
                 default:
             }

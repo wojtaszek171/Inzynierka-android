@@ -1,20 +1,22 @@
 package pl.pollub.shoppinglist.adapter;
 
 import android.content.Context;
-import android.text.format.DateUtils;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Date;
 import java.util.List;
 
 import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.model.User;
 import pl.pollub.shoppinglist.model.UserData;
+import pl.pollub.shoppinglist.util.TimeUtils;
 
+import static android.support.v4.view.ViewCompat.setBackgroundTintList;
+import static pl.pollub.shoppinglist.util.MiscUtils.getRandomAvatarBackgroundColor;
 import static pl.pollub.shoppinglist.util.ToastUtils.showToast;
 
 public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
@@ -30,7 +32,7 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
     @Override
     protected View createView(Context context, ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.item_friend_search, viewGroup, false);
+        View view = inflater.inflate(R.layout.item_friend_sa, viewGroup, false);
 
         return view;
     }
@@ -41,21 +43,17 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
             throw new IllegalArgumentException("User is null or not fetched");
         }
 
-        final TextView usernameLabel = (TextView) viewHolder.getView(R.id.username);
-        final TextView lastActiveAtLabel = (TextView) viewHolder.getView(R.id.lastActiveAt);
-        final Button inviteButton = (Button) viewHolder.getView(R.id.actionButton);
+        final TextView profileImage = (TextView) viewHolder.getView(R.id.profile_image_sa);
+        final TextView usernameLabel = (TextView) viewHolder.getView(R.id.username_sa);
+        final TextView lastActiveAtLabel = (TextView) viewHolder.getView(R.id.last_active_at_sa);
+        final Button inviteButton = (Button) viewHolder.getView(R.id.action_button_sa);
 
+        final String username = item.getUsername();
+        final char firstChar = username.toUpperCase().charAt(0);
+        profileImage.setText(Character.toString(firstChar));
+        setBackgroundTintList(profileImage, ColorStateList.valueOf(getRandomAvatarBackgroundColor()));
         usernameLabel.setText(item.getUsername());
-
-        Date lastActiveAt = item.getLastActiveAt();
-        if (lastActiveAt == null) {
-            lastActiveAtLabel.setText(R.string.never);
-        } else {
-            lastActiveAtLabel.setText(DateUtils.getRelativeTimeSpanString(
-                    getContext(),
-                    lastActiveAt.getTime()
-            ));
-        }
+        lastActiveAtLabel.setText(TimeUtils.getRelativeTimeString(getContext(), item.getLastActiveAt()));
 
         final UserData itemData = item.getUserData();
 
@@ -127,7 +125,7 @@ public class FriendSearchViewAdapter extends BaseRecyclerViewAdapter<User> {
     }
 
     private static void markButtonAlreadyInvited(Button button) {
-        button.setText("Zaproszony");
+        button.setText("Wysłano");
         button.setEnabled(false);
     }
 

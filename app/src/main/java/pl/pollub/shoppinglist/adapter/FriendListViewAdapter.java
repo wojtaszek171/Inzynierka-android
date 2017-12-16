@@ -2,6 +2,7 @@ package pl.pollub.shoppinglist.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageButton;
 import android.view.LayoutInflater;
@@ -18,6 +19,8 @@ import pl.pollub.shoppinglist.activity.fragment.FriendListFragment;
 import pl.pollub.shoppinglist.model.User;
 import pl.pollub.shoppinglist.util.TimeUtils;
 
+import static android.support.v4.view.ViewCompat.setBackgroundTintList;
+import static pl.pollub.shoppinglist.util.MiscUtils.getRandomAvatarBackgroundColor;
 import static pl.pollub.shoppinglist.util.ToastUtils.showToast;
 
 /**
@@ -62,6 +65,7 @@ public class FriendListViewAdapter extends BaseRecyclerViewAdapter<User> {
         final String username = item.getUsername();
         final char firstChar = username.toUpperCase().charAt(0);
         profileImage.setText(Character.toString(firstChar));
+        setBackgroundTintList(profileImage, ColorStateList.valueOf(getRandomAvatarBackgroundColor()));
         usernameLabel.setText(username);
         lastActiveAtLabel.setText(TimeUtils.getRelativeTimeString(getContext(), item.getLastActiveAt()));
 

@@ -1,6 +1,7 @@
 package pl.pollub.shoppinglist.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.model.User;
 import pl.pollub.shoppinglist.util.TimeUtils;
 import pl.pollub.shoppinglist.util.ToastUtils;
+
+import static android.support.v4.view.ViewCompat.setBackgroundTintList;
+import static pl.pollub.shoppinglist.util.MiscUtils.getRandomAvatarBackgroundColor;
 
 /**
  * @author Adrian
@@ -33,7 +37,7 @@ public class FriendApproveViewAdapter extends BaseRecyclerViewAdapter<User> {
     @Override
     protected View createView(Context context, ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.item_friend_approve, viewGroup, false);
+        View view = inflater.inflate(R.layout.item_friend_sa, viewGroup, false);
 
         return view;
     }
@@ -44,11 +48,16 @@ public class FriendApproveViewAdapter extends BaseRecyclerViewAdapter<User> {
             throw new IllegalArgumentException("User is null or not fetched");
         }
 
-        final TextView usernameLabel = (TextView) viewHolder.getView(R.id.username_approve);
-        final TextView lastActiveAtLabel = (TextView) viewHolder.getView(R.id.lastActiveAt_approve);
-        final Button approveButton = (Button) viewHolder.getView(R.id.actionButton_approve);
+        final TextView profileImage = (TextView) viewHolder.getView(R.id.profile_image_sa);
+        final TextView usernameLabel = (TextView) viewHolder.getView(R.id.username_sa);
+        final TextView lastActiveAtLabel = (TextView) viewHolder.getView(R.id.last_active_at_sa);
+        final Button approveButton = (Button) viewHolder.getView(R.id.action_button_sa);
 
-        usernameLabel.setText(item.getUsername());
+        final String username = item.getUsername();
+        final char firstChar = username.toUpperCase().charAt(0);
+        profileImage.setText(Character.toString(firstChar));
+        setBackgroundTintList(profileImage, ColorStateList.valueOf(getRandomAvatarBackgroundColor()));
+        usernameLabel.setText(username);
         lastActiveAtLabel.setText(TimeUtils.getRelativeTimeString(getContext(), item.getLastActiveAt()));
 
         if (hasAlreadyBeenApprovedByCurrentUser(item)) {

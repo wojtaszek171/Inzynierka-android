@@ -12,8 +12,8 @@
             android:id="@+id/friend_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/left_right_margin"
-            android:layout_marginRight="@dimen/left_right_margin"
+            android:layout_marginLeft="@dimen/single_left_right_margin"
+            android:layout_marginRight="@dimen/single_left_right_margin"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             tools:listitem="@layout/item_friend_list" />
 
