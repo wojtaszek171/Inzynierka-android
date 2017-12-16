@@ -56,8 +56,6 @@ public class FriendListFragment extends Fragment {
         binding.friendList.addItemDecoration(
                 new DividerItemDecoration(getContext(), recyclerLayoutManager.getOrientation())
         );
-        binding.addFriendsButton.setOnClickListener(interactionListener::onSearchClick);
-        binding.approveFriendsButton.setOnClickListener(interactionListener::onApproveClick);
         findAndBindFriends();
 
         return binding.getRoot();

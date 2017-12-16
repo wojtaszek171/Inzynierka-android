@@ -34,33 +34,6 @@
             layout="@layout/layout_loading_spinner"
             android:visibility="gone" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:gravity="end"
-            android:orientation="horizontal">
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/approve_friends_button"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="10dp"
-                android:scaleType="center"
-                app:backgroundTint="@color/colorPrimary"
-                app:srcCompat="@drawable/ic_action_approve" />
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/add_friends_button"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="10dp"
-                android:scaleType="center"
-                app:backgroundTint="@color/colorPrimary"
-                app:srcCompat="@drawable/ic_action_add" />
-        </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
 </layout>
 
