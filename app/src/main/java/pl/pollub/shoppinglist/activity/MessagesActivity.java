@@ -27,6 +27,8 @@ import pl.pollub.shoppinglist.model.Message;
 import pl.pollub.shoppinglist.model.User;
 import pl.pollub.shoppinglist.model.UserData;
 
+import static pl.pollub.shoppinglist.util.ToastUtils.showLongToast;
+
 /**
  * @author Adrian
  * @since 2017-12-01
@@ -64,8 +66,8 @@ public class MessagesActivity extends AppCompatActivity {
         binding.messageList.setAdapter(recyclerViewAdapter);
 
         binding.sendButton.setOnClickListener(view -> {
-            String input = binding.messageInput.getText().toString();
-            if (input.trim().isEmpty()) {
+            String input = binding.messageInput.getText().toString().trim();
+            if (input.isEmpty()) {
                 return;
             }
 
@@ -151,11 +153,10 @@ public class MessagesActivity extends AppCompatActivity {
             this.runOnUiThread(() -> binding.progressBar.setVisibility(View.GONE));
 
             if (task.isFaulted() || task.isCancelled()) {
-                this.runOnUiThread(() -> Toast.makeText(
-                        MessagesActivity.this,
-                        R.string.couldnt_load_messages,
-                        Toast.LENGTH_LONG
-                ).show());
+                this.runOnUiThread(() -> {
+                    binding.sendButton.setEnabled(false);
+                    showLongToast(MessagesActivity.this, R.string.couldnt_load_messages);
+                });
 
                 Log.w("MessagesActivity", task.getError());
 
