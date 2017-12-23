@@ -69,43 +69,47 @@
 
     <!--CATEGORIES:-->
     <string-array name="product_categories">
-        <item>Inne</item>
         <item>Warzywa i owoce</item>
         <item>Mięso</item>
         <item>Mrożonki i lody</item>
-        <item>Kawa,Herbata,Kakao</item>
+        <item>Kawa, herbata, kakao</item>
         <item>Napoje</item>
         <item>Nabiał</item>
         <item>Pieczywo</item>
         <item>Przekąski</item>
-        <item>Przyprawy</item>
         <item>Alkohole i tytoń</item>
-        <item>Chemia</item>
-        <item>Konserwy</item>
+        <item>Konserwy i prod. paczkowane</item>
         <item>Dla zwierząt</item>
-        <item>Akcesoria samochodowe</item>
-        <item>Urządzenia elektroniczne</item>
+        <item>Dla dzieci</item>
         <item>Zabawki</item>
+        <item>Leki</item>
+        <item>Higiena</item>
+        <item>Chemia</item>
+        <item>Urządzenia elektroniczne</item>
+        <item>Akcesoria samochodowe</item>
+        <item>Inne</item>
     </string-array>
 
     <string-array name="product_icons">
-        <item>other</item>
-        <item>vegetables</item>
-        <item>meat</item>
-        <item>frozen</item>
-        <item>tea</item>
-        <item>beverages</item>
-        <item>dairy</item>
-        <item>bread</item>
-        <item>snack</item>
-        <item>spices</item>
-        <item>alcohols</item>
-        <item>chemical</item>
-        <item>foodincan</item>
-        <item>pet</item>
-        <item>carparts</item>
-        <item>electricity</item>
-        <item>toys</item>
+        <item>cat_vegetables</item>
+        <item>cat_meat</item>
+        <item>cat_frozen</item>
+        <item>cat_tea</item>
+        <item>cat_beverages</item>
+        <item>cat_dairy</item>
+        <item>cat_bread</item>
+        <item>cat_snacks</item>
+        <item>cat_alcohols</item>
+        <item>cat_canned_packaged</item>
+        <item>cat_pets</item>
+        <item>cat_kids</item>
+        <item>cat_toys</item>
+        <item>cat_medicines</item>
+        <item>cat_hygiene</item>
+        <item>cat_chemicals</item>
+        <item>cat_electronics</item>
+        <item>cat_car_parts</item>
+        <item>cat_other</item>
     </string-array>
 
     <!--MEASURES:-->

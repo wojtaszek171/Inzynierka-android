@@ -70,7 +70,7 @@ public class ShoppingListDetailsAdapter extends ArrayAdapter<String> {
             } else if (checkBoxStatus.isChecked()) {
                 checkBoxStatus.setChecked(false);
             }
-            String nameOfFile = (product.get("image") != null) ? product.get("image").toString() + "_white" : "other";
+            String nameOfFile = (product.get("image") != null) ? product.get("image").toString() : "other";
             int idd = context.getResources().getIdentifier(nameOfFile, "drawable", context.getPackageName());
             image.setBackgroundResource(idd);
 

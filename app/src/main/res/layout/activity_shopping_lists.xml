@@ -23,8 +23,7 @@
             <ListView
                 android:id="@+id/list"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                android:layout_height="754dp"></ListView>
+                android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -43,6 +42,5 @@
     </FrameLayout>
 
     <include layout="@layout/menu_burger" />
-
 
 </android.support.v4.widget.DrawerLayout>

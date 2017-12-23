@@ -12,7 +12,7 @@ import pl.pollub.shoppinglist.R;
  */
 @Getter
 public enum Icon {
-    UNKNOWN(R.drawable.logo),
+    UNKNOWN(R.drawable.logo_big),
     BURGER(R.drawable.burger);
 
     public static final Icon DEFAULT = UNKNOWN;
