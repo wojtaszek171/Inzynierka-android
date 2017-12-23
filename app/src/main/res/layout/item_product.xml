@@ -23,7 +23,6 @@
                 android:layout_height="40dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:backgroundTint="@android:color/white"
                 android:maxHeight="50dp"
                 android:minWidth="40dp" />
 

@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
@@ -450,19 +451,20 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     }
 
     private void displayUnsubscribeListDialog() {
+        Drawable icon = ContextCompat.getDrawable(this, R.drawable.ic_share_24dp).mutate();
+        icon = DrawableCompat.wrap(icon);
+        DrawableCompat.setTint(icon, Color.BLACK);
         AlertDialog.Builder builder = new AlertDialog.Builder(ShoppingListDetailsActivity.this);
-        builder.setTitle("Czy chcesz odsubskrybować listę?");
-        builder.setMessage("Nie jesteś właścicielem listy, więc nie możesz udostępnić jej swoim znajomym." +
-                " Możesz ją natomiast odsubskrybować, aby już jej więcej nie widzieć.");
-        builder.setIcon(R.drawable.ic_share_24dp);
+        builder.setTitle("Czy chcesz odsubskrybować listę?")
+                .setMessage("Nie jesteś właścicielem listy, więc nie możesz udostępnić jej znajomym." +
+                        " Możesz ją jednak odsubskrybować i usunąć z listy.")
+                .setIcon(icon)
+                .setPositiveButton("Odsubskrybuj", (dialog, which) -> {
+                    unsubscribeList();
+                })
+                .setNegativeButton("Anuluj", null);
 
-        builder.setPositiveButton("Odsubskrybuj", (dialog, which) -> {
-            unsubscribeList();
-        });
-        builder.setNegativeButton("Anuluj", null);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        builder.create().show();
     }
 
     private void unsubscribeList() {
@@ -480,9 +482,12 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
     }
 
     private void displayShareListDialog(List<String> friendsUsernames) {
+        Drawable icon = ContextCompat.getDrawable(this, R.drawable.ic_share_24dp).mutate();
+        icon = DrawableCompat.wrap(icon);
+        DrawableCompat.setTint(icon, Color.BLACK);
         AlertDialog.Builder builder = new AlertDialog.Builder(ShoppingListDetailsActivity.this);
         builder.setTitle("Współdziel listę ze znajomymi");
-        builder.setIcon(R.drawable.ic_share_24dp);
+        builder.setIcon(icon);
 
         String[] friendsArr = friendsUsernames.toArray(new String[0]);
         boolean[] checkedItems = new boolean[friendsArr.length];

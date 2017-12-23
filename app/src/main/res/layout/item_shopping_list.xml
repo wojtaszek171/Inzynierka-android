@@ -8,160 +8,161 @@
     android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:id="@+id/relativ4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayout3"
+        android:background="@drawable/rounded_item_white">
+
         <RelativeLayout
-            android:id="@+id/relativ4"
+            android:id="@+id/relativ2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/relativeLayout3"
-            android:background="@drawable/rounded_item_white">
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true">
 
-                <RelativeLayout
-                    android:id="@+id/relativ2"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_alignParentStart="true">
+            <TextView
+                android:id="@+id/list_progress"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:text="0/0"
+                android:textColor="@android:color/holo_green_dark"
+                android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/list_progress"
-                            android:layout_width="45dp"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentStart="true"
-                            android:layout_alignParentTop="true"
-                            android:gravity="center"
-                            android:text="0/0"
-                            android:textColor="@android:color/holo_green_dark"
-                            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/list_progress"
+                android:gravity="center_vertical"
+                android:text="Opis : "
+                android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/textView4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentTop="true"
-                            android:layout_toEndOf="@+id/list_progress"
-                            android:gravity="center_vertical"
-                            android:text="Opis : "
-                            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/item_description"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/textView4"
+                android:gravity="center_vertical" />
 
-                        <TextView
-                            android:id="@+id/item_description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentTop="true"
-                            android:layout_toEndOf="@+id/textView4"
-                            android:gravity="center_vertical" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/collaborators_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_below="@+id/relativ2">
-
-                        <TextView
-                            android:id="@+id/textView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_above="@+id/textView2"
-                            android:layout_alignParentStart="true"
-                            android:layout_alignParentTop="true"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="5dp"
-                            android:text="Współdzielenie z:"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/collaborators"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentTop="true"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="5dp"
-                            android:textStyle="italic" />
-
-                        <TextView
-                            android:id="@+id/textView2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentStart="true"
-                            android:paddingLeft="5dp"
-                            android:text="Właściciel:"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/owner"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_below="@+id/textView" />
-
-                </RelativeLayout>
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/relativeLayout3"
+            android:id="@+id/collaborators_layout"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_alignParentStart="true"
+            android:layout_height="40dp"
+            android:layout_below="@+id/relativ2">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/textView2"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="Współdzielenie z:"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/collaborators"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:paddingLeft="5dp"
+                android:text="Właściciel:"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/owner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/textView" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/transparent">
+
+        <ImageView
+            android:id="@+id/listImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="6dp"
+            android:layout_toEndOf="@+id/checkBoxStatus"
+            android:background="@mipmap/ls_icon"
+            android:foregroundGravity="center_vertical"
+            android:minWidth="40dp" />
+
+        <TextView
+            android:id="@+id/listNameItem"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_toEndOf="@+id/listImage"
+            android:layout_toStartOf="@+id/imageView4"
+            android:layout_weight="0.45"
+            android:gravity="center_vertical"
+            android:hint="Name"
+            android:paddingLeft="5dp"
+            android:textColor="@android:color/white"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:background="@android:color/transparent">
+            android:layout_toStartOf="@+id/listDeadline"
+            android:tint="@color/white"
+            app:srcCompat="@drawable/ic_access_time_24dp" />
 
-                <ImageView
-                    android:id="@+id/listImage"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="6dp"
-                    android:layout_toEndOf="@+id/checkBoxStatus"
-                    android:background="@mipmap/ls_icon"
-                    android:foregroundGravity="center_vertical"
-                    android:minWidth="40dp" />
+        <TextView
+            android:id="@+id/listDeadline"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:textColor="@android:color/white" />
 
-                <TextView
-                    android:id="@+id/listNameItem"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp"
-                    android:layout_toEndOf="@+id/listImage"
-                    android:layout_toStartOf="@+id/imageView4"
-                    android:layout_weight="0.45"
-                    android:gravity="center_vertical"
-                    android:hint="Name"
-                    android:paddingLeft="5dp"
-                    android:textColor="@android:color/white"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+    </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentTop="true"
-                    android:layout_toStartOf="@+id/listDeadline"
-                    app:srcCompat="@android:drawable/ic_menu_recent_history" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_below="@+id/relativ4"
+        android:background="@android:color/transparent">
 
-                <TextView
-                    android:id="@+id/listDeadline"
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
-                    android:textColor="@android:color/white" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:layout_below="@+id/relativ4"
-            android:background="@android:color/transparent">
-
-        </RelativeLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
