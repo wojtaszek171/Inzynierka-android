@@ -2,9 +2,12 @@ package pl.pollub.shoppinglist.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,6 +23,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import pl.pollub.shoppinglist.R;
@@ -227,8 +232,24 @@ public class TemplatesActivity extends BaseNavigationActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // inflate the menu - this adds items to the action bar if it is present
         getMenuInflater().inflate(R.menu.menu_actionbar, menu);
+        MenuItem itemToHide = menu.findItem(R.id.action_share_list);
+        if (itemToHide != null) {
+            itemToHide.setVisible(false);
+        }
+
+        for (int itemId : Collections.singletonList(R.id.action_sort)) {
+            MenuItem menuItem = menu.findItem(itemId);
+            if (menuItem == null) {
+                continue;
+            }
+
+            Drawable menuItemIcon = DrawableCompat.wrap(menuItem.getIcon());
+            DrawableCompat.setTint(menuItemIcon, Color.WHITE);
+            menuItem.setIcon(menuItemIcon);
+        }
+
         return true;
     }
 

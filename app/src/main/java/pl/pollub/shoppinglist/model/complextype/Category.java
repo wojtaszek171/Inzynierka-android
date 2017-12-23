@@ -18,7 +18,7 @@ public enum Category {
     ALCOHOLS(null, Icon.DEFAULT), // alkohole
     PRESERVE(null, Icon.DEFAULT), // konserwy itd.
     DAIRY(null, Icon.DEFAULT), // nabiał
-    MEAT(null, Icon.DEFAULT), // mięso, kiełbachy, itd.
+    MEAT(null, Icon.DEFAULT), // mięso itp.
     FRESH_PRODUCE(null, Icon.DEFAULT), //świeże warzywa i owoce
     FROZEN_FOOD(null, Icon.DEFAULT), // mrożonki
     NEWSPAPER(null, Icon.DEFAULT), // gazety itd.
@@ -28,7 +28,7 @@ public enum Category {
     FISH_OR_SEAFOOD(null, Icon.DEFAULT), // ryby, owoce morza
     PHARMACY(null, Icon.DEFAULT), // leki
     CLOTH(null, Icon.DEFAULT), // ubrania
-    BABY_PRODUCT(null, Icon.DEFAULT), // produkty dla dzieci, kaszki, pampersy i inne takie
+    BABY_PRODUCT(null, Icon.DEFAULT), // produkty dla dzieci
     ELECTRONICS(null, Icon.DEFAULT), // elektronika
     OTHER(null, Icon.DEFAULT), // inne
 

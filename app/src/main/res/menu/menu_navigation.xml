@@ -3,26 +3,28 @@
 
     <item android:id="@+id/nav_friends"
         android:title="@string/friends"
-        android:icon="@mipmap/ic_supervisor_account_black_24dp"/>
+        android:icon="@drawable/ic_group_24dp"/>
     <item android:id="@+id/nav_lists"
         android:title="@string/lists"
-        android:icon="@mipmap/ic_view_list_black_24dp"/>
+        android:icon="@drawable/ic_view_list_24dp"/>
     <item android:id="@+id/nav_templates"
         android:title="@string/templates"
-        android:icon="@mipmap/ic_content_copy_black_24dp"/>
+        android:icon="@drawable/ic_content_copy_24dp"/>
     <item android:id="@+id/nav_custom_user_products"
         android:title="Produkty użytkownika"
-        android:icon="@mipmap/ic_content_copy_black_24dp"/>
+        android:icon="@drawable/ic_content_copy_24dp"/>
     <item android:id="@+id/nav_settings"
         android:title="@string/options"
-        android:icon="@mipmap/ic_settings_black_24dp"/>
+        android:icon="@drawable/ic_settings_24dp"/>
     <item android:id="@+id/nav_login"
-        android:title="@string/login" />
+        android:title="@string/login"
+        android:icon="@drawable/ic_login_24dp" />
     <item android:id="@+id/nav_register"
-        android:title="@string/register" />
-    <item
-        android:id="@+id/nav_logout"
+        android:title="@string/register"
+        android:icon="@drawable/ic_account_plus_24dp" />
+    <item android:id="@+id/nav_logout"
         android:title="@string/logout"
+        android:icon="@drawable/ic_poweroff_24dp"
         android:visible="false" />
 
 </menu>

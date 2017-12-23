@@ -7,35 +7,37 @@
     android:layout_height="match_parent"
     tools:context="pl.pollub.shoppinglist.activity.TemplatesActivity">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar" />
-
-        <ListView
-            android:id="@+id/list"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="443dp">
-            android:layout_height="754dp"></ListView>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/toolbar" />
+
+            <ListView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/addListButton"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="right"
-            android:layout_margin="10dp"
-            android:clickable="true"
-            app:backgroundTint="@color/colorPrimary"
-            app:fabSize="mini"
-            app:srcCompat="@android:drawable/ic_menu_add" />
+            style="@style/AlertDialog.AppCompat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/fab_add_clear_selector"
+            app:backgroundTint="@color/colorPrimaryDark"
+            app:fabGravity="bottom_end" />
 
-    </LinearLayout>
+    </FrameLayout>
 
     <include layout="@layout/menu_burger" />
-
 
 </android.support.v4.widget.DrawerLayout>

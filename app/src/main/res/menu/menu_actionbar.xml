@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.vi8e.giant.AddressListActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_sort"
-        android:icon="@android:drawable/ic_menu_sort_by_size"
-        android:title="sort"
+        android:icon="@drawable/ic_sort_24dp"
+        android:title="Sortowanie"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_share_list"
-        android:icon="@android:drawable/ic_menu_share"
-        android:title="friends"
+        android:icon="@drawable/ic_share_24dp"
+        android:title="Współdzielenie"
         app:showAsAction="always" />
 </menu>

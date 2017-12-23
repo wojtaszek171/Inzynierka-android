@@ -3,9 +3,12 @@ package pl.pollub.shoppinglist.activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -27,6 +30,7 @@ import com.parse.ParseUser;
 import com.parse.SubscriptionHandling;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -298,8 +302,20 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // inflate the menu - this adds items to the action bar if it is present
         getMenuInflater().inflate(R.menu.menu_actionbar, menu);
+
+        for (int itemId : Arrays.asList(R.id.action_sort, R.id.action_share_list)) {
+            MenuItem menuItem = menu.findItem(itemId);
+            if (menuItem == null) {
+                continue;
+            }
+
+            Drawable menuItemIcon = DrawableCompat.wrap(menuItem.getIcon());
+            DrawableCompat.setTint(menuItemIcon, Color.WHITE);
+            menuItem.setIcon(menuItemIcon);
+        }
+
         return true;
     }
 
@@ -438,7 +454,7 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
         builder.setTitle("Czy chcesz odsubskrybować listę?");
         builder.setMessage("Nie jesteś właścicielem listy, więc nie możesz udostępnić jej swoim znajomym." +
                 " Możesz ją natomiast odsubskrybować, aby już jej więcej nie widzieć.");
-        builder.setIcon(android.R.drawable.ic_menu_share);
+        builder.setIcon(R.drawable.ic_share_24dp);
 
         builder.setPositiveButton("Odsubskrybuj", (dialog, which) -> {
             unsubscribeList();
@@ -465,8 +481,8 @@ public class ShoppingListDetailsActivity extends BaseNavigationActivity {
 
     private void displayShareListDialog(List<String> friendsUsernames) {
         AlertDialog.Builder builder = new AlertDialog.Builder(ShoppingListDetailsActivity.this);
-        builder.setTitle("Współdziel listę ze znajomymi:");
-        builder.setIcon(android.R.drawable.ic_menu_share);
+        builder.setTitle("Współdziel listę ze znajomymi");
+        builder.setIcon(R.drawable.ic_share_24dp);
 
         String[] friendsArr = friendsUsernames.toArray(new String[0]);
         boolean[] checkedItems = new boolean[friendsArr.length];
