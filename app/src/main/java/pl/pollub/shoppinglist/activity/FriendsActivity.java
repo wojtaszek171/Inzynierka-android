@@ -46,30 +46,20 @@ public class FriendsActivity extends BaseNavigationActivity implements
         fragmentPagerAdapter.addFragment(new FriendListFragment(), getString(R.string.my_friends));
         fragmentPagerAdapter.addFragment(new FriendApproveFragment(), getString(R.string.invites));
         fragmentPagerAdapter.addFragment(new FriendSearchFragment(), getString(R.string.search_engine));
-        binding.tabBar.addTab(
-                binding.tabBar
-                        .newTab()
-                        .setText(fragmentPagerAdapter.getItemTitle(0))
-        );
-        binding.tabBar.addTab(
-                binding.tabBar
-                        .newTab()
-                        .setText(fragmentPagerAdapter.getItemTitle(1))
-        );
-        binding.tabBar.addTab(
-                binding.tabBar
-                        .newTab()
-                        .setText(fragmentPagerAdapter.getItemTitle(2))
-        );
+        binding.tabBar.addTab(binding.tabBar.newTab()
+                        .setText(fragmentPagerAdapter.getItemTitle(0)));
+        binding.tabBar.addTab(binding.tabBar.newTab()
+                        .setText(fragmentPagerAdapter.getItemTitle(1)));
+        binding.tabBar.addTab(binding.tabBar.newTab()
+                        .setText(fragmentPagerAdapter.getItemTitle(2)));
         binding.tabBar.setTabGravity(TabLayout.GRAVITY_FILL);
         binding.tabBar.addOnTabSelectedListener((OnTabSelectedListener) tab ->
                 binding.friendViewPager.setCurrentItem(tab.getPosition()));
 
         binding.friendViewPager.setAdapter(fragmentPagerAdapter);
-        binding.friendViewPager
-                .addOnPageChangeListener(
-                        new TabLayout.TabLayoutOnPageChangeListener(binding.tabBar)
-                );
+        binding.friendViewPager.addOnPageChangeListener(
+                new TabLayout.TabLayoutOnPageChangeListener(binding.tabBar)
+        );
     }
 
     @Override

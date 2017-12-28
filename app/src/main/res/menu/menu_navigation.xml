@@ -3,19 +3,21 @@
 
     <item android:id="@+id/nav_friends"
         android:title="@string/friends"
-        android:icon="@drawable/ic_group_24dp"/>
+        android:icon="@drawable/ic_group_24dp" />
     <item android:id="@+id/nav_lists"
         android:title="@string/lists"
-        android:icon="@drawable/ic_view_list_24dp"/>
+        android:icon="@drawable/ic_view_list_24dp" />
     <item android:id="@+id/nav_templates"
         android:title="@string/templates"
-        android:icon="@drawable/ic_content_copy_24dp"/>
+        android:icon="@drawable/ic_content_copy_24dp" />
     <item android:id="@+id/nav_custom_user_products"
         android:title="Produkty użytkownika"
-        android:icon="@drawable/ic_content_copy_24dp"/>
+        android:icon="@drawable/ic_content_copy_24dp"
+        android:visible="false" />
     <item android:id="@+id/nav_settings"
         android:title="@string/options"
-        android:icon="@drawable/ic_settings_24dp"/>
+        android:icon="@drawable/ic_settings_24dp"
+        android:visible="false" />
     <item android:id="@+id/nav_login"
         android:title="@string/login"
         android:icon="@drawable/ic_login_24dp" />
