@@ -114,7 +114,7 @@
                     android:layout_marginStart="30dp"
                     android:layout_weight="1"
                     android:background="@drawable/rounded_button"
-                    android:text="Data"
+                    android:text="@string/date"
                     android:visibility="invisible" />
 
                 <Button
@@ -126,7 +126,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/rounded_button"
                     android:onClick="showTimePickerDialog"
-                    android:text="Czas"
+                    android:text="@string/time"
                     android:visibility="invisible" />
             </LinearLayout>
 

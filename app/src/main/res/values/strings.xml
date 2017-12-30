@@ -66,6 +66,8 @@
     <string name="my_friends">Moi znajomi</string>
     <string name="invites">Zaproszenia</string>
     <string name="search_engine">Wyszukiwarka</string>
+    <string name="time">Czas</string>
+    <string name="date">Data</string>
 
     <!--CATEGORIES:-->
     <string-array name="product_categories">

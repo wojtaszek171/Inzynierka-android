@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -28,10 +27,10 @@ import pl.pollub.shoppinglist.R;
 import pl.pollub.shoppinglist.activity.fragment.DatePickerFragment;
 import pl.pollub.shoppinglist.activity.fragment.TimePickerFragment;
 import pl.pollub.shoppinglist.util.MiscUtils;
+import pl.pollub.shoppinglist.util.ToastUtils;
 import pl.pollub.shoppinglist.util.scheduling.ScheduleClient;
 
 public class AddShoppingListActivity extends AppCompatActivity {
-    private int isLogged = 0;
     private static int id;
     private Button textDate;
     private boolean template;
@@ -80,7 +79,8 @@ public class AddShoppingListActivity extends AppCompatActivity {
             listName.setText(listObject.getString("name"));
             description.setText(listObject.getString("description"));
 
-            if (!listObject.getString("deadline").equals("Data Czas")) {
+            if (!listObject.getString("deadline")
+                    .equals(getString(R.string.date) + " " + getString(R.string.time))) {
                 String[] dateAndTimeString = listObject.getString("deadline").split(" ");
                 textDate.setText(dateAndTimeString[0]);
                 timepickerBtn.setText(dateAndTimeString[1]);
@@ -88,9 +88,9 @@ public class AddShoppingListActivity extends AppCompatActivity {
         }
 
         saveNewList.setOnClickListener(view -> {
-            listNameString = listName.getText().toString();
-            descriptionString = description.getText().toString();
-            if (listNameString.equals("")) {
+            listNameString = listName.getText().toString().trim();
+            descriptionString = description.getText().toString().trim();
+            if (listNameString.isEmpty()) {
                 Toast.makeText(this, "Musisz podać nazwę listy", Toast.LENGTH_SHORT).show();
             } else {
                 if (listObject != null) {
@@ -130,8 +130,13 @@ public class AddShoppingListActivity extends AppCompatActivity {
     }
 
     private void updateShoppingList() {
-
         if (setNotificationsToggle.isChecked()) {
+            if (textDate.getText().toString().equals(getString(R.string.date))
+                    || timepickerBtn.getText().toString().equals(getString(R.string.time))) {
+                ToastUtils.showLongToast(this, "Wybierz poprawną datę/czas lub wyłącz powiadomienie");
+                return;
+            }
+
             setNotification();
         }
 
@@ -164,7 +169,6 @@ public class AddShoppingListActivity extends AppCompatActivity {
             });
         }
     }
-
 
     private void setNotificationSetButtonsVisibility(boolean show) {
         Button datepickerBtnLocal = findViewById(R.id.listDeadline);
@@ -201,7 +205,6 @@ public class AddShoppingListActivity extends AppCompatActivity {
     }
 
     private void setNotification() {
-
         Calendar notifyCalendar = getCalendarForNotification();
 
         String notificationTitle = getApplicationInfo().loadLabel(getPackageManager()).toString();
@@ -224,8 +227,13 @@ public class AddShoppingListActivity extends AppCompatActivity {
     }
 
     private void createShoppingList() {
-
         if (setNotificationsToggle.isChecked()) {
+            if (textDate.getText().toString().equals(getString(R.string.date))
+                    || timepickerBtn.getText().toString().equals(getString(R.string.time))) {
+                ToastUtils.showLongToast(this, "Wybierz poprawną datę/czas lub wyłącz powiadomienie");
+                return;
+            }
+
             setNotification();
         }
 
