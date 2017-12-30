@@ -1,6 +1,7 @@
 package pl.pollub.shoppinglist.activity;
 
 import android.app.DialogFragment;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +43,8 @@ public class AddShoppingListActivity extends AppCompatActivity {
     private EditText description;
     private String descriptionString;
 
+    private NotificationManager notificationManager;
+
     private Button timepickerBtn;
     ToggleButton setNotificationsToggle;
 
@@ -56,6 +59,8 @@ public class AddShoppingListActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         scheduleClient = new ScheduleClient(this);
         scheduleClient.doBindService();
@@ -79,8 +84,8 @@ public class AddShoppingListActivity extends AppCompatActivity {
             listName.setText(listObject.getString("name"));
             description.setText(listObject.getString("description"));
 
-            if (!listObject.getString("deadline")
-                    .equals(getString(R.string.date) + " " + getString(R.string.time))) {
+            if (!listObject.getString("deadline").equals(getString(R.string.date) + " " + getString(R.string.time))) {
+                setNotificationsToggle.setChecked(true);
                 String[] dateAndTimeString = listObject.getString("deadline").split(" ");
                 textDate.setText(dateAndTimeString[0]);
                 timepickerBtn.setText(dateAndTimeString[1]);
@@ -143,7 +148,8 @@ public class AddShoppingListActivity extends AppCompatActivity {
         if (MiscUtils.isNetworkAvailable(this) && ParseUser.getCurrentUser() != null) {
             listObject.put("name", listNameString);
             listObject.put("status", "0");
-            listObject.put("deadline", textDate.getText().toString());
+            listObject.put("deadline", textDate.getText().toString() + " "
+                    + timepickerBtn.getText().toString());
             listObject.put("description", descriptionString);
             listObject.put("isTemplate", template);
             listObject.saveEventually();
@@ -226,23 +232,24 @@ public class AddShoppingListActivity extends AppCompatActivity {
         dFragment.show(getFragmentManager(), "Date Picker");
     }
 
-    private void createShoppingList() {
+    private void setNotificationIfAllowed(){
         if (setNotificationsToggle.isChecked()) {
             if (textDate.getText().toString().equals(getString(R.string.date))
                     || timepickerBtn.getText().toString().equals(getString(R.string.time))) {
                 ToastUtils.showLongToast(this, "Wybierz poprawną datę/czas lub wyłącz powiadomienie");
                 return;
             }
-
             setNotification();
         }
+    }
+
+    private void createShoppingList() {
+        setNotificationIfAllowed();
 
         list = ParseObject.create("ShoppingList");
-
         list.put("name", listNameString);
         list.put("status", "0");
-        list.put("deadline", textDate.getText().toString() + " "
-                + timepickerBtn.getText().toString());
+        list.put("deadline", textDate.getText().toString() + " " + timepickerBtn.getText().toString());
         list.put("description", descriptionString);
         list.put("isTemplate", template);
 
@@ -253,15 +260,8 @@ public class AddShoppingListActivity extends AppCompatActivity {
             list.put("description", "opis");
             list.add("sharedAmong", ParseUser.getCurrentUser().getUsername());
             list.saveEventually(e -> {
-                if (e == null) {
-                    // No error, the object was saved
-                    // Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_LONG).show();
-                } else {
-                    // Error saving object, print the logs
-                    e.printStackTrace();
-                }
+                if (e != null) { e.printStackTrace(); }
             });
-
         } else {
             list.put("localId", Integer.toString(id));
         }
