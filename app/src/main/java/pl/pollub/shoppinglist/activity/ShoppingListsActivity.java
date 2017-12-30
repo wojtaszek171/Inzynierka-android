@@ -306,7 +306,11 @@ public class ShoppingListsActivity extends BaseNavigationActivity {
     }
 
     private void updateShoppingListsAdapterWithQueryResult(ArrayList<ParseObject> resultList) {
-        runOnUiThread(() -> listAdapter.swapItems(resultList, sort));
+        runOnUiThread(() -> {
+            if(listAdapter != null){
+                listAdapter.swapItems(resultList, sort);
+            }
+        });
     }
 
     private ParseQuery getMyShoppingListsQuery() {
