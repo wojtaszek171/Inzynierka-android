@@ -32,15 +32,15 @@ public class MainActivity extends AppCompatActivity implements
         setSupportActionBar(binding.toolbar.toolbar);
 
         if (isKeySet(GO_TO_LOGIN_KEY)) {
-            attachFragment(LoginFragment.class, getSupportFragmentManager(),
+            attachFragment(new LoginFragment(), getSupportFragmentManager(),
                     binding.mainFragmentContainer.getId(), false);
         } else if (isKeySet(GO_TO_REGISTRATION_KEY)) {
-            attachFragment(RegistrationFragment.class, getSupportFragmentManager(),
+            attachFragment(new RegistrationFragment(), getSupportFragmentManager(),
                     binding.mainFragmentContainer.getId(), false);
         } else if (User.getCurrentUser() != null) {
             openShoppingListsActivity(true);
         } else {
-            attachFragment(WelcomeFragment.class, getSupportFragmentManager(),
+            attachFragment(new WelcomeFragment(), getSupportFragmentManager(),
                     binding.mainFragmentContainer.getId(), false);
         }
     }
@@ -49,7 +49,11 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                getSupportFragmentManager().popBackStack();
+                if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                    finish();
+                } else {
+                    getSupportFragmentManager().popBackStack();
+                }
 
                 return true;
         }
@@ -59,13 +63,13 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onLoginClick(View view) {
-        attachFragment(LoginFragment.class, getSupportFragmentManager(),
+        attachFragment(new LoginFragment(), getSupportFragmentManager(),
                 binding.mainFragmentContainer.getId(), true);
     }
 
     @Override
     public void onRegisterClick(View view) {
-        attachFragment(RegistrationFragment.class, getSupportFragmentManager(),
+        attachFragment(new RegistrationFragment(), getSupportFragmentManager(),
                 binding.mainFragmentContainer.getId(), true);
     }
 

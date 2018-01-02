@@ -16,8 +16,7 @@
         android:visible="false" />
     <item android:id="@+id/nav_settings"
         android:title="@string/options"
-        android:icon="@drawable/ic_settings_24dp"
-        android:visible="false" />
+        android:icon="@drawable/ic_settings_24dp" />
     <item android:id="@+id/nav_login"
         android:title="@string/login"
         android:icon="@drawable/ic_login_24dp" />

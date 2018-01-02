@@ -25,18 +25,21 @@
             android:name="com.parse.APPLICATION_ID"
             android:value="@string/parse_app_id" />
 
-        <activity android:name=".activity.MainActivity"
+        <activity
+            android:name=".activity.MainActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.FriendsActivity" />
-        <activity android:name=".activity.MessagesActivity"
+        <activity
+            android:name=".activity.MessagesActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activity.ShoppingListDetailsActivity"/>
+        <activity android:name=".activity.ShoppingListDetailsActivity" />
         <activity android:name=".activity.ShoppingListsActivity" />
         <activity android:name=".activity.AddCustomProductActivity" />
         <activity android:name=".activity.CustomProductsActivity" />
         <activity android:name=".activity.AddShoppingListActivity" />
         <activity android:name=".activity.TemplatesActivity" />
         <activity android:name=".activity.SettingsActivity" />
+        <activity android:name=".activity.AboutActivity" />
         <activity android:name=".activity.AddProductToListActivity" />
         <activity android:name=".activity.SplashScreenActivity">
             <intent-filter>
@@ -44,7 +47,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service android:name=".service.ScheduleService" />
         <service android:name=".service.NotifyService" />
     </application>
+
 </manifest>

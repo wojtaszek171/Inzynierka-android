@@ -43,18 +43,8 @@ public class MiscUtils {
         );
     }
 
-    public static void attachFragment(Class<? extends Fragment> fragmentClass,
-                                      FragmentManager fm,
-                                      @IdRes int containerViewId,
-                                      boolean addToBackStack) {
-        Fragment fragment;
-
-        try {
-            fragment = fragmentClass.getDeclaredConstructor().newInstance();
-        } catch (ReflectiveOperationException exception) {
-            throw new IllegalAccessError(exception.getMessage());
-        }
-
+    public static void attachFragment(Fragment fragment, FragmentManager fm,
+                                      @IdRes int containerViewId, boolean addToBackStack) {
         FragmentTransaction transaction = fm.beginTransaction();
         transaction
                 .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
