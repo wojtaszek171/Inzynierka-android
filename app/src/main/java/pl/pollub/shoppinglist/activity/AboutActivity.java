@@ -2,20 +2,12 @@ package pl.pollub.shoppinglist.activity;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.AnimRes;
-import android.support.graphics.drawable.AnimationUtilsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
