@@ -9,6 +9,12 @@
 * simple built-in messenger - you don't need any 3rd-party app to discuss your shoppings anymore
 * online synchronization
 
+| | | |
+| --- | --- | --- |
+| ![alt text](https://github.com/wojtaszek171/Inzynierka-android/blob/readme-images/2020-12-18%2018_38_45-M%C3%B3j%20dysk%20%E2%80%93%20Dysk%20Google.png) | ![alt text](https://github.com/wojtaszek171/Inzynierka-android/blob/readme-images/2020-12-18%2018_39_00-M%C3%B3j%20dysk%20%E2%80%93%20Dysk%20Google.png) | ![alt text](https://github.com/wojtaszek171/Inzynierka-android/blob/readme-images/2020-12-18%2018_39_39-M%C3%B3j%20dysk%20%E2%80%93%20Dysk%20Google.png) |
+
+![alt text](https://github.com/wojtaszek171/Inzynierka-android/blob/readme-images/2020-12-18%2018_38_07-M%C3%B3j%20dysk%20%E2%80%93%20Dysk%20Google.png)
+
 ## Development
 
 In order to develop and test the application seamlessly, you need:
